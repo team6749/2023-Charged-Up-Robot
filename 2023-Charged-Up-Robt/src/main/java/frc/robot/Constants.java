@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 import frc.robot.subsystems.SwerveDriveModule;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -21,10 +24,15 @@ public final class Constants {
   }
   public static class DrivebaseConstants {
     //subsystem constructed with array of modules
-    public static SwerveDriveModule frontLeftModule = new SwerveDriveModule("frontLeftModule", 0, 0, 0, 0, null);
-    public static SwerveDriveModule frontRightModule = new SwerveDriveModule("frontRightModule", 0, 0, 0, 0, null);
-    public static SwerveDriveModule backLeftModule = new SwerveDriveModule("backLeftModule", 0, 0, 0, 0, null);
-    public static SwerveDriveModule backRightModule = new SwerveDriveModule("backRightModule", 0, 0, 0, 0, null);
-    public static SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new SwerveDriveModule [] {frontLeftModule, frontRightModule, backLeftModule, frontRightModule});
+    //9.75 inches
+    public static SwerveDriveModule frontLeftModule = new SwerveDriveModule("frontLeftModule", 1, 2 , 3, 0, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75)));
+
+    public static SwerveDriveModule frontRightModule = new SwerveDriveModule("frontRightModule", 4, 5, 6, 0, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75)));
+
+    public static SwerveDriveModule backRightModule = new SwerveDriveModule("backRightModule", 7, 8, 9, 0, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75)));
+
+    public static SwerveDriveModule backLeftModule = new SwerveDriveModule("backLeftModule", 10, 11, 12, 0, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75)));
+    
+    public static SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new SwerveDriveModule [] {frontLeftModule, frontRightModule, backRightModule, backLeftModule});
   }
 }

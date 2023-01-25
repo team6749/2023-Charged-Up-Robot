@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SwerveDriveModule {
     // private variables 
     private final WPI_TalonFX driveMotor; 
-    private final WPI_TalonFX angleMotor;
+    private final WPI_TalonFX rotationMotor;
     private final WPI_CANCoder absEncoder;
     public final PIDController PIDController = new PIDController(0.01, 0, 0);
     public Translation2d position;
@@ -30,9 +30,9 @@ public class SwerveDriveModule {
      * @param pos - the Translation2d distance on x/y from the center of the robot
      * Creates a new SwerveModule
      */
-    public SwerveDriveModule(String name, int driveMotorID, int angleMotorID, int absEncoderID, double offsetDegrees, Translation2d positionOnRobot){
+    public SwerveDriveModule(String name, int driveMotorID, int absEncoderID, int rotationMotorID, double offsetDegrees, Translation2d positionOnRobot){
         this.driveMotor = new WPI_TalonFX(driveMotorID);
-        this.angleMotor = new WPI_TalonFX(angleMotorID);
+        this.rotationMotor = new WPI_TalonFX(rotationMotorID);
         this.absEncoder = new WPI_CANCoder(absEncoderID);
         this.absEncoder.configMagnetOffset(calibrationDegrees);
         this.absEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
@@ -40,7 +40,7 @@ public class SwerveDriveModule {
         this.name = name;
         PIDController.enableContinuousInput(0, 360);
         driveMotor.setNeutralMode(NeutralMode.Brake);
-        angleMotor.setNeutralMode(NeutralMode.Brake);
+        rotationMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     //Meters per second
@@ -114,7 +114,7 @@ public class SwerveDriveModule {
         // speedMotor.set(driveOutput + driveFeedforward);
         // angleMotor.set(turnOutput + turnFeedforward);
 
-        angleMotor.set(turnOutput);
+        rotationMotor.set(turnOutput);
         //setting the motor to the speed it needs to be speeded
         driveMotor.set(state.speedMetersPerSecond * 0.5);
     }
@@ -124,7 +124,7 @@ public class SwerveDriveModule {
      */
     public void stop() {
         driveMotor.set(0);
-        angleMotor.set(0);
+        rotationMotor.set(0);
     }
 
     public void printOffsets(double calibration, double currentAngle, String name){

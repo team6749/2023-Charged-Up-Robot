@@ -5,6 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.SwerveDriveWithJoystick;
+import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 // import frc.robot.commands.Autos;
 // import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.ExampleSubsystem;
@@ -20,6 +23,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final SwerveDriveSubsystem _SwerveDrivebase = Constants.DrivebaseConstants.swerveDriveSubsystem;
+  public static Joystick _joystick = new Joystick(0);
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -29,6 +35,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    _SwerveDrivebase.setDefaultCommand(new SwerveDriveWithJoystick(_SwerveDrivebase, _joystick));
   }
 
   /**
@@ -37,7 +45,7 @@ public class RobotContainer {
    * predicate, or via the named factories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
    * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Fligh t
    * joysticks}.
    */
   private void configureBindings() {
