@@ -51,7 +51,7 @@ public class SwerveDriveWithJoystick extends CommandBase {
     }
 
     //y joystick deadzone
-    if(Math.abs(verticalDirectionSpeed) < (0.2)) {
+    if(Math.abs(verticalDirectionSpeed) < (0.1)) {
         verticalDirectionSpeed = 0;
     }
 

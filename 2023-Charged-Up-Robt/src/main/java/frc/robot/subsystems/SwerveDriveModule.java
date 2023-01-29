@@ -31,6 +31,7 @@ public class SwerveDriveModule {
      * Creates a new SwerveModule
      */
     public SwerveDriveModule(String name, int driveMotorID, int absEncoderID, int rotationMotorID, double offsetDegrees, Translation2d positionOnRobot){
+        this.calibrationDegrees = offsetDegrees;
         this.driveMotor = new WPI_TalonFX(driveMotorID);
         this.rotationMotor = new WPI_TalonFX(rotationMotorID);
         this.absEncoder = new WPI_CANCoder(absEncoderID);
@@ -71,8 +72,9 @@ public class SwerveDriveModule {
         SmartDashboard.putNumber("Swerve " + name + " rotation", getRotationEncoder());
         SmartDashboard.putNumber("Swerve " + name + " velocity", getDriveEncoderVelocity());
         SmartDashboard.putNumber("Swerve " + name + " position", getDriveEncoderPos());
-
-        printOffsets(calibrationDegrees, getRotationEncoder(), name);
+        SmartDashboard.putNumber("Swerve " + name + " offset", calibrationDegrees);
+        
+        SmartDashboard.putNumber("Swerve " + name + " new offset",  getRotationEncoder()-calibrationDegrees);
     }
 
     /**

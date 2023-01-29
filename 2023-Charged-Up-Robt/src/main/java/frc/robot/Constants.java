@@ -25,14 +25,51 @@ public final class Constants {
   public static class DrivebaseConstants {
     //subsystem constructed with array of modules
     //9.75 inches
-    public static SwerveDriveModule frontLeftModule = new SwerveDriveModule("frontLeftModule", 1, 2 , 3, 0, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75)));
+    // public static SwerveDriveModule frontLeftModule = new SwerveDriveModule("frontLeftModule", 1, 2 , 3, 140.7132, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75)));
 
-    public static SwerveDriveModule frontRightModule = new SwerveDriveModule("frontRightModule", 4, 5, 6, 0, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75)));
+    // public static SwerveDriveModule frontRightModule = new SwerveDriveModule("frontRightModule", 4, 5, 6, 106.875, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75)));
 
-    public static SwerveDriveModule backRightModule = new SwerveDriveModule("backRightModule", 7, 8, 9, 0, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75)));
+    // public static SwerveDriveModule backRightModule = new SwerveDriveModule("backRightModule", 7, 8, 9, 124.6288, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75)));
 
-    public static SwerveDriveModule backLeftModule = new SwerveDriveModule("backLeftModule", 10, 11, 12, 0, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75)));
+    // public static SwerveDriveModule backLeftModule = new SwerveDriveModule("backLeftModule", 10, 11, 12, 293.3789, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75)));
+    public static SwerveDriveModule frontLeftModule = new SwerveDriveModule(
+      "frontLeftModule",
+      4,
+      5, 
+      6, 
+      105.5, 
+      new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75))
+    );
     
-    public static SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new SwerveDriveModule [] {frontLeftModule, frontRightModule, backRightModule, backLeftModule});
+    public static SwerveDriveModule frontRightModule = new SwerveDriveModule(
+      "frontRightModule", 
+      7, 
+      8, 
+      9, 
+      -235.1, 
+      new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75))
+    );
+    
+    public static SwerveDriveModule backLeftModule = new SwerveDriveModule(
+      "backLeftModule", 
+      1, 
+      2, 
+      3, 
+      145.3, 
+      new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75))
+    );
+  
+    public static SwerveDriveModule backRightModule = new SwerveDriveModule(
+      "backRightModule", 
+      10, 
+      11, 
+      12, 
+      -68.1, 
+      new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75))
+    );
+    
+
+
+    public static SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new SwerveDriveModule [] {frontLeftModule, frontRightModule, backLeftModule, backRightModule});
   }
 }
