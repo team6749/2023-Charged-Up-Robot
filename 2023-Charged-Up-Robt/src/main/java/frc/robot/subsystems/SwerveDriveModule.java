@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,10 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SwerveDriveModule {
     // private variables 
     private final WPI_TalonFX driveMotor; 
-    private final WPI_TalonFX angleMotor;
+    private final WPI_TalonFX rotationMotor;
     private final WPI_CANCoder absEncoder;
     public final PIDController PIDController = new PIDController(0.01, 0, 0);
-    public Translation2d position;
+    public Translation2d positionOnRobot;
     public double calibrationDegrees;
     public String name;
     //constructor
@@ -30,17 +31,18 @@ public class SwerveDriveModule {
      * @param pos - the Translation2d distance on x/y from the center of the robot
      * Creates a new SwerveModule
      */
-    public SwerveDriveModule(String name, int driveMotorID, int angleMotorID, int absEncoderID, double offsetDegrees, Translation2d positionOnRobot){
+    public SwerveDriveModule(String name, int driveMotorID, int absEncoderID, int rotationMotorID, double offsetDegrees, Translation2d positionOnRobot){
+        this.calibrationDegrees = offsetDegrees;
         this.driveMotor = new WPI_TalonFX(driveMotorID);
-        this.angleMotor = new WPI_TalonFX(angleMotorID);
+        this.rotationMotor = new WPI_TalonFX(rotationMotorID);
         this.absEncoder = new WPI_CANCoder(absEncoderID);
         this.absEncoder.configMagnetOffset(calibrationDegrees);
         this.absEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-        this.position = positionOnRobot;
+        this.positionOnRobot = positionOnRobot;
         this.name = name;
         PIDController.enableContinuousInput(0, 360);
         driveMotor.setNeutralMode(NeutralMode.Brake);
-        angleMotor.setNeutralMode(NeutralMode.Brake);
+        rotationMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     //Meters per second
@@ -55,7 +57,7 @@ public class SwerveDriveModule {
      * @return the position of the drive motor
      */
     public double getDriveEncoderPos(){
-        return Units.metersToFeet(driveMotor.getSelectedSensorPosition() / (2048 * 8.14) * (Math.PI * 0.1));
+        return driveMotor.getSelectedSensorPosition() / (2048 * 8.14) * (Math.PI * 0.1);
     }
 
     //Degrees
@@ -63,7 +65,7 @@ public class SwerveDriveModule {
      * @return the rotation of a module in degrees
      */
     public double getRotationEncoder() {
-        return (double) Math.round(absEncoder.getAbsolutePosition() * 10000.0) / 10000.0;
+        return absEncoder.getAbsolutePosition();
     }
 
     //This must be called all the time
@@ -72,7 +74,8 @@ public class SwerveDriveModule {
         SmartDashboard.putNumber("Swerve " + name + " velocity", getDriveEncoderVelocity());
         SmartDashboard.putNumber("Swerve " + name + " position", getDriveEncoderPos());
 
-        printOffsets(calibrationDegrees, getRotationEncoder(), name);
+        SmartDashboard.putNumber("Swerve " + name + " distance traveled", getCurrentPosition().distanceMeters);
+        
     }
 
     /**
@@ -114,7 +117,7 @@ public class SwerveDriveModule {
         // speedMotor.set(driveOutput + driveFeedforward);
         // angleMotor.set(turnOutput + turnFeedforward);
 
-        angleMotor.set(turnOutput);
+        rotationMotor.set(turnOutput);
         //setting the motor to the speed it needs to be speeded
         driveMotor.set(state.speedMetersPerSecond * 0.5);
     }
@@ -124,12 +127,18 @@ public class SwerveDriveModule {
      */
     public void stop() {
         driveMotor.set(0);
-        angleMotor.set(0);
+        rotationMotor.set(0);
     }
 
-    public void printOffsets(double calibration, double currentAngle, String name){
-        //currentAngle includes calibration
-        double offset = (double) calibration - currentAngle;
-        System.out.println(name + ": " + offset);
+    
+    // public void printOffsets(double calibration, double currentAngle, String name){
+    //     //currentAngle includes calibration
+    //     double offset = (double) calibration - currentAngle;
+    //     System.out.println(name + ": " + offset);
+    // }
+    
+    public SwerveModulePosition getCurrentPosition(){
+        return new SwerveModulePosition(
+        getDriveEncoderPos(), Rotation2d.fromDegrees(getRotationEncoder()));
     }
 }
