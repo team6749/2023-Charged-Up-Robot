@@ -5,7 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
-
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.subsystems.SwerveDriveModule;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.math.util.Units;
@@ -25,49 +25,53 @@ public final class Constants {
   public static class DrivebaseConstants {
     //subsystem constructed with array of modules
     //9.75 inches
-    // public static SwerveDriveModule frontLeftModule = new SwerveDriveModule("frontLeftModule", 1, 2 , 3, 140.7132, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75)));
-
-    // public static SwerveDriveModule frontRightModule = new SwerveDriveModule("frontRightModule", 4, 5, 6, 106.875, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75)));
-
-    // public static SwerveDriveModule backRightModule = new SwerveDriveModule("backRightModule", 7, 8, 9, 124.6288, new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75)));
-
-    // public static SwerveDriveModule backLeftModule = new SwerveDriveModule("backLeftModule", 10, 11, 12, 293.3789, new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75)));
+    
+    public static Translation2d frontLeftPosition = new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75));
+    public static Translation2d frontRightPosition = new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75));
+    public static Translation2d backLeftPosition = new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75));
+    public static Translation2d backRightPosition = new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75));
+    
+    public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+      Constants.DrivebaseConstants.frontLeftPosition, 
+      Constants.DrivebaseConstants.frontRightPosition, 
+      Constants.DrivebaseConstants.backLeftPosition, 
+      Constants.DrivebaseConstants.backRightPosition
+    );
+    
     public static SwerveDriveModule frontLeftModule = new SwerveDriveModule(
       "frontLeftModule",
       4,
       5, 
       6, 
       105.5, 
-      new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75))
+      frontLeftPosition
     );
-    
     public static SwerveDriveModule frontRightModule = new SwerveDriveModule(
       "frontRightModule", 
       7, 
       8, 
       9, 
       -235.1, 
-      new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75))
+      frontRightPosition
     );
-    
     public static SwerveDriveModule backLeftModule = new SwerveDriveModule(
       "backLeftModule", 
       1, 
       2, 
       3, 
       145.3, 
-      new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75))
+      backLeftPosition
     );
-  
     public static SwerveDriveModule backRightModule = new SwerveDriveModule(
       "backRightModule", 
       10, 
       11, 
       12, 
       -68.1, 
-      new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75))
+      backRightPosition
     );
     
+
 
 
     public static SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new SwerveDriveModule [] {frontLeftModule, frontRightModule, backLeftModule, backRightModule});
