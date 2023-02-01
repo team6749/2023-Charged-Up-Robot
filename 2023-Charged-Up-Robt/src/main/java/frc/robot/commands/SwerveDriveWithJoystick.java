@@ -38,8 +38,8 @@ public class SwerveDriveWithJoystick extends CommandBase {
   public void execute() {
     selectedDriveMode = orientation.getSelected();
 
-    double verticalDirectionSpeed = limitedJoystickInput(sdJoystick.getY());
-    double horizontalDirectionSpeed = limitedJoystickInput(sdJoystick.getX());
+    double verticalDirectionSpeed = -limitedJoystickInput(sdJoystick.getY());
+    double horizontalDirectionSpeed = -limitedJoystickInput(sdJoystick.getX());
     double rotationalSpeed = (2.0*sdJoystick.getTwist());
     
     

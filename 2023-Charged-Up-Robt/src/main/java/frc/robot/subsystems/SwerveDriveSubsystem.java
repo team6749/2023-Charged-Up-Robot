@@ -59,7 +59,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
         
     public Rotation2d getRotation(){
-        return Rotation2d.fromDegrees(-gyro.getAngle());
+        return Rotation2d.fromDegrees(gyro.getAngle());
     }
 
     public Pose2d getPose2d(){
