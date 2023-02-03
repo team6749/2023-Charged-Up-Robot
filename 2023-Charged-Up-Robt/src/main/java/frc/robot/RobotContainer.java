@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithJoystick;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 // import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -43,6 +45,7 @@ public class RobotContainer {
   private final SwerveDriveSubsystem _SwerveDrivebase = Constants.DrivebaseConstants.swerveDriveSubsystem;
   public static Joystick _joystick = new Joystick(0);
 
+  final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -54,6 +57,7 @@ public class RobotContainer {
     configureBindings();
 
     _SwerveDrivebase.setDefaultCommand(new SwerveDriveWithJoystick(_SwerveDrivebase, _joystick));
+
   }
 
   /**
@@ -66,6 +70,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    new Trigger(activateAutoBalanceButton).onTrue(new SelfBalance(_SwerveDrivebase));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -90,7 +95,7 @@ public class RobotContainer {
         //negative translation2d is right of opening
         robotStartPosition,
         List.of(),
-        new Pose2d(-1, Units.inchesToMeters(0), Rotation2d.fromDegrees(0)),
+        new Pose2d(1, Units.inchesToMeters(0), Rotation2d.fromDegrees(0)),
           // new Pose2d(Units.inchesToMeters(320), Units.inchesToMeters(15), Rotation2d.fromDegrees(90)),
           // List.of(
             

@@ -8,18 +8,23 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 
+
 public class SwerveDriveSubsystem extends SubsystemBase{
     //priv variables
+    public static ADIS16470_IMU gyro = new ADIS16470_IMU();
     public SwerveDriveModule[] modules;
     public SwerveDriveKinematics _kinematics;
     public SwerveModuleState[] states;
-    public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+    // public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+    public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
 
     // constructor
@@ -33,7 +38,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
     odometry = new SwerveDriveOdometry(
         _kinematics,
-        gyro.getRotation2d(), 
+        getRotation(), 
         getCurrentModulePositions()
     );
     
@@ -46,7 +51,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         for (SwerveDriveModule swerveModule : modules) {
             swerveModule.periodic();
         }
-        
+        // System.out.println(gyro.getYComplementaryAngle());
         odometry.update(
             getRotation(), 
             getCurrentModulePositions()
@@ -54,12 +59,17 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
         SmartDashboard.putNumber("Swerve Odometry X", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Swerve Odometry Y", odometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("Swerve Odometry Rot", odometry.getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("Swerve Odosmetry Rot", odometry.getPoseMeters().getRotation().getDegrees());
+
+        // SmartDashboard.putNumber("acc x", gyro2.getYComplementaryAngle());
+        // SmartDashboard.putNumber("acc y", gyro2.getYFilteredAccelAngle());
+        // SmartDashboard.putNumber("angle", gyro2.getAngle());
+        // SmartDashboard.putNumber("acc z", accelerometer.getZ());
         }
 
         
     public Rotation2d getRotation(){
-        return Rotation2d.fromDegrees(gyro.getAngle());
+        return Rotation2d.fromDegrees(-gyro.getAngle());
     }
 
     public Pose2d getPose2d(){

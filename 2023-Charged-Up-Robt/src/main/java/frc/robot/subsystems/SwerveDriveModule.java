@@ -36,6 +36,7 @@ public class SwerveDriveModule {
         this.driveMotor = new WPI_TalonFX(driveMotorID);
         this.rotationMotor = new WPI_TalonFX(rotationMotorID);
         this.absEncoder = new WPI_CANCoder(absEncoderID);
+        this.absEncoder.configFactoryDefault();
         this.absEncoder.configMagnetOffset(calibrationDegrees);
         this.absEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         this.positionOnRobot = positionOnRobot;

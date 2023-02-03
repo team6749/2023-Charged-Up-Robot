@@ -11,19 +11,6 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "12,3": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Swerve backLeftModule offset",
-              "_title": "SmartDashboard/Swerve backLeftModule offset",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "12,0": {
             "size": [
               3,
@@ -59,19 +46,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backLeftModule rotation",
               "_title": "SmartDashboard/Swerve backLeftModule rotation",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "15,3": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Swerve backRightModule offset",
-              "_title": "SmartDashboard/Swerve backRightModule offset",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -115,19 +89,6 @@
               "_showGlyph": false
             }
           },
-          "6,3": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Swerve frontLeftModule offset",
-              "_title": "SmartDashboard/Swerve frontLeftModule offset",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "6,0": {
             "size": [
               3,
@@ -163,19 +124,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontLeftModule velocity",
               "_title": "SmartDashboard/Swerve frontLeftModule velocity",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "9,3": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Swerve frontRightModule offset",
-              "_title": "SmartDashboard/Swerve frontRightModule offset",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -228,6 +176,58 @@
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/SendableChooser[0]",
               "_title": "SmartDashboard/SendableChooser[0]",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/accY",
+              "_title": "SmartDashboard/accY",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Swerve Odometry X",
+              "_title": "SmartDashboard/Swerve Odometry X",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Swerve Odometry Y",
+              "_title": "SmartDashboard/Swerve Odometry Y",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,7": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Swerve Odosmetry Rot",
+              "_title": "SmartDashboard/Swerve Odosmetry Rot",
               "_glyph": 148,
               "_showGlyph": false
             }
