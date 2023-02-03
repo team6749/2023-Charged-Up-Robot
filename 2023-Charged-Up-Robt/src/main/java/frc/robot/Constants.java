@@ -25,11 +25,12 @@ public final class Constants {
   public static class DrivebaseConstants {
     //subsystem constructed with array of modules
     //9.75 inches
-    
-    public static Translation2d frontLeftPosition = new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(9.75));
-    public static Translation2d frontRightPosition = new Translation2d(Units.inchesToMeters(9.75), Units.inchesToMeters(-9.75));
-    public static Translation2d backLeftPosition = new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(9.75));
-    public static Translation2d backRightPosition = new Translation2d(Units.inchesToMeters(-9.75), Units.inchesToMeters(-9.75));
+    public static double distanceToCenter = Units.inchesToMeters(9.75);
+
+    public static Translation2d frontLeftPosition = new Translation2d(+distanceToCenter, +distanceToCenter);
+    public static Translation2d frontRightPosition = new Translation2d(+distanceToCenter, -distanceToCenter);
+    public static Translation2d backLeftPosition = new Translation2d(-distanceToCenter, +distanceToCenter);
+    public static Translation2d backRightPosition = new Translation2d(-distanceToCenter, -distanceToCenter);
     
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       Constants.DrivebaseConstants.frontLeftPosition, 

@@ -38,8 +38,8 @@ public class SwerveDriveWithJoystick extends CommandBase {
   public void execute() {
     selectedDriveMode = orientation.getSelected();
 
-    double verticalDirectionSpeed = limitedJoystickInput(sdJoystick.getY());
-    double horizontalDirectionSpeed = limitedJoystickInput(sdJoystick.getX());
+    double verticalDirectionSpeed = -limitedJoystickInput(sdJoystick.getY());
+    double horizontalDirectionSpeed = -limitedJoystickInput(sdJoystick.getX());
     double rotationalSpeed = (2.0*sdJoystick.getTwist());
     
     
@@ -56,9 +56,9 @@ public class SwerveDriveWithJoystick extends CommandBase {
     if(Math.abs(rotationalSpeed) < (0.2) ) {
         rotationalSpeed = 0;
     }
-    System.out.println("X: " + horizontalDirectionSpeed);
-    System.out.println("Y: " + verticalDirectionSpeed);
-    System.out.println("Rot: " + rotationalSpeed);
+    // System.out.println("X: " + horizontalDirectionSpeed);
+    // System.out.println("Y: " + verticalDirectionSpeed);
+    // System.out.println("Rot: " + rotationalSpeed);
     switch(selectedDriveMode){
       case ("Robot Oriented"):
           //put robot oriented drive here.
