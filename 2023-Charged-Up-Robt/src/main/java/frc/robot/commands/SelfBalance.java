@@ -16,7 +16,6 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 public class SelfBalance extends CommandBase {
   /** Creates a new SelfBalance. */
   private SwerveDriveSubsystem subsystem;
-  double accX;
   double accY;
   double thresholdLevel = 4;
   double offsetLevel = 3.7;
@@ -43,7 +42,6 @@ public class SelfBalance extends CommandBase {
     accY = ((SwerveDriveSubsystem.gyro.getYComplementaryAngle() + offsetLevel) + (accY))/2;
     SmartDashboard.putNumber("accY", accY);
     subsystem.setDesiredChassisSpeeds(new ChassisSpeeds(-pidController.calculate(accY), 0, 0));
-    System.out.println(accY);
     if(Math.abs(accY) > (thresholdLevel)){
       timer.reset();
     } else{
@@ -53,12 +51,7 @@ public class SelfBalance extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    System.out.println("command finshed");
-    if(interrupted){
-      System.out.println("interuppeted comand");
-    }
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
