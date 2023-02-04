@@ -24,8 +24,9 @@ public final class Constants {
   }
   public static class DrivebaseConstants {
     //subsystem constructed with array of modules
-    //9.75 inches
-    public static double distanceToCenter = Units.inchesToMeters(9.75);
+    //62.726cm
+    //31.363cm
+    public static double distanceToCenter = 0.31363; // in meters
 
     public static Translation2d frontLeftPosition = new Translation2d(+distanceToCenter, +distanceToCenter);
     public static Translation2d frontRightPosition = new Translation2d(+distanceToCenter, -distanceToCenter);

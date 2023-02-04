@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import org.opencv.core.Mat;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -19,7 +18,7 @@ public class SelfBalance extends CommandBase {
   double accY;
   double thresholdLevel = 4;
   double offsetLevel = 3.7;
-  PIDController pidController = new PIDController(0.0175,0,0);
+  PIDController pidController = new PIDController(0.0175,0, 0.00175);
   Timer timer = new Timer();
 
   public SelfBalance(SwerveDriveSubsystem swerveSubsystem) {
