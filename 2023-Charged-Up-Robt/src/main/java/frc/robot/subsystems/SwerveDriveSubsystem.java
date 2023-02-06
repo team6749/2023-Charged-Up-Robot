@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -26,6 +27,8 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     // public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
+
+    public SwerveDrivePoseEstimator poseEstimator;
 
     // constructor
     /**
@@ -57,6 +60,10 @@ public class SwerveDriveSubsystem extends SubsystemBase{
             getCurrentModulePositions()
             );
 
+        poseEstimator.update(getRotation(), getCurrentModulePositions());
+        // poseEstimator.addVisionMeasurement(getPose2d(), 0);
+
+
         SmartDashboard.putNumber("Swerve Odometry X", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Swerve Odometry Y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Swerve Odosmetry Rot", odometry.getPoseMeters().getRotation().getDegrees());
@@ -65,7 +72,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         // SmartDashboard.putNumber("acc y", gyro2.getYFilteredAccelAngle());
         // SmartDashboard.putNumber("angle", gyro2.getAngle());
         // SmartDashboard.putNumber("acc z", accelerometer.getZ());
-        }
+    }
 
         
     public Rotation2d getRotation(){
