@@ -8,6 +8,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -16,7 +17,7 @@ public class SelfBalance extends CommandBase {
   /** Creates a new SelfBalance. */
   private SwerveDriveSubsystem subsystem;
   double accY;
-  double thresholdLevel = 4;
+  double thresholdLevel = 1.5;
   double offsetLevel = 3.7;
   PIDController pidController = new PIDController(0.0175,0, 0.00175);
   Timer timer = new Timer();
@@ -55,6 +56,6 @@ public class SelfBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return (Math.abs(accY) < (thresholdLevel)) && timer.hasElapsed(1.5);
+      return (Math.abs(accY) < (thresholdLevel)) && timer.hasElapsed(2.15);
   }
 }

@@ -26,12 +26,13 @@ public final class Constants {
     //subsystem constructed with array of modules
     //62.726cm
     //31.363cm
-    public static double distanceToCenter = 0.31363; // in meters
+    public static double halfWidth = 0.25; // in meters
+    public static double halfHeight = 0.185; // in meters
 
-    public static Translation2d frontLeftPosition = new Translation2d(+distanceToCenter, +distanceToCenter);
-    public static Translation2d frontRightPosition = new Translation2d(+distanceToCenter, -distanceToCenter);
-    public static Translation2d backLeftPosition = new Translation2d(-distanceToCenter, +distanceToCenter);
-    public static Translation2d backRightPosition = new Translation2d(-distanceToCenter, -distanceToCenter);
+    public static Translation2d frontLeftPosition = new Translation2d(+halfHeight, +halfWidth);
+    public static Translation2d frontRightPosition = new Translation2d(+halfHeight, -halfWidth);
+    public static Translation2d backLeftPosition = new Translation2d(-halfHeight, +halfWidth);
+    public static Translation2d backRightPosition = new Translation2d(-halfHeight, -halfWidth);
     
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       Constants.DrivebaseConstants.frontLeftPosition, 
