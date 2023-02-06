@@ -9,6 +9,10 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 public final class Autos {
     private SwerveDriveSubsystem subsystem;
   /** Example static factory for an autonomous command. */
@@ -38,22 +42,8 @@ public final class Autos {
   
 
   public static CommandBase BlueAutoBalanceOnlyAuto(SwerveDriveSubsystem subsystem) {
-
-    
-
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(1.5, 1.5).setKinematics(subsystem._kinematics);
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        //negative translation2d is right of opening
-        subsystem.getPose2d(),
-        List.of(),
-        //TODO replace this with the field corrdinates of the charging station center
-        new Pose2d(1.9, Units.inchesToMeters(0), Rotation2d.fromDegrees(0)),
-        trajectoryConfig);
-
-    return new SequentialCommandGroup(
-        subsystem.drivePath(trajectory),
-        new SelfBalance(subsystem)
-    );
+    PathPlannerTrajectory BlueAutoBalanceOnlyPath = PathPlanner.loadPath("killme", new PathConstraints(1.5, 1.5));
+    return subsystem.followTrajectoryCommand(BlueAutoBalanceOnlyPath, true);
   }
 
 
