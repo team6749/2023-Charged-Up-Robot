@@ -107,7 +107,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     
     
 
-    
+
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS, camera, cameraPosition);
 
 
@@ -134,40 +134,28 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        //VISION STUFF
+        odometry.update(
+            getRotation(), 
+            getCurrentModulePositions()
+        );
+        poseEstimator.update(getRotation(), getCurrentModulePositions());
         
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
         if(estPose.isPresent()) {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
-             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds);     
+            poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds);     
           }
 
         //Call periodic on children
         for (SwerveDriveModule swerveModule : modules) {
             swerveModule.periodic();
         }
-        // System.out.println(gyro.getYComplementaryAngle());
-        odometry.update(
-            getRotation(), 
-            getCurrentModulePositions()
-            );
+
         SmartDashboard.putString("encoder odometry", odometry.getPoseMeters().toString());
-
-        poseEstimator.update(getRotation(), getCurrentModulePositions());
-
-        
         SmartDashboard.putString("pose Estimator", poseEstimator.getEstimatedPosition().toString());
-
-
         SmartDashboard.putNumber("Swerve Odometry X", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Swerve Odometry Y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Swerve Odosmetry Rot", odometry.getPoseMeters().getRotation().getDegrees());
-
-        // SmartDashboard.putNumber("acc x", gyro2.getYComplementaryAngle());
-        // SmartDashboard.putNumber("acc y", gyro2.getYFilteredAccelAngle());
-        // SmartDashboard.putNumber("angle", gyro2.getAngle());
-        // SmartDashboard.putNumber("acc z", accelerometer.getZ());
-
 
         //update the robot pose on the field image on smart dashboard
         field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -203,7 +191,6 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         for (int i = 0; i < desiredStates.length; i++) {
-            System.out.println("setting state for " + i);
             modules[i].setDesiredState(desiredStates[i]);
         }
     }

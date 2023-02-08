@@ -41,7 +41,7 @@ public final class Autos {
   
 
   public static CommandBase BlueAutoBalanceOnlyAuto(SwerveDriveSubsystem subsystem) {
-    PathPlannerTrajectory BlueAutoBalanceOnlyPath = PathPlanner.loadPath("killme", new PathConstraints(1.5, 1.5));
+    PathPlannerTrajectory BlueAutoBalanceOnlyPath = PathPlanner.loadPath("testpath", new PathConstraints(1.5, 1.5));
     return subsystem.followTrajectoryCommand(BlueAutoBalanceOnlyPath, true);
   }
 

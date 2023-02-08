@@ -19,9 +19,9 @@ public class SelfBalance extends CommandBase {
   /** Creates a new SelfBalance. */
   private SwerveDriveSubsystem subsystem;
   double accY;
-  double thresholdLevel = 1.5;
-  double offsetLevel = 2.5;
-  PIDController pidController = new PIDController(0.019,0, 0.00175);
+  double thresholdLevel = 0.75;
+  double offsetLevel = 2.4;
+  PIDController pidController = new PIDController(0.0175,0.0012, 0.002);
   Timer timer = new Timer();
 
   public SelfBalance(SwerveDriveSubsystem swerveSubsystem) {
@@ -33,6 +33,7 @@ public class SelfBalance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    pidController.reset();
     timer.reset();
     timer.start();
   }
@@ -55,14 +56,7 @@ public class SelfBalance extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("finsihded");
-    subsystem.setModuleStates(new SwerveModuleState[] {
-      new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
-      new SwerveModuleState(0, Rotation2d.fromDegrees(-135)),
-      new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-      new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
-    });
-    subsystem.stopModules();
+    pidController.reset();
   }
 
   // Returns true when the command should end.
