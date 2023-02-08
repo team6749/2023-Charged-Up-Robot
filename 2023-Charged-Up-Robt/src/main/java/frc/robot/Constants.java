@@ -4,7 +4,15 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.robot.subsystems.SwerveDriveModule;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -77,5 +85,43 @@ public final class Constants {
 
 
     public static SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new SwerveDriveModule [] {frontLeftModule, frontRightModule, backLeftModule, backRightModule});
+
+    //define the positions of the april tags on the field and 
+    //create the layout of them on the field to update pose in 
+    //relation to the tags
+    public static AprilTag[] tags = new AprilTag[] {
+      new AprilTag(1,
+          new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
+              new Rotation3d(0, 0, 3.1415))),
+      new AprilTag(2,
+          new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
+              new Rotation3d(0, 0, 3.1415))),
+      new AprilTag(3, 
+          new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
+              new Rotation3d(0, 0, 3.1415))),
+      new AprilTag(4, 
+          new Pose3d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
+              new Rotation3d(0, 0, 3.1415))),
+      new AprilTag(5, 
+          new Pose3d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
+              new Rotation3d(0, 0, 0))),
+      new AprilTag(6, 
+          new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
+              new Rotation3d(0, 0, 0))),
+      new AprilTag(7, 
+              new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
+                  new Rotation3d(0, 0, 0))),
+      new AprilTag(8, 
+               new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
+                  new Rotation3d(0, 0, 0)))
+            };
+  
+  public static AprilTagFieldLayout layout2023 = new AprilTagFieldLayout(
+      List.of(tags),
+      Units.inchesToMeters(615.25),
+      Units.inchesToMeters(315.5));   
+  
+  //define the position of the camera on the robot
+  public static Transform3d cameraPosition = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0));
   }
 }

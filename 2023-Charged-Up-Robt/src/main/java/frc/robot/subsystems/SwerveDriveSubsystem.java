@@ -1,17 +1,23 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,6 +36,15 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
     public SwerveDrivePoseEstimator poseEstimator;
 
+    //field map for smartdashboard and pose on smartdashboard
+    public final Field2d field = new Field2d();
+
+    // initializing grabbing the data from the camera after processing in photon,
+    // name the camera in photon vision the same as the camera name string in code
+    PhotonCamera camera = new PhotonCamera("robotcamera");
+    
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(Constants.DrivebaseConstants.layout2023, PoseStrategy.AVERAGE_BEST_TARGETS, camera, Constants.DrivebaseConstants.cameraPosition);
+
     // constructor
     /**
      * @param modules - An Array of SwerveDriveModules
@@ -44,12 +59,24 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         getRotation(), 
         getCurrentModulePositions()
     );
-    
+    poseEstimator = new SwerveDrivePoseEstimator(_kinematics, getRotation(), getCurrentModulePositions(), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+    //add the field map to smartdashboard
+    SmartDashboard.putData("field map", field);
 }
 
 
     @Override
     public void periodic() {
+        //VISION STUFF
+        
+        Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
+
+
+        if(estPose.isPresent()) {
+            SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
+            // System.out.println("boop");
+          }
+
         //Call periodic on children
         for (SwerveDriveModule swerveModule : modules) {
             swerveModule.periodic();
@@ -72,6 +99,10 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         // SmartDashboard.putNumber("acc y", gyro2.getYFilteredAccelAngle());
         // SmartDashboard.putNumber("angle", gyro2.getAngle());
         // SmartDashboard.putNumber("acc z", accelerometer.getZ());
+
+
+        //update the robot pose on the field image on smart dashboard
+        field.setRobotPose(getPose2d());
     }
 
         
@@ -88,6 +119,8 @@ public class SwerveDriveSubsystem extends SubsystemBase{
             getCurrentModulePositions(), 
             pose
         );
+
+
     }
 
     

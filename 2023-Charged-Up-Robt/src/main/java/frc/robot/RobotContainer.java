@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.AprilTagSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,7 +41,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDriveSubsystem _SwerveDrivebase = Constants.DrivebaseConstants.swerveDriveSubsystem;
-  private final AprilTagSubsystem _AprilTagSubsystem = new AprilTagSubsystem();
   public static Joystick _joystick = new Joystick(0);
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
