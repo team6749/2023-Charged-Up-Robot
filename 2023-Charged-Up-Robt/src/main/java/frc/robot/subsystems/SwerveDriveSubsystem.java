@@ -9,9 +9,23 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import java.util.List;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -19,9 +33,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -42,6 +57,60 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
     HashMap<String, Command> eventMap = new HashMap<>();
+
+    public SwerveDrivePoseEstimator poseEstimator;
+
+    //field map for smartdashboard and pose on smartdashboard
+    public final Field2d field = new Field2d();
+
+    // initializing grabbing the data from the camera after processing in photon,
+    // name the camera in photon vision the same as the camera name string in code
+    PhotonCamera camera = new PhotonCamera("robotcamera");
+
+    //define the positions of the april tags on the field and 
+    //create the layout of them on the field to update pose in 
+    //relation to the tags
+    public static AprilTag[] tags = new AprilTag[] {
+        new AprilTag(1,
+            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(2,
+            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(3, 
+            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(4, 
+            new Pose3d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(5, 
+            new Pose3d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
+                new Rotation3d(0, 0, 0))),
+        new AprilTag(6, 
+            new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 0))),
+        new AprilTag(7, 
+                new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
+                    new Rotation3d(0, 0, 0))),
+        new AprilTag(8, 
+                 new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
+                    new Rotation3d(0, 0, 0)))
+              };
+    
+    public static AprilTagFieldLayout layout2023 = new AprilTagFieldLayout(
+        List.of(tags),
+        Units.inchesToMeters(615.25),
+        Units.inchesToMeters(315.5));   
+    
+    //define the position of the camera on the robot
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0));
+    
+    
+
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS, camera, cameraPosition);
+
+
+
     // constructor
     /**
      * @param modules - An Array of SwerveDriveModules
@@ -56,12 +125,22 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         getRotation(), 
         getCurrentModulePositions()
     );
-    
+    poseEstimator = new SwerveDrivePoseEstimator(_kinematics, getRotation(), getCurrentModulePositions(), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+    //add the field map to smartdashboard
+    SmartDashboard.putData("field map", field);
 }
 
 
     @Override
     public void periodic() {
+        //VISION STUFF
+        
+        Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
+        if(estPose.isPresent()) {
+            SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
+             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds);     
+          }
+
         //Call periodic on children
         for (SwerveDriveModule swerveModule : modules) {
             swerveModule.periodic();
@@ -71,6 +150,13 @@ public class SwerveDriveSubsystem extends SubsystemBase{
             getRotation(), 
             getCurrentModulePositions()
             );
+        SmartDashboard.putString("encoder odometry", odometry.getPoseMeters().toString());
+
+        poseEstimator.update(getRotation(), getCurrentModulePositions());
+
+        
+        SmartDashboard.putString("pose Estimator", poseEstimator.getEstimatedPosition().toString());
+
 
         SmartDashboard.putNumber("Swerve Odometry X", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Swerve Odometry Y", odometry.getPoseMeters().getY());
@@ -80,7 +166,11 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         // SmartDashboard.putNumber("acc y", gyro2.getYFilteredAccelAngle());
         // SmartDashboard.putNumber("angle", gyro2.getAngle());
         // SmartDashboard.putNumber("acc z", accelerometer.getZ());
-        }
+
+
+        //update the robot pose on the field image on smart dashboard
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
+    }
 
         
     public Rotation2d getRotation(){
@@ -96,6 +186,8 @@ public class SwerveDriveSubsystem extends SubsystemBase{
             getCurrentModulePositions(), 
             pose
         );
+
+
     }
 
     
