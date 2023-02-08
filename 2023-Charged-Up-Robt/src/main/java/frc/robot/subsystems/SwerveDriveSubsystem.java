@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -7,20 +8,28 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DrivebaseConstants;
 
 
 
@@ -42,8 +51,50 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     // initializing grabbing the data from the camera after processing in photon,
     // name the camera in photon vision the same as the camera name string in code
     PhotonCamera camera = new PhotonCamera("robotcamera");
+
+    //define the positions of the april tags on the field and 
+    //create the layout of them on the field to update pose in 
+    //relation to the tags
+    public static AprilTag[] tags = new AprilTag[] {
+        new AprilTag(1,
+            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(2,
+            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(3, 
+            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(4, 
+            new Pose3d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
+                new Rotation3d(0, 0, 3.1415))),
+        new AprilTag(5, 
+            new Pose3d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
+                new Rotation3d(0, 0, 0))),
+        new AprilTag(6, 
+            new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
+                new Rotation3d(0, 0, 0))),
+        new AprilTag(7, 
+                new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
+                    new Rotation3d(0, 0, 0))),
+        new AprilTag(8, 
+                 new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
+                    new Rotation3d(0, 0, 0)))
+              };
     
-    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(Constants.DrivebaseConstants.layout2023, PoseStrategy.AVERAGE_BEST_TARGETS, camera, Constants.DrivebaseConstants.cameraPosition);
+    public static AprilTagFieldLayout layout2023 = new AprilTagFieldLayout(
+        List.of(tags),
+        Units.inchesToMeters(615.25),
+        Units.inchesToMeters(315.5));   
+    
+    //define the position of the camera on the robot
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0));
+    
+    
+
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS, camera, cameraPosition);
+
+
 
     // constructor
     /**
@@ -70,11 +121,9 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         //VISION STUFF
         
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
-
-
         if(estPose.isPresent()) {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
-            // System.out.println("boop");
+             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds);     
           }
 
         //Call periodic on children
@@ -86,9 +135,12 @@ public class SwerveDriveSubsystem extends SubsystemBase{
             getRotation(), 
             getCurrentModulePositions()
             );
+        SmartDashboard.putString("encoder odometry", odometry.getPoseMeters().toString());
 
         poseEstimator.update(getRotation(), getCurrentModulePositions());
-        // poseEstimator.addVisionMeasurement(getPose2d(), 0);
+
+        
+        SmartDashboard.putString("pose Estimator", poseEstimator.getEstimatedPosition().toString());
 
 
         SmartDashboard.putNumber("Swerve Odometry X", odometry.getPoseMeters().getX());
@@ -102,7 +154,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
 
         //update the robot pose on the field image on smart dashboard
-        field.setRobotPose(getPose2d());
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
 
         
