@@ -6,7 +6,9 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,8 +20,8 @@ public class SelfBalance extends CommandBase {
   private SwerveDriveSubsystem subsystem;
   double accY;
   double thresholdLevel = 1.5;
-  double offsetLevel = 3.7;
-  PIDController pidController = new PIDController(0.0175,0, 0.00175);
+  double offsetLevel = 2.5;
+  PIDController pidController = new PIDController(0.019,0, 0.00175);
   Timer timer = new Timer();
 
   public SelfBalance(SwerveDriveSubsystem swerveSubsystem) {
@@ -44,14 +46,24 @@ public class SelfBalance extends CommandBase {
     subsystem.setDesiredChassisSpeeds(new ChassisSpeeds(-pidController.calculate(accY), 0, 0));
     if(Math.abs(accY) > (thresholdLevel)){
       timer.reset();
-    } else{
-      subsystem.setDesiredChassisSpeeds(new ChassisSpeeds(0,0,0));
     }
+    // } else{
+    //   subsystem.setDesiredChassisSpeeds(new ChassisSpeeds(0,0,0));
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("finsihded");
+    subsystem.setModuleStates(new SwerveModuleState[] {
+      new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
+      new SwerveModuleState(0, Rotation2d.fromDegrees(-135)),
+      new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+      new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
+    });
+    subsystem.stopModules();
+  }
 
   // Returns true when the command should end.
   @Override
