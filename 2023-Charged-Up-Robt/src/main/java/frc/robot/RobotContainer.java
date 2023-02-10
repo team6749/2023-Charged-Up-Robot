@@ -9,6 +9,7 @@ import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithJoystick;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Commands;
 // import frc.robot.commands.Autos;
 // import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.ExampleSubsystem;
@@ -29,6 +30,7 @@ public class RobotContainer {
   public static Joystick _joystick = new Joystick(0);
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
+  final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -53,7 +55,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    new Trigger(activateAutoBalanceButton).onTrue(new SelfBalance(_SwerveDrivebase));
+    new Trigger(activateAutoBalanceButton).whileTrue(new SelfBalance(_SwerveDrivebase));
+
+    new Trigger(lineUpWithConeSpotButton).onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));

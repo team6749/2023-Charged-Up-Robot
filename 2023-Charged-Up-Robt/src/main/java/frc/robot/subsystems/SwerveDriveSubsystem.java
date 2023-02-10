@@ -3,12 +3,11 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +30,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
@@ -41,7 +38,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -66,6 +62,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     // initializing grabbing the data from the camera after processing in photon,
     // name the camera in photon vision the same as the camera name string in code
     PhotonCamera camera = new PhotonCamera("robotcamera");
+    
 
     //define the positions of the april tags on the field and 
     //create the layout of them on the field to update pose in 
@@ -103,7 +100,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         Units.inchesToMeters(315.5));   
     
     //define the position of the camera on the robot
-    public static Transform3d cameraPosition = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0));
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.25, -.12, 0.22), new Rotation3d(0, 0, 0));
     
     
 
@@ -120,6 +117,8 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     public SwerveDriveSubsystem(SwerveDriveModule[] modules){
         this.modules = modules;
         _kinematics = Constants.DrivebaseConstants.kinematics;
+
+    
 
     odometry = new SwerveDriveOdometry(
         _kinematics,
@@ -143,7 +142,8 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
         if(estPose.isPresent()) {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
-            poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds);     
+            poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds); 
+            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(4, 4, 16));  
           }
 
         //Call periodic on children
@@ -163,11 +163,11 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
         
     public Rotation2d getRotation(){
-        return Rotation2d.fromDegrees(-gyro.getAngle());
+        return Rotation2d.fromDegrees(gyro.getAngle());
     }
 
     public Pose2d getPose2d(){
-        return odometry.getPoseMeters();
+        return poseEstimator.getEstimatedPosition();
     }
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(

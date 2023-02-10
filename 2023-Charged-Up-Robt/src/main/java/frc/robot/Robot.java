@@ -9,8 +9,6 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Autos;
-
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -82,7 +80,9 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.schedule();
     // }
-    Autos.BlueAutoBalanceOnlyAuto(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
+    
+    // Autos.BlueAutoBalanceOnlyAuto(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
+    Autos.LineUpWithConeArea(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
   }
 
   /** This function is called periodically during autonomous. */

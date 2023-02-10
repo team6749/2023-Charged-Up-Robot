@@ -41,13 +41,13 @@ public class SwerveDriveWithJoystick extends CommandBase {
     selectedDriveMode = orientation.getSelected();
 
     double joystickRotation = sdJoystick.getTwist();
-    if(Math.abs(joystickRotation) < (0.25) ) {
+    if(Math.abs(joystickRotation) < (0.30) ) {
       joystickRotation = 0;
   }
 
-    double verticalDirectionSpeed = -limitedJoystickInput(sdJoystick.getY());
-    double horizontalDirectionSpeed = -limitedJoystickInput(sdJoystick.getX());
-    double rotationalSpeed = limitedJoystickInput(joystickRotation)*2;
+    double verticalDirectionSpeed = limitedJoystickInput(-sdJoystick.getY());
+    double horizontalDirectionSpeed = limitedJoystickInput(-sdJoystick.getX());
+    double rotationalSpeed = limitedJoystickInput(-joystickRotation)*2;
     
     if(sdJoystick.getMagnitude() < 0.15) {
       horizontalDirectionSpeed = 0;
@@ -58,23 +58,21 @@ public class SwerveDriveWithJoystick extends CommandBase {
     // System.out.println("X: " + horizontalDirectionSpeed);
     // System.out.println("Y: " + verticalDirectionSpeed);
     // System.out.println("Rot: " + rotationalSpeed);
+
+    
+    SmartDashboard.putNumber("vertical driving speed", verticalDirectionSpeed);
+    SmartDashboard.putNumber("horizontal driving speed", horizontalDirectionSpeed);
+    SmartDashboard.putNumber("Joystick twist ", rotationalSpeed);
     
     switch(selectedDriveMode){
       case ("Robot Oriented"):
           //put robot oriented drive here.
-
-
             desiredSpeeds = new ChassisSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed);
             break;
-          
-      
       case ("Field Oriented"):
           //put field oriented drive here.
-
-
           desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getRotation());
           break;
-      
     }
     if(verticalDirectionSpeed == 0 && horizontalDirectionSpeed == 0 && rotationalSpeed == 0){
       swerveDriveSubsystem.setModuleStates(new SwerveModuleState[] {
@@ -84,7 +82,6 @@ public class SwerveDriveWithJoystick extends CommandBase {
         new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
       });
       } else {
-        
         swerveDriveSubsystem.setDesiredChassisSpeeds(desiredSpeeds);
       }
   }
