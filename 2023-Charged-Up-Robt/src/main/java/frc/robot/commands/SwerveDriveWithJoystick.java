@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,41 +40,50 @@ public class SwerveDriveWithJoystick extends CommandBase {
   public void execute() {
     selectedDriveMode = orientation.getSelected();
 
-    double verticalDirectionSpeed = -limitedJoystickInput(sdJoystick.getY());
-    double horizontalDirectionSpeed = -limitedJoystickInput(sdJoystick.getX());
-    double rotationalSpeed = (2.0*sdJoystick.getTwist());
+    double joystickRotation = sdJoystick.getTwist();
+    if(Math.abs(joystickRotation) < (0.30) ) {
+      joystickRotation = 0;
+  }
+
+    double verticalDirectionSpeed = limitedJoystickInput(-sdJoystick.getY());
+    double horizontalDirectionSpeed = limitedJoystickInput(-sdJoystick.getX());
+    double rotationalSpeed = limitedJoystickInput(-joystickRotation)*2;
     
-    
-    //x joystick deadzone
-    if(Math.abs(horizontalDirectionSpeed) < (0.25) ) {
+    if(sdJoystick.getMagnitude() < 0.15) {
       horizontalDirectionSpeed = 0;
-    }
-    
-    //y joystick deadzone
-    if(Math.abs(verticalDirectionSpeed) < (0.25)) {
       verticalDirectionSpeed = 0;
     }
     
-    if(Math.abs(rotationalSpeed) < (0.2) ) {
-        rotationalSpeed = 0;
-    }
+    
     // System.out.println("X: " + horizontalDirectionSpeed);
     // System.out.println("Y: " + verticalDirectionSpeed);
     // System.out.println("Rot: " + rotationalSpeed);
+
+    
+    SmartDashboard.putNumber("vertical driving speed", verticalDirectionSpeed);
+    SmartDashboard.putNumber("horizontal driving speed", horizontalDirectionSpeed);
+    SmartDashboard.putNumber("Joystick twist ", rotationalSpeed);
+    
     switch(selectedDriveMode){
       case ("Robot Oriented"):
           //put robot oriented drive here.
-          desiredSpeeds = new ChassisSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed);
-          break;
-      
+            desiredSpeeds = new ChassisSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed);
+            break;
       case ("Field Oriented"):
           //put field oriented drive here.
           desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getRotation());
           break;
-      
     }
-
-    swerveDriveSubsystem.setDesiredChassisSpeeds(desiredSpeeds);
+    if(verticalDirectionSpeed == 0 && horizontalDirectionSpeed == 0 && rotationalSpeed == 0){
+      swerveDriveSubsystem.setModuleStates(new SwerveModuleState[] {
+        new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
+        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
+        new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+      });
+      } else {
+        swerveDriveSubsystem.setDesiredChassisSpeeds(desiredSpeeds);
+      }
   }
   
   // Called once the command ends or is interrupted.

@@ -90,7 +90,7 @@ public class SwerveDriveModule {
      */
     public void setDesiredState(SwerveModuleState desiredState) {
         //prevents wheels from resetting back to straight orientation
-        if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
+        if (Math.abs(desiredState.speedMetersPerSecond) < 0.001 && Math.abs(desiredState.angle.getDegrees()) < 0.001) {
             stop();
             return;
         }

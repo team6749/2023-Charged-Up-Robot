@@ -19,7 +19,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backLeftModule offset",
-              "_title": "SmartDashboard/Swerve backLeftModule offset"
+              "_title": "SmartDashboard/Swerve backLeftModule offset",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "12,0": {
@@ -30,7 +32,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backLeftModule position",
-              "_title": "/SmartDashboard/Swerve backLeftModule position"
+              "_title": "/SmartDashboard/Swerve backLeftModule position",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "12,1": {
@@ -41,7 +45,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backLeftModule velocity",
-              "_title": "SmartDashboard/Swerve backLeftModule velocity"
+              "_title": "SmartDashboard/Swerve backLeftModule velocity",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "12,2": {
@@ -52,7 +58,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backLeftModule rotation",
-              "_title": "SmartDashboard/Swerve backLeftModule rotation"
+              "_title": "SmartDashboard/Swerve backLeftModule rotation",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "15,3": {
@@ -63,7 +71,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backRightModule offset",
-              "_title": "SmartDashboard/Swerve backRightModule offset"
+              "_title": "SmartDashboard/Swerve backRightModule offset",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "15,0": {
@@ -74,7 +84,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backRightModule position",
-              "_title": "/SmartDashboard/Swerve backRightModule position"
+              "_title": "/SmartDashboard/Swerve backRightModule position",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "15,2": {
@@ -85,7 +97,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backRightModule rotation",
-              "_title": "SmartDashboard/Swerve backRightModule rotation"
+              "_title": "SmartDashboard/Swerve backRightModule rotation",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "15,1": {
@@ -96,7 +110,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve backRightModule velocity",
-              "_title": "SmartDashboard/Swerve backRightModule velocity"
+              "_title": "SmartDashboard/Swerve backRightModule velocity",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,3": {
@@ -107,7 +123,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontLeftModule offset",
-              "_title": "SmartDashboard/Swerve frontLeftModule offset"
+              "_title": "SmartDashboard/Swerve frontLeftModule offset",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,0": {
@@ -118,7 +136,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontLeftModule position",
-              "_title": "/SmartDashboard/Swerve frontLeftModule position"
+              "_title": "/SmartDashboard/Swerve frontLeftModule position",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,2": {
@@ -129,7 +149,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontLeftModule rotation",
-              "_title": "SmartDashboard/Swerve frontLeftModule rotation"
+              "_title": "SmartDashboard/Swerve frontLeftModule rotation",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,1": {
@@ -140,7 +162,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontLeftModule velocity",
-              "_title": "SmartDashboard/Swerve frontLeftModule velocity"
+              "_title": "SmartDashboard/Swerve frontLeftModule velocity",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "9,3": {
@@ -151,7 +175,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontRightModule offset",
-              "_title": "SmartDashboard/Swerve frontRightModule offset"
+              "_title": "SmartDashboard/Swerve frontRightModule offset",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "9,0": {
@@ -162,7 +188,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontRightModule position",
-              "_title": "/SmartDashboard/Swerve frontRightModule position"
+              "_title": "/SmartDashboard/Swerve frontRightModule position",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "9,2": {
@@ -173,7 +201,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontRightModule rotation",
-              "_title": "SmartDashboard/Swerve frontRightModule rotation"
+              "_title": "SmartDashboard/Swerve frontRightModule rotation",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "9,1": {
@@ -184,7 +214,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Swerve frontRightModule velocity",
-              "_title": "SmartDashboard/Swerve frontRightModule velocity"
+              "_title": "SmartDashboard/Swerve frontRightModule velocity",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "10,4": {
@@ -195,7 +227,9 @@
             "content": {
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/SendableChooser[0]",
-              "_title": "SmartDashboard/SendableChooser[0]"
+              "_title": "SmartDashboard/SendableChooser[0]",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "6,6": {
@@ -206,7 +240,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/target x position",
-              "_title": "/SmartDashboard/target x position"
+              "_title": "/SmartDashboard/target x position",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "8,6": {
@@ -217,7 +253,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/target y position",
-              "_title": "/SmartDashboard/target y position"
+              "_title": "/SmartDashboard/target y position",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "10,6": {
@@ -228,7 +266,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/target rotation",
-              "_title": "/SmartDashboard/target rotation"
+              "_title": "/SmartDashboard/target rotation",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "12,6": {
@@ -239,7 +279,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/camera position on field",
-              "_title": "/SmartDashboard/camera position on field"
+              "_title": "/SmartDashboard/camera position on field",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
@@ -269,32 +311,70 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "10,0": {
+          "7,0": {
             "size": [
-              9,
-              5
+              12,
+              7
             ],
             "content": {
               "_type": "Field",
               "_source0": "network_table:///SmartDashboard/field map",
               "_title": "/SmartDashboard/field map",
-              "Game/Game": "A2022_Rapid_React",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Game/Game": "A2023_Charged_Up",
               "Visuals/Robot Icon Size": 50.0,
               "Visuals/Show Outside Circles": false
             }
           },
-          "4,0": {
+          "0,0": {
+            "size": [
+              6,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/pose est",
+              "_title": "/SmartDashboard/pose est",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,2": {
             "size": [
               6,
               5
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/pose est",
-              "_title": "/SmartDashboard/pose est"
+              "_type": "Camera Stream",
+              "_source0": "camera_server://photonvision_Port_1182_MJPEG_Server",
+              "_title": "photonvision_Port_1182_MJPEG_Server",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
             }
           }
         }
+      }
+    },
+    {
+      "title": "Tab 4",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
       }
     }
   ],

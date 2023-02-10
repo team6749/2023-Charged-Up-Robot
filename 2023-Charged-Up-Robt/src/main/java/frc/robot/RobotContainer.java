@@ -8,22 +8,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithJoystick;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-
-import java.util.List;
-
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 // import frc.robot.commands.Autos;
 // import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.ExampleSubsystem;
@@ -44,6 +30,7 @@ public class RobotContainer {
   public static Joystick _joystick = new Joystick(0);
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
+  final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -68,7 +55,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    new Trigger(activateAutoBalanceButton).onTrue(new SelfBalance(_SwerveDrivebase));
+    new Trigger(activateAutoBalanceButton).whileTrue(new SelfBalance(_SwerveDrivebase));
+
+    new Trigger(lineUpWithConeSpotButton).onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -77,48 +66,4 @@ public class RobotContainer {
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
-
-  Pose2d robotStartPosition = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-      // An ExampleCommand will run in autonomous
-      TrajectoryConfig trajectoryConfig = new TrajectoryConfig(0.7, 0.5).setKinematics(_SwerveDrivebase._kinematics);
-      //4.5, 3.5
-      // int rand = (int)(Math.random() * (360) + 1);
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        //negative translation2d is right of opening
-        robotStartPosition,
-        List.of(),
-        new Pose2d(1, Units.inchesToMeters(0), Rotation2d.fromDegrees(0)),
-          // new Pose2d(Units.inchesToMeters(320), Units.inchesToMeters(15), Rotation2d.fromDegrees(90)),
-          // List.of(
-            
-        //         new Translation2d(1, 0),
-        //         new Translation2d(1, -1),
-        //         new Translation2d(0, -1)),
-        
-        trajectoryConfig);
-
-        PIDController xController = new PIDController(6.5, 0, 0);
-        PIDController yController = new PIDController(6.5, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-          trajectory,
-          _SwerveDrivebase::getPose2d,
-          Constants.DrivebaseConstants.kinematics,
-          xController,
-          yController,
-          thetaController,
-          _SwerveDrivebase::setModuleStates,
-          _SwerveDrivebase);
-
-        return swerveControllerCommand;
-      }
-    }
+}

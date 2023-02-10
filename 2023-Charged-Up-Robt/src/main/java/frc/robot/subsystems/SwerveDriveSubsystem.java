@@ -1,5 +1,13 @@
 package frc.robot.subsystems;
 
+import java.util.HashMap;
+
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.controller.PIDController;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,9 +35,12 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
 public class SwerveDriveSubsystem extends SubsystemBase{
@@ -41,6 +52,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     // public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
+    HashMap<String, Command> eventMap = new HashMap<>();
 
     public SwerveDrivePoseEstimator poseEstimator;
 
@@ -50,6 +62,7 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     // initializing grabbing the data from the camera after processing in photon,
     // name the camera in photon vision the same as the camera name string in code
     PhotonCamera camera = new PhotonCamera("robotcamera");
+    
 
     //define the positions of the april tags on the field and 
     //create the layout of them on the field to update pose in 
@@ -87,9 +100,10 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         Units.inchesToMeters(315.5));   
     
     //define the position of the camera on the robot
-    public static Transform3d cameraPosition = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0));
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.25, -.12, 0.22), new Rotation3d(0, 0, 0));
     
     
+
 
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS, camera, cameraPosition);
 
@@ -104,6 +118,8 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         this.modules = modules;
         _kinematics = Constants.DrivebaseConstants.kinematics;
 
+    
+
     odometry = new SwerveDriveOdometry(
         _kinematics,
         getRotation(), 
@@ -117,40 +133,29 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        //VISION STUFF
+        odometry.update(
+            getRotation(), 
+            getCurrentModulePositions()
+        );
+        poseEstimator.update(getRotation(), getCurrentModulePositions());
         
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
         if(estPose.isPresent()) {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
-             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds);     
+            poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds); 
+            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(4, 4, 16));  
           }
 
         //Call periodic on children
         for (SwerveDriveModule swerveModule : modules) {
             swerveModule.periodic();
         }
-        // System.out.println(gyro.getYComplementaryAngle());
-        odometry.update(
-            getRotation(), 
-            getCurrentModulePositions()
-            );
+
         SmartDashboard.putString("encoder odometry", odometry.getPoseMeters().toString());
-
-        poseEstimator.update(getRotation(), getCurrentModulePositions());
-
-        
         SmartDashboard.putString("pose Estimator", poseEstimator.getEstimatedPosition().toString());
-
-
         SmartDashboard.putNumber("Swerve Odometry X", odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Swerve Odometry Y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Swerve Odosmetry Rot", odometry.getPoseMeters().getRotation().getDegrees());
-
-        // SmartDashboard.putNumber("acc x", gyro2.getYComplementaryAngle());
-        // SmartDashboard.putNumber("acc y", gyro2.getYFilteredAccelAngle());
-        // SmartDashboard.putNumber("angle", gyro2.getAngle());
-        // SmartDashboard.putNumber("acc z", accelerometer.getZ());
-
 
         //update the robot pose on the field image on smart dashboard
         field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -158,11 +163,11 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
         
     public Rotation2d getRotation(){
-        return Rotation2d.fromDegrees(-gyro.getAngle());
+        return Rotation2d.fromDegrees(gyro.getAngle());
     }
 
     public Pose2d getPose2d(){
-        return odometry.getPoseMeters();
+        return poseEstimator.getEstimatedPosition();
     }
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(
@@ -181,11 +186,9 @@ public class SwerveDriveSubsystem extends SubsystemBase{
      */
     public void setDesiredChassisSpeeds(ChassisSpeeds cSpeeds) {
         SwerveModuleState[] _desiredStates = _kinematics.toSwerveModuleStates(cSpeeds);
-        for (int i = 0; i < _desiredStates.length; i++) {
-            modules[i].setDesiredState(_desiredStates[i]);
-        }
+        setModuleStates(_desiredStates);
     }
-
+    
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         for (int i = 0; i < desiredStates.length; i++) {
             modules[i].setDesiredState(desiredStates[i]);
@@ -206,4 +209,29 @@ public class SwerveDriveSubsystem extends SubsystemBase{
             modules[3].getCurrentPosition()
         };
     }
+
+
+    //creates a path to follow using the parameter trjactoery and returns the auto command
+// Assuming this method is part of a drivetrain subsystem that provides the necessary methods
+public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    return new SequentialCommandGroup(
+         new InstantCommand(() -> {
+           // Reset odometry for the first path you run during auto
+           if(isFirstPath){
+               this.resetOdometry(traj.getInitialHolonomicPose());
+           }
+         }),
+         new PPSwerveControllerCommand(
+             traj, 
+             this::getPose2d, // Pose supplier
+             this._kinematics, // SwerveDriveKinematics
+             new PIDController(6.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+             new PIDController(6.5, 0, 0), // Y controller (usually the same values as X controller)
+             new PIDController(3.5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+             this::setModuleStates, // Module states consumer
+             false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+             this // Requires this drive subsystem
+         )
+     );
+ }
 }

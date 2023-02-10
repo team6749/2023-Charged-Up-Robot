@@ -25,12 +25,13 @@ public final class Constants {
     //subsystem constructed with array of modules
     //62.726cm
     //31.363cm
-    public static double distanceToCenter = 0.31363; // in meters
+    public static double halfWidth = 0.185; // in meters
+    public static double halfHeight = 0.25; // in meters
 
-    public static Translation2d frontLeftPosition = new Translation2d(+distanceToCenter, +distanceToCenter);
-    public static Translation2d frontRightPosition = new Translation2d(+distanceToCenter, -distanceToCenter);
-    public static Translation2d backLeftPosition = new Translation2d(-distanceToCenter, +distanceToCenter);
-    public static Translation2d backRightPosition = new Translation2d(-distanceToCenter, -distanceToCenter);
+    public static Translation2d frontLeftPosition = new Translation2d(+halfHeight, +halfWidth);
+    public static Translation2d frontRightPosition = new Translation2d(+halfHeight, -halfWidth);
+    public static Translation2d backLeftPosition = new Translation2d(-halfHeight, +halfWidth);
+    public static Translation2d backRightPosition = new Translation2d(-halfHeight, -halfWidth);
     
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       Constants.DrivebaseConstants.frontLeftPosition, 
@@ -39,37 +40,37 @@ public final class Constants {
       Constants.DrivebaseConstants.backRightPosition
     );
     
-    public static SwerveDriveModule frontLeftModule = new SwerveDriveModule(
+    public static SwerveDriveModule backRightModule = new SwerveDriveModule(
       "frontLeftModule",
       4,
       5, 
       6, 
-      105.5, 
-      frontLeftPosition
+      103.5, 
+      backRightPosition
     );
-    public static SwerveDriveModule frontRightModule = new SwerveDriveModule(
+    public static SwerveDriveModule backLeftModule = new SwerveDriveModule(
       "frontRightModule", 
       7, 
       8, 
       9, 
-      -235.1, 
-      frontRightPosition
+      -236.6, 
+      backLeftPosition
     );
-    public static SwerveDriveModule backLeftModule = new SwerveDriveModule(
+    public static SwerveDriveModule frontRightModule = new SwerveDriveModule(
       "backLeftModule", 
       1, 
       2, 
       3, 
-      145.3, 
-      backLeftPosition
+      140.0, 
+      frontRightPosition
     );
-    public static SwerveDriveModule backRightModule = new SwerveDriveModule(
+    public static SwerveDriveModule frontLeftModule = new SwerveDriveModule(
       "backRightModule", 
       10, 
       11, 
       12, 
-      -68.1, 
-      backRightPosition
+      -66.6, 
+      frontLeftPosition
     );
     
 
