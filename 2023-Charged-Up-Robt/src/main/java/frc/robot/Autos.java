@@ -35,19 +35,29 @@ public final class Autos {
     throw new UnsupportedOperationException("This is a utility class!");
   }
   
-
-  public static CommandBase BlueAutoBalanceOnlyAuto(SwerveDriveSubsystem subsystem) {
-    PathPlannerTrajectory BlueAutoBalanceOnlyPath = PathPlanner.loadPath("todays path", new PathConstraints(1.5, 1.5));
-    return subsystem.followTrajectoryCommand(BlueAutoBalanceOnlyPath, true);
+  
+  //path planner lib auto mirrors / flips paths
+  //starts closer to charge station
+  public static CommandBase ChargingStationOnlyTop(SwerveDriveSubsystem subsystem) {
+    PathPlannerTrajectory ChargingStationOnlyTop = PathPlanner.loadPath("ChargingStationOnlyTop", new PathConstraints(1.5, 1.5));
+    return subsystem.followTrajectoryCommand(ChargingStationOnlyTop, true);
+  }
+  
+  //path planner lib auto mirrors / flips paths
+  //closer to gates
+  public static CommandBase ChargingStationOnlyBottom(SwerveDriveSubsystem subsystem) {
+    PathPlannerTrajectory ChargingStationOnlyBottom = PathPlanner.loadPath("ChargingStationOnlyBottom", new PathConstraints(1.5, 1.5));
+    return subsystem.followTrajectoryCommand(ChargingStationOnlyBottom, true);
   }
 
+  //custom command w/o pplib
   public static Command LineUpWithConeArea(SwerveDriveSubsystem subsystem){
-    Pose2d asdf = subsystem.getPose2d();
+    Pose2d currentPose = subsystem.getPose2d();
 
     // An ExampleCommand will run in autonomous
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      asdf,
+      currentPose,
       List.of(),
       new Pose2d(1.8, 1.6, Rotation2d.fromDegrees(180)),
        trajectoryConfig);

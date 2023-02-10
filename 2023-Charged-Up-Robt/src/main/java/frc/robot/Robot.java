@@ -6,8 +6,14 @@ package frc.robot;
 
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,6 +23,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  public SendableChooser<Pose2d> startPosChooser = new SendableChooser<Pose2d>();
+  public SendableChooser<CommandBase> autoChooser = new SendableChooser<CommandBase>();
+  
 
   private RobotContainer m_robotContainer;
   Thread m_visionThread;
@@ -30,6 +39,16 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    
+    startPosChooser.setDefaultOption("Current Robot Pose", m_robotContainer._SwerveDrivebase.getPose2d());
+    startPosChooser.addOption("Blue Top Left", new Pose2d(new Translation2d(2.91, 4.41), Rotation2d.fromDegrees(0)));
+    startPosChooser.addOption("Blue Bottom Left", new Pose2d(new Translation2d(4.37, 0.7), Rotation2d.fromDegrees(0)));
+
+    autoChooser.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase));
+    autoChooser.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
+
+
 
     //april tag shit
     m_visionThread =
@@ -83,7 +102,7 @@ public class Robot extends TimedRobot {
     
     
     // Autos.LineUpWithConeArea(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
-    Autos.BlueAutoBalanceOnlyAuto(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
+
   }
 
   /** This function is called periodically during autonomous. */
