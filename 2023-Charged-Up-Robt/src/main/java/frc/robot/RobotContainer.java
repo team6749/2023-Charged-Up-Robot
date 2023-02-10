@@ -5,10 +5,18 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.LineUpWithStation;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithJoystick;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+
+import java.util.Map;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 // import frc.robot.commands.Autos;
 // import frc.robot.commands.ExampleCommand;
@@ -26,11 +34,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SwerveDriveSubsystem _SwerveDrivebase = Constants.DrivebaseConstants.swerveDriveSubsystem;
+  public final SwerveDriveSubsystem _SwerveDrivebase = Constants.DrivebaseConstants.swerveDriveSubsystem;
   public static Joystick _joystick = new Joystick(0);
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
   final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -65,5 +74,9 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+    for(int i = 1; i < 10; i++) {
+      SmartDashboard.putData("Drive to " + i, new LineUpWithStation(_SwerveDrivebase, i));
+    }
   }
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 
 public class SwerveDriveModule {
@@ -17,7 +18,8 @@ public class SwerveDriveModule {
     private final WPI_TalonFX driveMotor; 
     private final WPI_TalonFX rotationMotor;
     private final WPI_CANCoder absEncoder;
-    public final PIDController PIDController = new PIDController(0.01, 0, 0);
+    public final PIDController velocityPID = new PIDController(0.025, 0, 0);
+    public final PIDController rotationPID = new PIDController(0.01, 0, 0);
     public Translation2d positionOnRobot;
     public double calibrationDegrees;
     public String name;
@@ -40,7 +42,7 @@ public class SwerveDriveModule {
         this.absEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         this.positionOnRobot = positionOnRobot;
         this.name = name;
-        PIDController.enableContinuousInput(0, 360);
+        rotationPID.enableContinuousInput(0, 360);
         driveMotor.setNeutralMode(NeutralMode.Brake);
         rotationMotor.setNeutralMode(NeutralMode.Brake);
     }
@@ -50,14 +52,15 @@ public class SwerveDriveModule {
      * @return the velocity of robot in meters per second
      */
     public double getDriveEncoderVelocity() {
-        return driveMotor.getSelectedSensorVelocity() / (2048 * 8.14);
+        //Converts m/100ms to m/1000ms (m/s)
+        return driveMotor.getSelectedSensorVelocity() / (2048 * 8.14) * (Math.PI * Constants.DrivebaseConstants.wheelDiameter) * 10;
     }
 
     /**
      * @return the position of the drive motor
      */
     public double getDriveEncoderPos(){
-        return driveMotor.getSelectedSensorPosition() / (2048 * 8.14) * (Math.PI * 0.1);
+        return driveMotor.getSelectedSensorPosition() / (2048 * 8.14) * (Math.PI * Constants.DrivebaseConstants.wheelDiameter);
     }
 
     //Degrees
@@ -102,24 +105,19 @@ public class SwerveDriveModule {
     
         // Calculate the turning motor output from the turning PID controller.
         final double turnOutput =
-        PIDController.calculate(getRotationEncoder(), state.angle.getDegrees());
+        rotationPID.calculate(getRotationEncoder(), state.angle.getDegrees());
         SmartDashboard.putNumber("Swerve " + name + " target pid", turnOutput);
 
-        // // Calculate the drive output from the drive PID controller.
-        // final double driveOutput =
-        //     _PidController.calculate(getDriveEncoder(), state.speedMetersPerSecond);
-    
-        // final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
-    
-        // final double turnFeedforward =
-        //     m_turnFeedforward.calculate(_PidController.getSetpoint().velocity);
-    
-        // speedMotor.set(driveOutput + driveFeedforward);
-        // angleMotor.set(turnOutput + turnFeedforward);
+        double velocityFeedfoward = state.speedMetersPerSecond * 0.275;
+        double velocityFeedback = velocityPID.calculate(getDriveEncoderVelocity(), state.speedMetersPerSecond);
 
         rotationMotor.set(turnOutput);
+        System.out.println(state.speedMetersPerSecond);
+
+        SmartDashboard.putNumber("ff difference to actual velocity " + name, state.speedMetersPerSecond - getDriveEncoderVelocity());
+
         //setting the motor to the speed it needs to be speeded
-        driveMotor.set(state.speedMetersPerSecond * 0.5);
+        driveMotor.set(velocityFeedfoward + velocityFeedback);
     }
 
     /**

@@ -18,7 +18,7 @@ public class SelfBalance extends CommandBase {
   double accY;
   double thresholdLevel = 0.75;
   double offsetLevel = 2.4;
-  PIDController pidController = new PIDController(0.0175,0.0012, 0.002);
+  PIDController pidController = new PIDController(0.0215,0.005, 0.004);
   Timer timer = new Timer();
 
   public SelfBalance(SwerveDriveSubsystem swerveSubsystem) {
