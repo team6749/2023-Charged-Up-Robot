@@ -81,8 +81,9 @@ public class Robot extends TimedRobot {
     //   m_autonomousCommand.schedule();
     // }
     
-    // Autos.BlueAutoBalanceOnlyAuto(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
-    Autos.LineUpWithConeArea(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
+    
+    // Autos.LineUpWithConeArea(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
+    Autos.BlueAutoBalanceOnlyAuto(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
   }
 
   /** This function is called periodically during autonomous. */
