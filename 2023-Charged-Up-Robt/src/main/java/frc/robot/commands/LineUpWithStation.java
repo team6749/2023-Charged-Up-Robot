@@ -19,6 +19,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class LineUpWithStation extends CommandBase {
@@ -27,9 +28,8 @@ public class LineUpWithStation extends CommandBase {
   private final Translation2d stationZero = new Translation2d(1.75, 0.5);
   private final Translation2d spacing = new Translation2d(0, 0.5588);
 
-  
-
   private Command moveCommand;
+
   /** Creates a new LineUpWithStation. */
   public LineUpWithStation(SwerveDriveSubsystem subsystem, int station) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,32 +38,34 @@ public class LineUpWithStation extends CommandBase {
     addRequirements(subsystem);
 
   }
-  
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     Pose2d currentPose = subsystem.getPose2d();
 
     Pose2d targetPosition = new Pose2d(stationZero.plus(spacing.times(substation - 1)), Rotation2d.fromDegrees(180));
-    double yOffset = (currentPose.getY() - targetPosition.getY()) /2;
+    double yOffset = (currentPose.getY() - targetPosition.getY()) / 2;
+
+    System.out.println(Constants.Drivebase.sideifyPose2d(targetPosition));
+    System.out.println(Constants.Drivebase.sideifyTranslation2d(new Translation2d(2.2, yOffset + targetPosition.getY())));
     // An ExampleCommand will run in autonomous
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      currentPose,
-      List.of(
-        new Translation2d(2.2, currentPose.getY()),
-        new Translation2d(2.2, yOffset + targetPosition.getY())
-        ),
-      targetPosition,
-       trajectoryConfig);
+        currentPose,
+        List.of(
+            Constants.Drivebase.sideifyTranslation2d(new Translation2d(2.2, currentPose.getY())),
+            Constants.Drivebase.sideifyTranslation2d(new Translation2d(2.2, yOffset + targetPosition.getY()))),
+        Constants.Drivebase.sideifyPose2d(targetPosition),
+        trajectoryConfig);
 
-      PIDController xController = new PIDController(6.5, 0, 0);
-      PIDController yController = new PIDController(6.5, 0, 0);
-      ProfiledPIDController thetaController = new ProfiledPIDController(
-              3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    PIDController xController = new PIDController(6.5, 0, 0);
+    PIDController yController = new PIDController(6.5, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+        3, 0, 0, new TrapezoidProfile.Constraints(5 / 4, 3));
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-       moveCommand = new SwerveControllerCommand(
+    moveCommand = new SwerveControllerCommand(
         trajectory,
         subsystem::getPose2d,
         subsystem._kinematics,
@@ -72,7 +74,7 @@ public class LineUpWithStation extends CommandBase {
         thetaController,
         subsystem::setModuleStates,
         subsystem);
-        moveCommand.initialize();
+    moveCommand.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -92,4 +94,5 @@ public class LineUpWithStation extends CommandBase {
   public boolean isFinished() {
     return moveCommand.isFinished();
   }
+
 }

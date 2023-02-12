@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.SwerveDriveModule;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -18,26 +21,28 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
+  public static class Operation {
+
     public static final int kDriverControllerPort = 0;
+
   }
-  public static class DrivebaseConstants {
+  public static class Drivebase {
     //subsystem constructed with array of modules
     //62.726cm
     //31.363cm
     public static double halfWidth = 0.185; // in meters
     public static double halfHeight = 0.25; // in meters
-    public static double wheelDiameter = 0.097;
+    public static double wheelDiameter = 0.097; //meters
     public static Translation2d frontLeftPosition = new Translation2d(+halfHeight, +halfWidth);
     public static Translation2d frontRightPosition = new Translation2d(+halfHeight, -halfWidth);
     public static Translation2d backLeftPosition = new Translation2d(-halfHeight, +halfWidth);
     public static Translation2d backRightPosition = new Translation2d(-halfHeight, -halfWidth);
     
     public static SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-      Constants.DrivebaseConstants.frontLeftPosition, 
-      Constants.DrivebaseConstants.frontRightPosition, 
-      Constants.DrivebaseConstants.backLeftPosition, 
-      Constants.DrivebaseConstants.backRightPosition
+      Constants.Drivebase.frontLeftPosition, 
+      Constants.Drivebase.frontRightPosition, 
+      Constants.Drivebase.backLeftPosition, 
+      Constants.Drivebase.backRightPosition
     );
     
     public static SwerveDriveModule backRightModule = new SwerveDriveModule(
@@ -78,9 +83,33 @@ public final class Constants {
 
     public static SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem(new SwerveDriveModule [] {frontLeftModule, frontRightModule, backLeftModule, backRightModule});
 
-    //standard positions/paths
-    //everything is blue sided
+
+    public static final double fieldLengthInMeters = 16.54;
+    public static final double fieldWidthInMeters = 8.02;
     
+    //everything is blue sided
     //sideify function
+    public static Pose2d sideifyPose2d(Pose2d blue){
+
+      if(DriverStation.getAlliance() != DriverStation.Alliance.Red){
+        //If we are not red (aka blue) return the blue value
+        return blue;
+      }
+
+      Rotation2d redSideRotation = blue.getRotation().plus(Rotation2d.fromDegrees(180));
+      
+      return new Pose2d(sideifyTranslation2d(blue.getTranslation()), redSideRotation);
+    }
+
+    public static Translation2d sideifyTranslation2d(Translation2d blue){
+      if(DriverStation.getAlliance() != DriverStation.Alliance.Red){
+        //If we are not red (aka blue) return the blue value
+        return blue;
+      }
+
+      double redSideLength = fieldLengthInMeters - blue.getX();
+      
+      return new Translation2d(redSideLength, blue.getY());
+    }
   }
 }

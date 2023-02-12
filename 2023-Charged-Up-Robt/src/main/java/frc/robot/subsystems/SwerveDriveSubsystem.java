@@ -42,9 +42,8 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-
-public class SwerveDriveSubsystem extends SubsystemBase{
-    //priv variables
+public class SwerveDriveSubsystem extends SubsystemBase {
+    // priv variables
     public static ADIS16470_IMU gyro = new ADIS16470_IMU();
     public SwerveDriveModule[] modules;
     public SwerveDriveKinematics _kinematics;
@@ -56,97 +55,98 @@ public class SwerveDriveSubsystem extends SubsystemBase{
 
     public SwerveDrivePoseEstimator poseEstimator;
 
-    //field map for smartdashboard and pose on smartdashboard
+    // field map for smartdashboard and pose on smartdashboard
     public final Field2d field = new Field2d();
 
     // initializing grabbing the data from the camera after processing in photon,
     // name the camera in photon vision the same as the camera name string in code
     PhotonCamera camera = new PhotonCamera("robotcamera");
-    
 
-    //define the positions of the april tags on the field and 
-    //create the layout of them on the field to update pose in 
-    //relation to the tags
+    // define the positions of the april tags on the field and
+    // create the layout of them on the field to update pose in
+    // relation to the tags
     public static AprilTag[] tags = new AprilTag[] {
-        new AprilTag(1,
-            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
-                new Rotation3d(0, 0, 3.1415))),
-        new AprilTag(2,
-            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
-                new Rotation3d(0, 0, 3.1415))),
-        new AprilTag(3, 
-            new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
-                new Rotation3d(0, 0, 3.1415))),
-        new AprilTag(4, 
-            new Pose3d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
-                new Rotation3d(0, 0, 3.1415))),
-        new AprilTag(5, 
-            new Pose3d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38),
-                new Rotation3d(0, 0, 0))),
-        new AprilTag(6, 
-            new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22),
-                new Rotation3d(0, 0, 0))),
-        new AprilTag(7, 
-                new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22),
-                    new Rotation3d(0, 0, 0))),
-        new AprilTag(8, 
-                 new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19), Units.inchesToMeters(18.22),
-                    new Rotation3d(0, 0, 0)))
-              };
-    
+            new AprilTag(1,
+                    new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(42.19),
+                            Units.inchesToMeters(18.22),
+                            new Rotation3d(0, 0, 3.1415))),
+            new AprilTag(2,
+                    new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19),
+                            Units.inchesToMeters(18.22),
+                            new Rotation3d(0, 0, 3.1415))),
+            new AprilTag(3,
+                    new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19),
+                            Units.inchesToMeters(18.22),
+                            new Rotation3d(0, 0, 3.1415))),
+            new AprilTag(4,
+                    new Pose3d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74),
+                            Units.inchesToMeters(27.38),
+                            new Rotation3d(0, 0, 3.1415))),
+            new AprilTag(5,
+                    new Pose3d(Units.inchesToMeters(14.25), Units.inchesToMeters(265.74),
+                            Units.inchesToMeters(27.38),
+                            new Rotation3d(0, 0, 0))),
+            new AprilTag(6,
+                    new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(174.19),
+                            Units.inchesToMeters(18.22),
+                            new Rotation3d(0, 0, 0))),
+            new AprilTag(7,
+                    new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(108.19),
+                            Units.inchesToMeters(18.22),
+                            new Rotation3d(0, 0, 0))),
+            new AprilTag(8,
+                    new Pose3d(Units.inchesToMeters(40.45), Units.inchesToMeters(42.19),
+                            Units.inchesToMeters(18.22),
+                            new Rotation3d(0, 0, 0)))
+    };
+
     public static AprilTagFieldLayout layout2023 = new AprilTagFieldLayout(
-        List.of(tags),
-        Units.inchesToMeters(615.25),
-        Units.inchesToMeters(315.5));   
-    
-    //define the position of the camera on the robot
-    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.25, -.12, 0.22), new Rotation3d(0, 0, 0));
-    
-    
+            List.of(tags),
+            Constants.Drivebase.fieldLengthInMeters,
+            Constants.Drivebase.fieldWidthInMeters);
 
+    // define the position of the camera on the robot
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.25, -.12, 0.22),
+            new Rotation3d(0, 0, 0));
 
-    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS, camera, cameraPosition);
-
-
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS,
+            camera, cameraPosition);
 
     // constructor
     /**
      * @param modules - An Array of SwerveDriveModules
-     * Creates a new SwerveDrivebase
+     *                Creates a new SwerveDrivebase
      */
-    public SwerveDriveSubsystem(SwerveDriveModule[] modules){
+    public SwerveDriveSubsystem(SwerveDriveModule[] modules) {
         this.modules = modules;
-        _kinematics = Constants.DrivebaseConstants.kinematics;
+        _kinematics = Constants.Drivebase.kinematics;
 
-    
-
-    odometry = new SwerveDriveOdometry(
-        _kinematics,
-        getRotation(), 
-        getCurrentModulePositions()
-    );
-    poseEstimator = new SwerveDrivePoseEstimator(_kinematics, getRotation(), getCurrentModulePositions(), new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-    //add the field map to smartdashboard
-    SmartDashboard.putData("field map", field);
-}
-
+        odometry = new SwerveDriveOdometry(
+                _kinematics,
+                getRotation(),
+                getCurrentModulePositions());
+        poseEstimator = new SwerveDrivePoseEstimator(_kinematics, getRotation(), getCurrentModulePositions(),
+                new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+        // add the field map to smartdashboard
+        SmartDashboard.putData("field map", field);
+    }
 
     @Override
     public void periodic() {
         odometry.update(
-            getRotation(), 
-            getCurrentModulePositions()
-        );
+                getRotation(),
+                getCurrentModulePositions());
         poseEstimator.update(getRotation(), getCurrentModulePositions());
-        
-        Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
-        if(estPose.isPresent()) {
-            SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
-            poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(), estPose.get().timestampSeconds); 
-            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(4, 4, 16));  
-          }
 
-        //Call periodic on children
+        Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
+        if (estPose.isPresent()) {
+            SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
+            poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(),
+                    estPose.get().timestampSeconds);
+            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(4, 4, 16));
+        }
+
+        // Call periodic on children
         for (SwerveDriveModule swerveModule : modules) {
             swerveModule.periodic();
         }
@@ -157,38 +157,35 @@ public class SwerveDriveSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Swerve Odometry Y", odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Swerve Odosmetry Rot", odometry.getPoseMeters().getRotation().getDegrees());
 
-        //update the robot pose on the field image on smart dashboard
+        // update the robot pose on the field image on smart dashboard
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
 
-        
-    public Rotation2d getRotation(){
+    public Rotation2d getRotation() {
         return Rotation2d.fromDegrees(gyro.getAngle());
     }
 
-    public Pose2d getPose2d(){
+    public Pose2d getPose2d() {
         return poseEstimator.getEstimatedPosition();
     }
+
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(
-            getRotation(), 
-            getCurrentModulePositions(), 
-            pose
-        );
-
+                getRotation(),
+                getCurrentModulePositions(),
+                pose);
 
     }
 
-    
     /**
      * @param cSpeeds the desired chassis speeds to set each module to
-     * converts each module to the ChassisSpeeds cSpeeds
+     *                converts each module to the ChassisSpeeds cSpeeds
      */
     public void setDesiredChassisSpeeds(ChassisSpeeds cSpeeds) {
         SwerveModuleState[] _desiredStates = _kinematics.toSwerveModuleStates(cSpeeds);
         setModuleStates(_desiredStates);
     }
-    
+
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         for (int i = 0; i < desiredStates.length; i++) {
             modules[i].setDesiredState(desiredStates[i]);
@@ -198,40 +195,47 @@ public class SwerveDriveSubsystem extends SubsystemBase{
     public void stopModules() {
         for (int i = 0; i < modules.length; i++) {
             modules[i].stop();
-        }        
+        }
     }
 
-    public SwerveModulePosition[] getCurrentModulePositions(){
-        return new SwerveModulePosition[]{
-            modules[0].getCurrentPosition(),
-            modules[1].getCurrentPosition(),
-            modules[2].getCurrentPosition(),
-            modules[3].getCurrentPosition()
+    public SwerveModulePosition[] getCurrentModulePositions() {
+        return new SwerveModulePosition[] {
+                modules[0].getCurrentPosition(),
+                modules[1].getCurrentPosition(),
+                modules[2].getCurrentPosition(),
+                modules[3].getCurrentPosition()
         };
     }
 
-
-    //creates a path to follow using the parameter trjactoery and returns the auto command
-// Assuming this method is part of a drivetrain subsystem that provides the necessary methods
-public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    return new SequentialCommandGroup(
-         new InstantCommand(() -> {
-           // Reset odometry for the first path you run during auto
-           if(isFirstPath){
-               this.resetOdometry(traj.getInitialHolonomicPose());
-           }
-         }),
-         new PPSwerveControllerCommand(
-             traj, 
-             this::getPose2d, // Pose supplier
-             this._kinematics, // SwerveDriveKinematics
-             new PIDController(6.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-             new PIDController(6.5, 0, 0), // Y controller (usually the same values as X controller)
-             new PIDController(3.5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-             this::setModuleStates, // Module states consumer
-             true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-             this // Requires this drive subsystem
-         )
-     );
- }
+    // creates a path to follow using the parameter trjactoery and returns the auto
+    // command
+    // Assuming this method is part of a drivetrain subsystem that provides the
+    // necessary methods
+    public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    // Reset odometry for the first path you run during auto
+                    if (isFirstPath) {
+                        this.resetOdometry(traj.getInitialHolonomicPose());
+                    }
+                }),
+                new PPSwerveControllerCommand(
+                        traj,
+                        this::getPose2d, // Pose supplier
+                        this._kinematics, // SwerveDriveKinematics
+                        new PIDController(6.5, 0, 0), // X controller. Tune these values for
+                                                      // your robot. Leaving them 0
+                                                      // will only use feedforwards.
+                        new PIDController(6.5, 0, 0), // Y controller (usually the same values
+                                                      // as X controller)
+                        new PIDController(3.5, 0, 0), // Rotation controller. Tune these values
+                                                      // for your robot. Leaving
+                                                      // them 0 will only use feedforwards.
+                        this::setModuleStates, // Module states consumer
+                        true, // Should the path be automatically mirrored depending on alliance
+                              // color.
+                              // Optional, defaults to true
+                        this // Requires this drive subsystem
+                ));
+    }
 }
