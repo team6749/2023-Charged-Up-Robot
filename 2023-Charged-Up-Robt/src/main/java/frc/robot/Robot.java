@@ -55,13 +55,8 @@ public class Robot extends TimedRobot {
     new Thread(
         () -> {
           var camera = CameraServer.startAutomaticCapture();
-
-          var cameraWidth = 320;
-          var cameraHeight = 240;
-
-          camera.setResolution(cameraWidth, cameraHeight);
- 
-          
+          camera.setResolution(160, 120);
+          camera.setFPS(30);
         });
   m_visionThread.setDaemon(true);
   m_visionThread.start();
