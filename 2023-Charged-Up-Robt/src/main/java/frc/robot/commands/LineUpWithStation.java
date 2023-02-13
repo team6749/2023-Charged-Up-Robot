@@ -10,7 +10,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -47,8 +46,6 @@ public class LineUpWithStation extends CommandBase {
     Pose2d targetPosition = new Pose2d(stationZero.plus(spacing.times(substation - 1)), Rotation2d.fromDegrees(180));
     double yOffset = (currentPose.getY() - targetPosition.getY()) / 2;
 
-    System.out.println(Constants.Drivebase.sideifyPose2d(targetPosition));
-    System.out.println(Constants.Drivebase.sideifyTranslation2d(new Translation2d(2.2, yOffset + targetPosition.getY())));
     // An ExampleCommand will run in autonomous
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
