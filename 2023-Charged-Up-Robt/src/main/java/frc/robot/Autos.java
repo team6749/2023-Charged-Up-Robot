@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.SelfBalance;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.util.List;
@@ -23,10 +24,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 public final class Autos {
-    private SwerveDriveSubsystem subsystem;
-  /** Example static factory for an autonomous command. */
+    /** Example static factory for an autonomous command. */
 //   public static CommandBase exampleAuto(ExampleSubsystem subsystem) {
 //     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
 //   }
@@ -34,20 +34,21 @@ public final class Autos {
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
-  
+
   
   //path planner lib auto mirrors / flips paths
   //starts closer to charge station
   public static CommandBase ChargingStationOnlyTop(SwerveDriveSubsystem subsystem) {
     PathPlannerTrajectory ChargingStationOnlyTop = PathPlanner.loadPath("ChargingStationOnlyTop", new PathConstraints(1.5, 1.5));
-    return subsystem.followTrajectoryCommand(ChargingStationOnlyTop, true);
+    return subsystem.followTrajectoryCommand(ChargingStationOnlyTop, true).andThen(new SelfBalance(subsystem));
+
   }
   
   //path planner lib auto mirrors / flips paths
   //closer to gates
   public static CommandBase ChargingStationOnlyBottom(SwerveDriveSubsystem subsystem) {
     PathPlannerTrajectory ChargingStationOnlyBottom = PathPlanner.loadPath("ChargingStationOnlyBottom", new PathConstraints(1.5, 1.5));
-    return subsystem.followTrajectoryCommand(ChargingStationOnlyBottom, true);
+    return subsystem.followTrajectoryCommand(ChargingStationOnlyBottom, true).andThen(new SelfBalance(subsystem));
   }
 
   //custom command w/o pplib
