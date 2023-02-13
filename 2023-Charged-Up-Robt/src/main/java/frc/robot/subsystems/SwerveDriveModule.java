@@ -53,14 +53,14 @@ public class SwerveDriveModule {
      */
     public double getDriveEncoderVelocity() {
         //Converts m/100ms to m/1000ms (m/s)
-        return driveMotor.getSelectedSensorVelocity() / (2048 * 8.14) * (Math.PI * Constants.DrivebaseConstants.wheelDiameter) * 10;
+        return driveMotor.getSelectedSensorVelocity() / (2048 * 8.14) * (Math.PI * Constants.Drivebase.wheelDiameter) * 10;
     }
 
     /**
      * @return the position of the drive motor
      */
     public double getDriveEncoderPos(){
-        return driveMotor.getSelectedSensorPosition() / (2048 * 8.14) * (Math.PI * Constants.DrivebaseConstants.wheelDiameter);
+        return driveMotor.getSelectedSensorPosition() / (2048 * 8.14) * (Math.PI * Constants.Drivebase.wheelDiameter);
     }
 
     //Degrees
@@ -112,7 +112,7 @@ public class SwerveDriveModule {
         double velocityFeedback = velocityPID.calculate(getDriveEncoderVelocity(), state.speedMetersPerSecond);
 
         rotationMotor.set(turnOutput);
-        System.out.println(state.speedMetersPerSecond);
+        // System.out.println(state.speedMetersPerSecond);
 
         SmartDashboard.putNumber("ff difference to actual velocity " + name, state.speedMetersPerSecond - getDriveEncoderVelocity());
 

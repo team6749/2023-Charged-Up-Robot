@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.Operation;
 import frc.robot.commands.LineUpWithStation;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithJoystick;
@@ -12,6 +12,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.util.Map;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -34,16 +35,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public final SwerveDriveSubsystem _SwerveDrivebase = Constants.DrivebaseConstants.swerveDriveSubsystem;
+  public final SwerveDriveSubsystem _SwerveDrivebase = Constants.Drivebase.swerveDriveSubsystem;
   public static Joystick _joystick = new Joystick(0);
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
   final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
 
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+      new CommandXboxController(Operation.kDriverControllerPort);
+
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -51,7 +53,6 @@ public class RobotContainer {
     configureBindings();
 
     _SwerveDrivebase.setDefaultCommand(new SwerveDriveWithJoystick(_SwerveDrivebase, _joystick));
-
   }
 
   /**
@@ -80,3 +81,7 @@ public class RobotContainer {
     }
   }
 }
+
+//﻿﻿﻿﻿﻿﻿ Pose2d(Translation2d(X: 14.79, Y: 1.06), Rotation2d(Rads: -0.00, Deg: -0.00)) ﻿
+//﻿﻿﻿﻿﻿﻿ Translation2d(X: 14.34, Y: 0.23) ﻿
+
