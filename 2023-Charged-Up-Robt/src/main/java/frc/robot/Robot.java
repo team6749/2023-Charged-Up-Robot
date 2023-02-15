@@ -26,7 +26,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   public SendableChooser<Pose2d> startPosChooser = new SendableChooser<Pose2d>();
   public SendableChooser<CommandBase> autoChooser = new SendableChooser<CommandBase>();
-  
+  SendableChooser<Command> autoSelector = new SendableChooser<Command>();
+
 
   private RobotContainer m_robotContainer;
   Thread m_visionThread;
@@ -41,7 +42,12 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    
+    autoSelector.setDefaultOption("DO NOTHING", Autos.doNothing(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("Drive Forward (2m)", Autos.driveForward(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("Forward and Balance (.3m in front of ramp", Autos.forwardAndBalance(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
+    SmartDashboard.putData("auto selector", autoSelector);
 
 
     //april tag shit
@@ -90,7 +96,7 @@ public class Robot extends TimedRobot {
     // }
     
     
-      m_robotContainer.autoSelector.getSelected().schedule();
+      autoSelector.getSelected().schedule();
   }
 
   /** This function is called periodically during autonomous. */
