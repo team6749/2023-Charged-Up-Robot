@@ -32,11 +32,10 @@ public final class Autos {
 //   public static CommandBase exampleAuto(ExampleSubsystem subsystem) {
 //     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
 //   }
-  static PIDController xController = new PIDController(6.5, 0, 0);
-  static PIDController yController = new PIDController(6.5, 0, 0);
-  static ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
+  final static PIDController xController = new PIDController(6.5, 0, 0);
+  final static PIDController yController = new PIDController(6.5, 0, 0);
+  final static ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
   private Autos() {
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
     throw new UnsupportedOperationException("This is a utility class!");
   }
 
@@ -56,12 +55,12 @@ public final class Autos {
     return subsystem.followTrajectoryCommand(ChargingStationOnlyBottom, true).andThen(new SelfBalance(subsystem));
   }
 
+  //literally do nothing at all
   public static CommandBase doNothing (SwerveDriveSubsystem subsystem) {
     return new CommandBase() {};
-    //literally do nothing at all
   }
 
-  //pplib command to drive straight forward 3 meters
+  //pplib command to drive straight forward 2 meters
   public static CommandBase driveForward (SwerveDriveSubsystem subsystem){
     Pose2d currentPose = subsystem.getPose2d();
 
@@ -70,10 +69,11 @@ public final class Autos {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       currentPose,
       List.of(),
-      // uses start position and moves 3m forward on x
-      new Pose2d(currentPose.getTranslation().plus(new Translation2d(3, 0)), currentPose.getRotation()),
+      // uses start position and moves 2m forward on x
+      new Pose2d(currentPose.getTranslation().plus(new Translation2d(2, 0)), currentPose.getRotation()),
        trajectoryConfig);
-      
+       thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
        
       return new SwerveControllerCommand(
         trajectory,
@@ -83,11 +83,10 @@ public final class Autos {
         yController,
         thetaController,
         subsystem::setModuleStates,
-        subsystem)
-      .andThen(new SelfBalance(subsystem));
+        subsystem);
   }
 
-  //drive forward 1.5m and balance
+  //drive forward 1.3m and balance
   //START 0.3m FROM CHARGING PAD RAMP
   public static CommandBase forwardAndBalance (SwerveDriveSubsystem subsystem){
     Pose2d currentPose = subsystem.getPose2d();
@@ -98,8 +97,10 @@ public final class Autos {
       currentPose,
       List.of(),
 
-      new Pose2d(currentPose.getTranslation().plus(new Translation2d(1.5, 0)), currentPose.getRotation()),
+      new Pose2d(currentPose.getTranslation().plus(new Translation2d(1.3, 0)), currentPose.getRotation()),
        trajectoryConfig);
+      
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
       return new SwerveControllerCommand(
         trajectory,
@@ -124,6 +125,8 @@ public final class Autos {
       List.of(),
       new Pose2d(1.8, 1.6, Rotation2d.fromDegrees(180)),
        trajectoryConfig);
+      
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
       return new SwerveControllerCommand(
         trajectory,

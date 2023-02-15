@@ -42,13 +42,6 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     
-    startPosChooser.setDefaultOption("Current Robot Pose", m_robotContainer._SwerveDrivebase.getPose2d());
-    startPosChooser.addOption("Blue Top Left", new Pose2d(new Translation2d(2.91, 4.41), Rotation2d.fromDegrees(0)));
-    startPosChooser.addOption("Blue Bottom Left", new Pose2d(new Translation2d(4.37, 0.7), Rotation2d.fromDegrees(0)));
-
-    autoChooser.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase));
-    autoChooser.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
-
 
 
     //april tag shit
@@ -97,9 +90,7 @@ public class Robot extends TimedRobot {
     // }
     
     
-    // Autos.LineUpWithConeArea(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
-      // Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase).schedule();
-      Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase).schedule();
+      m_robotContainer.autoSelector.getSelected().schedule();
   }
 
   /** This function is called periodically during autonomous. */

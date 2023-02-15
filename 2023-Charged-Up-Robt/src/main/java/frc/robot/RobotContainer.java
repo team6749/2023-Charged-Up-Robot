@@ -12,12 +12,15 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.util.Map;
 
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 // import frc.robot.commands.Autos;
 // import frc.robot.commands.ExampleCommand;
@@ -40,7 +43,7 @@ public class RobotContainer {
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
   final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
-
+  SendableChooser<Command> autoSelector = new SendableChooser<Command>();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(Operation.kDriverControllerPort);
@@ -51,6 +54,11 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    autoSelector.setDefaultOption("DO NOTHING", Autos.doNothing(_SwerveDrivebase));
+    autoSelector.addOption("Drive Forward (2m)", Autos.driveForward(_SwerveDrivebase));
+    autoSelector.addOption("Forward and Balance (.3m in front of ramp", Autos.forwardAndBalance(_SwerveDrivebase));
+    autoSelector.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(_SwerveDrivebase));
+    autoSelector.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(_SwerveDrivebase));
 
     _SwerveDrivebase.setDefaultCommand(new SwerveDriveWithJoystick(_SwerveDrivebase, _joystick));
   }
