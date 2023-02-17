@@ -7,7 +7,9 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -71,8 +73,14 @@ public class SwerveDriveWithJoystick extends CommandBase {
             break;
       case ("Field Oriented"):
           //put field oriented drive here.
-          desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getRotation());
-          break;
+          if(DriverStation.getAlliance() != Alliance.Red){
+            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getRotation());
+            break;
+          } else {
+            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-verticalDirectionSpeed, -horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getRotation());
+            break;
+
+          }
     }
     if(verticalDirectionSpeed == 0 && horizontalDirectionSpeed == 0 && rotationalSpeed == 0){
       swerveDriveSubsystem.setModuleStates(new SwerveModuleState[] {
