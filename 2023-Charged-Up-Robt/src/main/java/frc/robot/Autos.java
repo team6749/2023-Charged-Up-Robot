@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.commands.DriveToPlace;
+import frc.robot.commands.DriveXDistanceForward;
 import frc.robot.commands.SelfBalance;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -62,56 +64,13 @@ public final class Autos {
 
   //pplib command to drive straight forward 2 meters
   public static CommandBase driveForward (SwerveDriveSubsystem subsystem){
-    Pose2d currentPose = subsystem.getPose2d();
-
-    // An ExampleCommand will run in autonomous
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      currentPose,
-      List.of(),
-      // uses start position and moves 2m forward on x
-      new Pose2d(currentPose.getTranslation().plus(new Translation2d(2, 0)), currentPose.getRotation()),
-       trajectoryConfig);
-       thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-       
-      return new SwerveControllerCommand(
-        trajectory,
-        subsystem::getPose2d,
-        subsystem._kinematics,
-        xController,
-        yController,
-        thetaController,
-        subsystem::setModuleStates,
-        subsystem);
+    return new DriveXDistanceForward(subsystem, 2, 0);
   }
 
   //drive forward 1.3m and balance
   //START 0.3m FROM CHARGING PAD RAMP
-  public static CommandBase forwardAndBalance (SwerveDriveSubsystem subsystem){
-    Pose2d currentPose = subsystem.getPose2d();
-
-    // An ExampleCommand will run in autonomous
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      currentPose,
-      List.of(),
-
-      new Pose2d(currentPose.getTranslation().plus(new Translation2d(1.3, 0)), currentPose.getRotation()),
-       trajectoryConfig);
-      
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-      return new SwerveControllerCommand(
-        trajectory,
-        subsystem::getPose2d,
-        subsystem._kinematics,
-        xController,
-        yController,
-        thetaController,
-        subsystem::setModuleStates,
-        subsystem);
-
+  public static Command forwardAndBalance (SwerveDriveSubsystem subsystem){
+    return new DriveXDistanceForward(subsystem, 1.3, 0).andThen(new SelfBalance(subsystem));
   }
 
   //custom command w/o pplib

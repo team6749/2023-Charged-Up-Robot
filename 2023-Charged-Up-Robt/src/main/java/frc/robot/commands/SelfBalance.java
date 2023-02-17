@@ -18,7 +18,7 @@ public class SelfBalance extends CommandBase {
   /** Creates a new SelfBalance. */
   private SwerveDriveSubsystem subsystem;
   double accY;
-  double thresholdLevel = 0.75;
+  double thresholdLevel = 1;
   double offsetLevel = 2.4;
   PIDController pidController = new PIDController(0.0215,0.005, 0.004);
   Timer timer = new Timer();
@@ -27,6 +27,7 @@ public class SelfBalance extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = swerveSubsystem;
     addRequirements(swerveSubsystem);
+    pidController.setIntegratorRange(-0.1, 0.1);
   }
   
   // Called when the command is initially scheduled.
