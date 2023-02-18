@@ -123,9 +123,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         odometry = new SwerveDriveOdometry(
                 _kinematics,
-                getRotation(),
+                getGyroRotation(),
                 getCurrentModulePositions());
-        poseEstimator = new SwerveDrivePoseEstimator(_kinematics, getRotation(), getCurrentModulePositions(),
+        poseEstimator = new SwerveDrivePoseEstimator(_kinematics, getGyroRotation(), getCurrentModulePositions(),
                 new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         // add the field map to smartdashboard
         SmartDashboard.putData("field map", field);
@@ -134,9 +134,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         odometry.update(
-                getRotation(),
+                getGyroRotation(),
                 getCurrentModulePositions());
-        poseEstimator.update(getRotation(), getCurrentModulePositions());
+        poseEstimator.update(getGyroRotation(), getCurrentModulePositions());
 
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
         if (estPose.isPresent()) {
@@ -161,7 +161,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
 
-    public Rotation2d getRotation() {
+    public Rotation2d getGyroRotation() {
         return Rotation2d.fromDegrees(gyro.getAngle());
     }
 
@@ -171,7 +171,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(
-                getRotation(),
+                getGyroRotation(),
                 getCurrentModulePositions(),
                 pose);
 

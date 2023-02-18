@@ -74,13 +74,11 @@ public class SwerveDriveWithJoystick extends CommandBase {
       case ("Field Oriented"):
           //put field oriented drive here.
           if(DriverStation.getAlliance() != Alliance.Red){
-            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getRotation());
-            break;
+            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getPose2d().getRotation());
           } else {
-            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-verticalDirectionSpeed, -horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getRotation());
-            break;
-
+            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-verticalDirectionSpeed, -horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getPose2d().getRotation());
           }
+          break;
     }
     if(verticalDirectionSpeed == 0 && horizontalDirectionSpeed == 0 && rotationalSpeed == 0){
       swerveDriveSubsystem.setModuleStates(new SwerveModuleState[] {
