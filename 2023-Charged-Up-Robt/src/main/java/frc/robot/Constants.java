@@ -46,6 +46,7 @@ public final class Constants {
       Constants.Drivebase.backRightPosition
     );
     
+    public static int bucketMotorID = 20;
     public static SwerveDriveModule backRightModule = new SwerveDriveModule(
       "frontLeftModule",
       4,

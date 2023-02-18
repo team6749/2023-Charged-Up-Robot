@@ -17,7 +17,7 @@ public class SelfBalance extends CommandBase {
 
   /** Creates a new SelfBalance. */
   private SwerveDriveSubsystem subsystem;
-  double accY;
+  double accX;
   double thresholdLevel = 1;
   double offsetLevel = 2.4;
   PIDController pidController = new PIDController(0.0215,0.005, 0.004);
@@ -42,10 +42,10 @@ public class SelfBalance extends CommandBase {
   @Override
   public void execute() {
     //uses roborio accel y to level robot
-    accY = ((SwerveDriveSubsystem.gyro.getYComplementaryAngle() + offsetLevel) + (accY))/2;
-    SmartDashboard.putNumber("accY", accY);
-    subsystem.setDesiredChassisSpeeds(new ChassisSpeeds(-pidController.calculate(accY), 0, 0));
-    if(Math.abs(accY) > (thresholdLevel)){
+    accX = ((SwerveDriveSubsystem.gyro.getXComplementaryAngle() + offsetLevel) + (accX))/2;
+    SmartDashboard.putNumber("accY", accX);
+    subsystem.setDesiredChassisSpeeds(new ChassisSpeeds(pidController.calculate(accX), 0, 0));
+    if(Math.abs(accX) > (thresholdLevel)){
       timer.reset();
     }
     // } else{
@@ -62,6 +62,6 @@ public class SelfBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return (Math.abs(accY) < (thresholdLevel)) && timer.hasElapsed(2.15);
+      return (Math.abs(accX) < (thresholdLevel)) && timer.hasElapsed(2.15);
   }
 }
