@@ -106,7 +106,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             Constants.Drivebase.fieldWidthInMeters);
 
     // define the position of the camera on the robot
-    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.25, -.12, 0.22),
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.31, 0, 0.22),
             new Rotation3d(0, 0, 0));
 
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS,
