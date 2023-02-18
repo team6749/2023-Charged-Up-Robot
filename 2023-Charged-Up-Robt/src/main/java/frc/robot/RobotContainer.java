@@ -5,9 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.Operation;
+import frc.robot.commands.ControlBucket;
 import frc.robot.commands.LineUpWithStation;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithJoystick;
+import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.util.Map;
@@ -40,9 +42,12 @@ public class RobotContainer {
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public final SwerveDriveSubsystem _SwerveDrivebase = Constants.Drivebase.swerveDriveSubsystem;
   public static Joystick _joystick = new Joystick(0);
+  public final BucketSubsystem _BucketSubsystem = new BucketSubsystem(Constants.Drivebase.bucketMotorID, _joystick);
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
   final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
+  final static JoystickButton bucketUpButton = new JoystickButton(_joystick, 5);
+  final static JoystickButton bucketDownButton = new JoystickButton(_joystick, 3);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(Operation.kDriverControllerPort);
@@ -69,6 +74,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
     new Trigger(activateAutoBalanceButton).whileTrue(new SelfBalance(_SwerveDrivebase));
+    // new Trigger(bucketUpButton).whileTrue(new ControlBucket(_BucketSubsystem, -0.2));
+    // new Trigger(bucketDownButton).whileTrue(new ControlBucket(_BucketSubsystem, -0.1));
 
     new Trigger(lineUpWithConeSpotButton).onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
