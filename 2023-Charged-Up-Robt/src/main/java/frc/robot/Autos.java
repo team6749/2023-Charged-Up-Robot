@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.commands.DriveToPlace;
+import frc.robot.commands.DriveXDistanceForward;
 import frc.robot.commands.SelfBalance;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -17,6 +19,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -30,7 +34,9 @@ public final class Autos {
 //   public static CommandBase exampleAuto(ExampleSubsystem subsystem) {
 //     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
 //   }
-
+  final static PIDController xController = new PIDController(6.5, 0, 0);
+  final static PIDController yController = new PIDController(6.5, 0, 0);
+  final static ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
@@ -51,6 +57,22 @@ public final class Autos {
     return subsystem.followTrajectoryCommand(ChargingStationOnlyBottom, true).andThen(new SelfBalance(subsystem));
   }
 
+  //literally do nothing at all
+  public static CommandBase doNothing (SwerveDriveSubsystem subsystem) {
+    return new CommandBase() {};
+  }
+
+  //pplib command to drive straight forward 2 meters
+  public static CommandBase driveForward (SwerveDriveSubsystem subsystem){
+    return new DriveXDistanceForward(subsystem, 2, 0);
+  }
+
+  //drive forward 1.3m and balance
+  //START 0.3m FROM CHARGING PAD RAMP
+  public static Command forwardAndBalance (SwerveDriveSubsystem subsystem){
+    return new DriveXDistanceForward(subsystem, 1.3, 0).andThen(new SelfBalance(subsystem));
+  }
+
   //custom command w/o pplib
   public static Command LineUpWithConeArea(SwerveDriveSubsystem subsystem){
     Pose2d currentPose = subsystem.getPose2d();
@@ -62,11 +84,7 @@ public final class Autos {
       List.of(),
       new Pose2d(1.8, 1.6, Rotation2d.fromDegrees(180)),
        trajectoryConfig);
-
-      PIDController xController = new PIDController(6.5, 0, 0);
-      PIDController yController = new PIDController(6.5, 0, 0);
-      ProfiledPIDController thetaController = new ProfiledPIDController(
-              3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
+      
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
       return new SwerveControllerCommand(

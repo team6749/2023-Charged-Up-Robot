@@ -18,7 +18,7 @@ public class SwerveDriveModule {
     private final WPI_TalonFX driveMotor; 
     private final WPI_TalonFX rotationMotor;
     private final WPI_CANCoder absEncoder;
-    public final PIDController velocityPID = new PIDController(0.025, 0, 0);
+    public final PIDController velocityPID = new PIDController(0.05, 0, 0);
     public final PIDController rotationPID = new PIDController(0.01, 0, 0);
     public Translation2d positionOnRobot;
     public double calibrationDegrees;

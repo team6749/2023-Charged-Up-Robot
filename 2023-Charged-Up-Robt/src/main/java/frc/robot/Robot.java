@@ -26,7 +26,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   public SendableChooser<Pose2d> startPosChooser = new SendableChooser<Pose2d>();
   public SendableChooser<CommandBase> autoChooser = new SendableChooser<CommandBase>();
-  
+  SendableChooser<Command> autoSelector = new SendableChooser<Command>();
+
 
   private RobotContainer m_robotContainer;
   Thread m_visionThread;
@@ -41,14 +42,12 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    
-    startPosChooser.setDefaultOption("Current Robot Pose", m_robotContainer._SwerveDrivebase.getPose2d());
-    startPosChooser.addOption("Blue Top Left", new Pose2d(new Translation2d(2.91, 4.41), Rotation2d.fromDegrees(0)));
-    startPosChooser.addOption("Blue Bottom Left", new Pose2d(new Translation2d(4.37, 0.7), Rotation2d.fromDegrees(0)));
-
-    autoChooser.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase));
-    autoChooser.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
-
+    autoSelector.setDefaultOption("DO NOTHING", Autos.doNothing(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("Drive Forward (2m)", Autos.driveForward(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("Forward and Balance (.3m in front of ramp", Autos.forwardAndBalance(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
+    SmartDashboard.putData("auto selector", autoSelector);
 
 
     //april tag shit
@@ -97,9 +96,7 @@ public class Robot extends TimedRobot {
     // }
     
     
-    // Autos.LineUpWithConeArea(Constants.DrivebaseConstants.swerveDriveSubsystem).schedule();
-      // Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase).schedule();
-      Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase).schedule();
+      autoSelector.getSelected().schedule();
   }
 
   /** This function is called periodically during autonomous. */
