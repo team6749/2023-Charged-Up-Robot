@@ -22,11 +22,13 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class LineUpWithStation extends CommandBase {
-  private final SwerveDriveSubsystem subsystem;
-  private final int substation;
+  // final variables for station 0 and the spacing between each
   private final Translation2d stationZero = new Translation2d(1.75, 0.5);
   private final Translation2d spacing = new Translation2d(0, 0.5588);
 
+  // variables being assigned in constructor
+  private final SwerveDriveSubsystem subsystem;
+  private final int substation;
   private Command moveCommand;
 
   /** Creates a new LineUpWithStation. */
@@ -35,33 +37,39 @@ public class LineUpWithStation extends CommandBase {
     this.substation = station;
     this.subsystem = subsystem;
     addRequirements(subsystem);
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // gets current pose and final pose using staion id
+    // y offset is halfway between current and target y
     Pose2d currentPose = subsystem.getPose2d();
-
     Pose2d targetPosition = new Pose2d(stationZero.plus(spacing.times(substation - 1)), Rotation2d.fromDegrees(180));
     double yOffset = (currentPose.getY() - targetPosition.getY()) / 2;
 
     // An ExampleCommand will run in autonomous
+    // trajectory generator
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         currentPose,
         List.of(
+            // backs up straight from current station
             Constants.Drivebase.sideifyTranslation2d(new Translation2d(2.2, currentPose.getY())),
+            // moves to a location half way between starting y and target y
             Constants.Drivebase.sideifyTranslation2d(new Translation2d(2.2, yOffset + targetPosition.getY()))),
+        // destination
         Constants.Drivebase.sideifyPose2d(targetPosition),
         trajectoryConfig);
 
+    // pid controllers
     PIDController xController = new PIDController(6.5, 0, 0);
     PIDController yController = new PIDController(6.5, 0, 0);
     ProfiledPIDController thetaController = new ProfiledPIDController(
         3, 0, 0, new TrapezoidProfile.Constraints(5 / 4, 3));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
+    // command to wrap trajectory generate
     moveCommand = new SwerveControllerCommand(
         trajectory,
         subsystem::getPose2d,
