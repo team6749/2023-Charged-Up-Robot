@@ -27,6 +27,16 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
   }
+
+  public static class Arm{
+    public static int armBaseMotor;
+    public static int armMiddleMotor;
+    public static int armClawMotor;
+
+    public static int armBaseEncoder = 1;
+    public static int armMiddleEncoder = 2;
+    public static int armClawEncoder = 3;
+  }
   public static class Drivebase {
     //subsystem constructed with array of modules
     //62.726cm

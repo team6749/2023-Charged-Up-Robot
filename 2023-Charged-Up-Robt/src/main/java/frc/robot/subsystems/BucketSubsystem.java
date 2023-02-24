@@ -35,7 +35,7 @@ public class BucketSubsystem extends SubsystemBase {
   }
   
   public void dump(){
-    bucketMotor.set(ControlMode.PercentOutput, -0.125);
+    bucketMotor.set(ControlMode.PercentOutput, -0.075);
   }
   public void undump(){
     bucketMotor.set(ControlMode.PercentOutput, 0.075);
