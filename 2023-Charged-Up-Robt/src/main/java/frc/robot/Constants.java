@@ -29,8 +29,8 @@ public final class Constants {
   }
 
   public static class Arm{
-    public static int armBaseMotor;
-    public static int armMiddleMotor;
+    public static int armBaseMotor = 14;
+    public static int armMiddleMotor = 13;
     public static int armClawMotor;
 
     public static int armBaseEncoder = 1;
