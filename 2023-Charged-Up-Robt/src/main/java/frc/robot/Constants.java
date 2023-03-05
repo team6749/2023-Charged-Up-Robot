@@ -30,7 +30,7 @@ public final class Constants {
 
   public static class Arm{
     public static int baseMotor = 14;
-    public static int clawMotor;
+    public static int clawMotor = 13;
     public static int wristMotor;
 
     public static int baseEncoder = 4;

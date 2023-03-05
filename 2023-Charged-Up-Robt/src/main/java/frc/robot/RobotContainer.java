@@ -103,14 +103,15 @@ public class RobotContainer {
 
     new Trigger(lineUpWithConeSpotButton)
         .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
+
     
     //new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
     new Trigger(moveArmDownButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 90));
     new Trigger(moveArmUpButton).whileTrue(
-        new MoveArmSegment(_ArmSubsystem.baseSegment, 100)
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 36))
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -42))
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 3)));
+        new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
+        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -27))
+        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
+        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -45)));
 
     for (int i = 1; i < 10; i++) {
       SmartDashboard.putData("Drive to " + i, new LineUpWithStation(_SwerveDrivebase, i));

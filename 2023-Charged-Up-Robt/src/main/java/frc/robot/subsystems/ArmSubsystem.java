@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    moveClawWithoutEncoder(0.1);
   }
 
   // public double getBaseAnglePosition() {
