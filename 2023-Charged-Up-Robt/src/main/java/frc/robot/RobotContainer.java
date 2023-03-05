@@ -61,8 +61,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // _SwerveDrivebase.setDefaultCommand(new
-    // SwerveDriveWithJoystick(_SwerveDrivebase, _joystick));
+    _SwerveDrivebase.setDefaultCommand(new
+    SwerveDriveWithJoystick(_SwerveDrivebase, _joystick));
   }
 
   /**
@@ -103,26 +103,14 @@ public class RobotContainer {
 
     new Trigger(lineUpWithConeSpotButton)
         .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    // .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    // new Trigger(moveArmUpButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
-    // new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem,
-    // -0.1));
-    // new Trigger(moveArmUpButton).whileTrue(new
-    // MoveArmSegment(_ArmSubsystem.baseSegment, 0));
+    
     //new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
-    new Trigger(moveArmDownButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 0));
+    new Trigger(moveArmDownButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 90));
     new Trigger(moveArmUpButton).whileTrue(
-        new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -27))
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -10)));
+        new MoveArmSegment(_ArmSubsystem.baseSegment, 100)
+        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 36))
+        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -42))
+        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 3)));
 
     for (int i = 1; i < 10; i++) {
       SmartDashboard.putData("Drive to " + i, new LineUpWithStation(_SwerveDrivebase, i));
