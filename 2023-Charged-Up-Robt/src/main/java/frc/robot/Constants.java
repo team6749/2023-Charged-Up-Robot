@@ -29,13 +29,15 @@ public final class Constants {
   }
 
   public static class Arm{
-    public static int armBaseMotor = 14;
-    public static int armMiddleMotor = 13;
-    public static int armClawMotor;
+    public static int baseMotor = 14;
+    public static int clawMotor;
+    public static int wristMotor;
 
-    public static int armBaseEncoder = 1;
-    public static int armMiddleEncoder = 2;
-    public static int armClawEncoder = 3;
+    public static int baseEncoder = 4;
+    public static int clawEncoder = 3;
+
+
+    public static double baseOffset = 220;
   }
   public static class Drivebase {
     //subsystem constructed with array of modules

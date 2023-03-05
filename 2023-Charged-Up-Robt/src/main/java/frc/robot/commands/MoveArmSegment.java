@@ -5,41 +5,40 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSegment;
 
-public class MoveArmBase extends CommandBase {
-  ArmSubsystem subsystem;
-  double base;
-  /** Creates a new MoveArm. */
-  public MoveArmBase(ArmSubsystem _subsystem, double baseDegrees) {
-    subsystem = _subsystem;
-    addRequirements(subsystem);
-    base = baseDegrees;
-    // Use addRequirements() here to declare subsystem dependencies.
+public class MoveArmSegment extends CommandBase {
+
+  ArmSegment m_Segment;
+  double m_setPoint;
+
+  /** Creates a new MoveArmSegment. */
+  public MoveArmSegment(ArmSegment segment, double setPoint) {
+    m_Segment = segment;
+    m_setPoint = setPoint;
+    addRequirements(segment);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_Segment.enable();
+    m_Segment.setSetpoint(m_setPoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    subsystem.moveBaseWithoutEncoder(base);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subsystem.moveBaseWithoutEncoder(0);
+    m_Segment.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(subsystem.getBaseDegrees() == base){
-    return false;
-    // } return false;
+    return m_Segment.getController().atSetpoint();
   }
 }
