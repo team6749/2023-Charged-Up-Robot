@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.MatBuilder;
@@ -18,12 +19,14 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -33,6 +36,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,7 +56,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     // public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
-    HashMap<String, Command> eventMap = new HashMap<>();
 
     public SwerveDrivePoseEstimator poseEstimator;
 
@@ -106,10 +110,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             Constants.Drivebase.fieldWidthInMeters);
 
     // define the position of the camera on the robot
-    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.31, 0, 0.22),
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(-0.2, 0.09, 0.24),
             new Rotation3d(0, 0, 0));
 
-    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS,
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
             camera, cameraPosition);
 
     // constructor
@@ -133,17 +137,24 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        layout2023.setOrigin(DriverStation.getAlliance() == Alliance.Red
+        ? OriginPosition.kRedAllianceWallRightSide
+        : OriginPosition.kBlueAllianceWallRightSide);
+
         odometry.update(
                 getGyroRotation(),
                 getCurrentModulePositions());
         poseEstimator.update(getGyroRotation(), getCurrentModulePositions());
+
+        photonPoseEstimator.setReferencePose(poseEstimator.getEstimatedPosition());
 
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
         if (estPose.isPresent()) {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(),
                     estPose.get().timestampSeconds);
-            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(4, 4, 16));
+            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(16, 16, 64));
         }
 
         // Call periodic on children
@@ -212,30 +223,22 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     // Assuming this method is part of a drivetrain subsystem that provides the
     // necessary methods
     public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    // Reset odometry for the first path you run during auto
-                    if (isFirstPath) {
-                        this.resetOdometry(traj.getInitialHolonomicPose());
-                    }
-                }),
-                new PPSwerveControllerCommand(
-                        traj,
-                        this::getPose2d, // Pose supplier
-                        this._kinematics, // SwerveDriveKinematics
-                        new PIDController(6.5, 0, 0), // X controller. Tune these values for
-                                                      // your robot. Leaving them 0
-                                                      // will only use feedforwards.
-                        new PIDController(6.5, 0, 0), // Y controller (usually the same values
-                                                      // as X controller)
-                        new PIDController(3.5, 0, 0), // Rotation controller. Tune these values
-                                                      // for your robot. Leaving
-                                                      // them 0 will only use feedforwards.
-                        this::setModuleStates, // Module states consumer
-                        true, // Should the path be automatically mirrored depending on alliance
-                              // color.
-                              // Optional, defaults to true
-                        this // Requires this drive subsystem
-                ));
+        return new PPSwerveControllerCommand(
+                traj,
+                this::getPose2d, // Pose supplier
+                this._kinematics, // SwerveDriveKinematics
+                new PIDController(6.5, 0, 0), // X controller. Tune these values for
+                                              // your robot. Leaving them 0
+                                              // will only use feedforwards.
+                new PIDController(6.5, 0, 0), // Y controller (usually the same values
+                                              // as X controller)
+                new PIDController(3.5, 0, 0), // Rotation controller. Tune these values
+                                              // for your robot. Leaving
+                                              // them 0 will only use feedforwards.
+                this::setModuleStates, // Module states consumer
+                true, // Should the path be automatically mirrored depending on alliance color.  Optional, defaults to true
+                this // Requires this drive subsystem
+        );
     }
+
 }

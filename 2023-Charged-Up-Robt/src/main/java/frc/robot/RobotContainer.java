@@ -41,8 +41,8 @@ public class RobotContainer {
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public final SwerveDriveSubsystem _SwerveDrivebase = Constants.Drivebase.swerveDriveSubsystem;
   public static Joystick _joystick = new Joystick(0);
-  public final BucketSubsystem _BucketSubsystem = new BucketSubsystem(Constants.Drivebase.bucketMotorID, _joystick);
-  public final ArmSubsystem _ArmSubsystem = new ArmSubsystem();
+  // public final BucketSubsystem _BucketSubsystem = new BucketSubsystem(Constants.Drivebase.bucketMotorID, _joystick);
+  // public final ArmSubsystem _ArmSubsystem = new ArmSubsystem();
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
   final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
@@ -80,19 +80,19 @@ public class RobotContainer {
    * joysticks}.
    */
 
-  public CommandBase moveArmUp() {
-    return new SequentialCommandGroup(
-        new MoveArmBase(_ArmSubsystem, 0.15)
-    // new MoveArmMiddle(_ArmSubsystem, 0.15)
-    );
-  }
+  // public CommandBase moveArmUp() {
+  //   return new SequentialCommandGroup(
+  //       new MoveArmBase(_ArmSubsystem, 0.15)
+  //   // new MoveArmMiddle(_ArmSubsystem, 0.15)
+  //   );
+  // }
 
-  public CommandBase moveArmDown() {
-    return new SequentialCommandGroup(
-        new MoveArmBase(_ArmSubsystem, -0.15)
-    // new MoveArmMiddle(_ArmSubsystem, -0.15)
-    );
-  }
+  // public CommandBase moveArmDown() {
+  //   return new SequentialCommandGroup(
+  //       new MoveArmBase(_ArmSubsystem, -0.15)
+  //   // new MoveArmMiddle(_ArmSubsystem, -0.15)
+  //   );
+  // }
 
   private void configureBindings() {
     new Trigger(activateAutoBalanceButton).whileTrue(new SelfBalance(_SwerveDrivebase));
@@ -101,22 +101,22 @@ public class RobotContainer {
     // new Trigger(bucketDownButton).whileTrue(new ControlBucket(_BucketSubsystem,
     // -0.1));
 
-    new Trigger(lineUpWithConeSpotButton)
-        .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
+  //   new Trigger(lineUpWithConeSpotButton)
+  //       .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
 
     
-    //new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
-    new Trigger(moveArmDownButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 90));
-    new Trigger(moveArmUpButton).whileTrue(
-        new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -27))
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -45)));
+  //   //new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
+  //   new Trigger(moveArmDownButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 90));
+  //   new Trigger(moveArmUpButton).whileTrue(
+  //       new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
+  //       .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -27))
+  //       .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
+  //       .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -45)));
 
     for (int i = 1; i < 10; i++) {
       SmartDashboard.putData("Drive to " + i, new LineUpWithStation(_SwerveDrivebase, i));
     }
-  }
+  // }
 
   // public Command armToGround() {
   // return new SequentialCommandGroup(
@@ -140,7 +140,7 @@ public class RobotContainer {
   // }
 
 }
-
+}
 // ﻿﻿﻿﻿﻿﻿ Pose2d(Translation2d(X: 14.79, Y: 1.06), Rotation2d(Rads: -0.00, Deg:
 // -0.00)) ﻿
 // ﻿﻿﻿﻿﻿﻿ Translation2d(X: 14.34, Y: 0.23) ﻿

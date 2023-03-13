@@ -10,6 +10,8 @@ import java.util.List;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -45,14 +47,19 @@ public class DriveXDistanceForward extends CommandBase {
   @Override
   public void initialize() {
     Pose2d currentPose = subsystem.getPose2d();
-    this.destination = new Pose2d(new Translation2d(currentPose.getX() + distanceX, currentPose.getY() + distanceY), currentPose.getRotation());
+
+    destination = currentPose.plus(new Transform2d(new Translation2d(distanceX, distanceY), Rotation2d.fromDegrees(0)));
+
+    System.out.println(currentPose);
+    System.out.println(destination);
+
     // An ExampleCommand will run in autonomous
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
+    trajectoryConfig.setReversed( distanceX < 0 );
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       currentPose,
       List.of(),
-
-      Constants.Drivebase.sideifyPose2d(destination),
+      destination,
        trajectoryConfig);
       
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
