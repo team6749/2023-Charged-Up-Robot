@@ -9,12 +9,14 @@ import frc.robot.commands.LineUpWithStation;
 import frc.robot.commands.MoveArmBase;
 import frc.robot.commands.MoveArmSegment;
 import frc.robot.commands.SelfBalance;
+import frc.robot.commands.SwerveDriveWithController;
 import frc.robot.commands.SwerveDriveWithJoystick;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -40,17 +42,26 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public final SwerveDriveSubsystem _SwerveDrivebase = Constants.Drivebase.swerveDriveSubsystem;
-  public static Joystick _joystick = new Joystick(0);
-  public final BucketSubsystem _BucketSubsystem = new BucketSubsystem(Constants.Drivebase.bucketMotorID, _joystick);
+
+  // public static Joystick _joystick = new Joystick(0);
+  public static XboxController _controller = new XboxController(0);
+
+  // public final BucketSubsystem _BucketSubsystem = new BucketSubsystem(Constants.Drivebase.bucketMotorID, _joystick);
   public final ArmSubsystem _ArmSubsystem = new ArmSubsystem();
 
-  final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
-  final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
-  final static JoystickButton bucketUpButton = new JoystickButton(_joystick, 5);
-  final static JoystickButton bucketDownButton = new JoystickButton(_joystick, 3);
+  // final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
+  // final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
+  // final static JoystickButton bucketUpButton = new JoystickButton(_joystick, 5);
+  // final static JoystickButton bucketDownButton = new JoystickButton(_joystick, 3);
+  //  final static JoystickButton moveArmUpButton = new JoystickButton(_joystick, 9);
+  // final static JoystickButton moveArmDownButton = new JoystickButton(_joystick, 10);
 
-  final static JoystickButton moveArmUpButton = new JoystickButton(_joystick, 9);
-  final static JoystickButton moveArmDownButton = new JoystickButton(_joystick, 10);
+  final static JoystickButton activateAutoBalanceButton = new JoystickButton(_controller, 7); //back
+
+  final static JoystickButton moveArmUpButton = new JoystickButton(_controller, XboxController.Axis.kRightTrigger.value); //gets right trigger
+  final static JoystickButton moveArmDownButton = new JoystickButton(_controller, XboxController.Axis.kLeftTrigger.value); //gets left trigger
+  //claw up/down bound to upper triggers
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(Operation.kDriverControllerPort);
 
@@ -62,7 +73,7 @@ public class RobotContainer {
     configureBindings();
 
     _SwerveDrivebase.setDefaultCommand(new
-    SwerveDriveWithJoystick(_SwerveDrivebase, _joystick));
+    SwerveDriveWithController(_SwerveDrivebase, _controller));
   }
 
   /**
@@ -101,8 +112,8 @@ public class RobotContainer {
     // new Trigger(bucketDownButton).whileTrue(new ControlBucket(_BucketSubsystem,
     // -0.1));
 
-    new Trigger(lineUpWithConeSpotButton)
-        .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
+    // new Trigger(lineUpWithConeSpotButton)
+    //     .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
 
     
     //new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
