@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,8 +56,10 @@ public class Robot extends TimedRobot {
           camera.setResolution(160, 120);
           camera.setFPS(30);
         });
-  m_visionThread.setDaemon(true);
-  m_visionThread.start();
+    m_visionThread.setDaemon(true);
+    m_visionThread.start();
+
+    Shuffleboard.startRecording();
   }
 
   /**
@@ -77,7 +80,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Shuffleboard.stopRecording();
+
+  }
 
   @Override
   public void disabledPeriodic() {}
