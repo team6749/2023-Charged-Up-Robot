@@ -4,17 +4,20 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class ClawSubsystem extends SubsystemBase {
-public WPI_TalonSRX wristMotor = new WPI_TalonSRX(Constants.Arm.wristMotor);
+  DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[1], Constants.Arm.solenoid[2]);
   /** Creates a new ClawSubsystem. */
   public ClawSubsystem() {
-    
+  }
+
+  public void toggleSolenoidState(){
+    solenoid.toggle();
   }
 
   @Override
@@ -22,6 +25,5 @@ public WPI_TalonSRX wristMotor = new WPI_TalonSRX(Constants.Arm.wristMotor);
     // This method will be called once per scheduler run
   }
   public void closeWrist(double power){
-    wristMotor.set(ControlMode.PercentOutput, power);
   }
 }

@@ -5,41 +5,34 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 
-public class MoveArmBase extends CommandBase {
-  ArmSubsystem subsystem;
-  double base;
-  /** Creates a new MoveArm. */
-  public MoveArmBase(ArmSubsystem _subsystem, double baseDegrees) {
-    subsystem = _subsystem;
+public class ClawControl extends CommandBase {
+  ClawSubsystem m_ClawSubsystem = new ClawSubsystem();
+  /** Creates a new ClawControl. */
+  public ClawControl(ClawSubsystem subsystem) {
+    subsystem = m_ClawSubsystem;
     addRequirements(subsystem);
-    base = baseDegrees;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.moveBaseSegment(base);
+    m_ClawSubsystem.toggleSolenoidState();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    subsystem.moveBaseSegment(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(subsystem.getBaseDegrees() == base){
     return false;
-    // } return false;
   }
 }
