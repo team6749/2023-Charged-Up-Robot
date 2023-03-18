@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,18 +16,15 @@ public class ArmSubsystem extends SubsystemBase {
   double baseMotorPower;
   double clawMotorPower;
 
-  public ArmSegment baseSegment = new ArmSegment(-45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), 15, 4);
-  // public ArmSegment clawSegment = new ArmSegment(-150, 150, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), 13, 3);
+  public ArmSegment baseSegment = new ArmSegment(0.1, -45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), 15, 4);
+  public ArmSegment clawSegment = new ArmSegment(0.05, -150, 150, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), 13, 3);
 
-  WPI_TalonFX clawMotor = new WPI_TalonFX(Constants.Arm.clawMotor);
   
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     baseSegment.setName("Base Segment");
-    baseSegment.disable();
+    clawSegment.setName("Claw Segment");
 
-    // clawSegment.setName("Claw Segment");
-    // clawSegment.disable();
     // baseSegment.setSetpoint(90);
     // baseSegment.getController().atSetpoint();
   }

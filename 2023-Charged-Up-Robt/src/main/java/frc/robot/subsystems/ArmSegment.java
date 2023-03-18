@@ -20,9 +20,10 @@ public class ArmSegment extends PIDSubsystem {
 
   double minRange;
   double maxRange;
+  double maxOutput;
 
   /** Creates a new ArmSegment. */
-  public ArmSegment(double minRange, double maxRange, boolean invert, double offset, PIDController controller, int motorID, int encoderID) {
+  public ArmSegment(double maxOutput, double minRange, double maxRange, boolean invert, double offset, PIDController controller, int motorID, int encoderID) {
     super(controller);
 
     motor = new WPI_TalonFX(motorID);
@@ -40,16 +41,19 @@ public class ArmSegment extends PIDSubsystem {
   
     //degrees
     controller.setTolerance(2);
+
+    //By default do not move
+    disable();
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
-    if (output > 0.1) {
-      output = 0.1;
+    if (output > maxOutput) {
+      output = maxOutput;
     }
-    if (output < -0.1) {
-      output = -0.1;
+    if (output < -maxOutput) {
+      output = -maxOutput;
     }
     SmartDashboard.putNumber(getName() + " PID", output);
     motor.set(ControlMode.PercentOutput, output);

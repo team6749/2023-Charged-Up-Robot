@@ -124,12 +124,21 @@ public class RobotContainer {
     
     //new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
     new Trigger(moveArmUpButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 90));
+
     new Trigger(moveArmDownButton).whileTrue(
         new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -27))
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -45)));
+
+    // new Trigger(moveArmDownButton).whileTrue(
+    //   new MoveArmSegment(_ArmSubsystem.clawSegment, 90)
+    //     .alongWith(new MoveArmSegment(_ArmSubsystem.baseSegment, -27))
+    //     .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
+    //     .alongWith(new MoveArmSegment(_ArmSubsystem.clawSegment, 0)));
         
+
+    
     // new Trigger(moveClawUpButton).whileTrue(new MoveArmSegment(_ArmSubsystem.clawSegment, 0)
     //     .andThen(new MoveArmSegment(_ArmSubsystem.clawSegment, 20)));
     
