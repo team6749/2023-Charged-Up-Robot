@@ -24,11 +24,13 @@ public class DriveToPlace extends CommandBase {
   /** Creates a new DriveToPlace. */
 
   // inits pid controllers
+  //these are used to counteract against any error the subsystem may have during auto driving
   final static PIDController xController = new PIDController(6.5, 0, 0);
   final static PIDController yController = new PIDController(6.5, 0, 0);
   final static ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0,
       new TrapezoidProfile.Constraints(5 / 4, 3));
 
+  //these are the private variables
   SwerveDriveSubsystem subsystem;
   List<Translation2d> waypoints;
   Pose2d destination;

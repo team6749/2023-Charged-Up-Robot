@@ -48,7 +48,7 @@ public class DriveXDistanceForward extends CommandBase {
   @Override
   public void initialize() {
 
-    // current pose
+    //gets the current robot position found using april tags and odometry
     Pose2d currentPose = subsystem.getPose2d();
 
     // adds x and y offset from pose2d
@@ -69,7 +69,7 @@ public class DriveXDistanceForward extends CommandBase {
 
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    // generates the wrapping command
+    // generates the wrapping command used to run the automatic drive distance
     this.moveCommand = new SwerveControllerCommand(
         trajectory,
         subsystem::getPose2d,

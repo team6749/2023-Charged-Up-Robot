@@ -22,11 +22,11 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class LineUpWithStation extends CommandBase {
-  // final variables for station 0 and the spacing between each
+  // final variables for station 0 and the spacing between each station
   private final Translation2d stationZero = new Translation2d(1.75, 0.5);
   private final Translation2d spacing = new Translation2d(0, 0.5588);
 
-  // variables being assigned in constructor
+  // private variables within the command
   private final SwerveDriveSubsystem subsystem;
   private final int substation;
   private Command moveCommand;
@@ -62,14 +62,14 @@ public class LineUpWithStation extends CommandBase {
         Constants.Drivebase.sideifyPose2d(targetPosition),
         trajectoryConfig);
 
-    // pid controllers
+    // pid controllers used to correct any error
     PIDController xController = new PIDController(6.5, 0, 0);
     PIDController yController = new PIDController(6.5, 0, 0);
     ProfiledPIDController thetaController = new ProfiledPIDController(
         3, 0, 0, new TrapezoidProfile.Constraints(5 / 4, 3));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    // command to wrap trajectory generate
+    // command to wrap trajectory generator
     moveCommand = new SwerveControllerCommand(
         trajectory,
         subsystem::getPose2d,
