@@ -17,8 +17,8 @@ public class ArmSubsystem extends SubsystemBase {
   double baseMotorPower;
   double clawMotorPower;
 
-  public ArmSegment baseSegment = new ArmSegment(-45, 100, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0));
-  public ArmSegment clawSegment = new ArmSegment(-150, 150, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0));
+  public ArmSegment baseSegment = new ArmSegment(-45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), 15, 4);
+  // public ArmSegment clawSegment = new ArmSegment(-150, 150, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), 13, 3);
 
   WPI_TalonFX clawMotor = new WPI_TalonFX(Constants.Arm.clawMotor);
   
@@ -27,8 +27,8 @@ public class ArmSubsystem extends SubsystemBase {
     baseSegment.setName("Base Segment");
     baseSegment.disable();
 
-    clawSegment.setName("Claw Segment");
-    clawSegment.disable();
+    // clawSegment.setName("Claw Segment");
+    // clawSegment.disable();
     // baseSegment.setSetpoint(90);
     // baseSegment.getController().atSetpoint();
   }
@@ -36,8 +36,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    moveClawSegment(0.1);
-  }
+  //   moveClawSegment(0);
+  // }
 
   // public double getBaseAnglePosition() {
   //   return baseTargetAngle = ( * 360) + Constants.Arm.baseOffset;
@@ -47,7 +47,7 @@ public class ArmSubsystem extends SubsystemBase {
   // }
   // public double getClawAnglePosition() {
   //   return clawAngle = (clawEncoder.getAbsolutePosition() *360);
-  // }
+  }
 
 
   public void moveBaseSegment(double power){
@@ -55,8 +55,8 @@ public class ArmSubsystem extends SubsystemBase {
     baseSegment.motor.set(ControlMode.PercentOutput, power);
   }
 
-  public void moveClawSegment(double power){
-    clawSegment.motor.set(ControlMode.PercentOutput, power);
-  }
+  // public void moveClawSegment(double power){
+  //   clawSegment.motor.set(ControlMode.PercentOutput, power);
+  // }
   }
 

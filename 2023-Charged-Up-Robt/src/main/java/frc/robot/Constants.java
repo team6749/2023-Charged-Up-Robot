@@ -37,7 +37,7 @@ public final class Constants {
     public static int clawEncoder = 3;
 
 
-    public static double baseOffset = 220;
+    public static double baseOffset = 136.4;
     public static double clawOffset;
 
     public static int[] solenoid = {1, 2};

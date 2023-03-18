@@ -43,8 +43,9 @@ public class RobotContainer {
   public static Joystick _joystick = new Joystick(0);
   public final BucketSubsystem _BucketSubsystem = new BucketSubsystem(Constants.Drivebase.bucketMotorID, _joystick);
   public final ArmSubsystem _ArmSubsystem = new ArmSubsystem();
-  public final ClawSubsystem _ClawSubsystem = new ClawSubsystem();
+  // public final ClawSubsystem _ClawSubsystem = new ClawSubsystem();
   public final int one = 1;
+
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
   final static JoystickButton lineUpWithConeSpotButton = new JoystickButton(_joystick, 8);
@@ -100,13 +101,13 @@ public class RobotContainer {
     );
   }
 
-  public CommandBase setArmAndLineUp() {
-    return new SequentialCommandGroup(
-      new MoveArmSegment(_ArmSubsystem.baseSegment, 45),
-      new MoveArmSegment(_ArmSubsystem.clawSegment, 45),
-      new LineUpWithStation(_SwerveDrivebase, 1)
-    );
-  }
+  // public CommandBase setArmAndLineUp() {
+  //   return new SequentialCommandGroup(
+  //     new MoveArmSegment(_ArmSubsystem.baseSegment, 45),
+  //     new MoveArmSegment(_ArmSubsystem.clawSegment, 45),
+  //     new LineUpWithStation(_SwerveDrivebase, 1)
+  //   );
+  // }
 
   private void configureBindings() {
 
@@ -119,18 +120,18 @@ public class RobotContainer {
     new Trigger(lineUpWithConeSpotButton)
         .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
 
-    new Trigger(clawToggleButton).onTrue(new ClawControl(_ClawSubsystem));
+    // new Trigger(clawToggleButton).onTrue(new ClawControl(_ClawSubsystem));
     
     //new Trigger(moveArmDownButton).whileTrue(new MoveArmBase(_ArmSubsystem, 0.1));
-    new Trigger(moveArmDownButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 90));
-    new Trigger(moveArmUpButton).whileTrue(
+    new Trigger(moveArmUpButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 90));
+    new Trigger(moveArmDownButton).whileTrue(
         new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -27))
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -45)));
         
-    new Trigger(moveClawUpButton).whileTrue(new MoveArmSegment(_ArmSubsystem.clawSegment, 0)
-        .andThen(new MoveArmSegment(_ArmSubsystem.clawSegment, 20)));
+    // new Trigger(moveClawUpButton).whileTrue(new MoveArmSegment(_ArmSubsystem.clawSegment, 0)
+    //     .andThen(new MoveArmSegment(_ArmSubsystem.clawSegment, 20)));
     
     
     for (int i = 1; i < 10; i++) {

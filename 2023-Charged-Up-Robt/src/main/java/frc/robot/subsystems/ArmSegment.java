@@ -12,19 +12,21 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import frc.robot.Constants;
 
 public class ArmSegment extends PIDSubsystem {
 
-  WPI_TalonFX motor = new WPI_TalonFX(Constants.Arm.baseMotor);
-  DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.Arm.baseEncoder);
+  WPI_TalonFX motor;
+  DutyCycleEncoder encoder;
 
   double minRange;
   double maxRange;
 
   /** Creates a new ArmSegment. */
-  public ArmSegment(double minRange, double maxRange, boolean invert, double offset, PIDController controller) {
+  public ArmSegment(double minRange, double maxRange, boolean invert, double offset, PIDController controller, int motorID, int encoderID) {
     super(controller);
+
+    motor = new WPI_TalonFX(motorID);
+    encoder = new DutyCycleEncoder(encoderID);
   
     this.minRange = minRange;
     this.maxRange = maxRange;
