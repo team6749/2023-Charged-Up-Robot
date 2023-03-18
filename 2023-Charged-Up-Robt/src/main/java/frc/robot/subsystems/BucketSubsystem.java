@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class BucketSubsystem extends SubsystemBase {
   /** Creates a new BucketSubsystem. */
@@ -35,7 +34,7 @@ public class BucketSubsystem extends SubsystemBase {
   }
   
   public void dump(){
-    bucketMotor.set(ControlMode.PercentOutput, -0.125);
+    bucketMotor.set(ControlMode.PercentOutput, -0.075);
   }
   public void undump(){
     bucketMotor.set(ControlMode.PercentOutput, 0.075);

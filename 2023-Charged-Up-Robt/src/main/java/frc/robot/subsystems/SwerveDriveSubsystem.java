@@ -60,7 +60,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     // initializing grabbing the data from the camera after processing in photon,
     // name the camera in photon vision the same as the camera name string in code
-    PhotonCamera camera = new PhotonCamera("robotcamera");
+    PhotonCamera camera = new PhotonCamera("OV9281");
 
     // define the positions of the april tags on the field and
     // create the layout of them on the field to update pose in
