@@ -113,9 +113,7 @@ public class RobotContainer {
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
         .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, -45)));
 
-    for (int i = 1; i < 10; i++) {
-      SmartDashboard.putData("Drive to " + i, new LineUpWithStation(_SwerveDrivebase, i));
-    }
+
   }
 
   // public Command armToGround() {
@@ -140,7 +138,3 @@ public class RobotContainer {
   // }
 
 }
-
-// ﻿﻿﻿﻿﻿﻿ Pose2d(Translation2d(X: 14.79, Y: 1.06), Rotation2d(Rads: -0.00, Deg:
-// -0.00)) ﻿
-// ﻿﻿﻿﻿﻿﻿ Translation2d(X: 14.34, Y: 0.23) ﻿
