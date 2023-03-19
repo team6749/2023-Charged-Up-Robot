@@ -4,24 +4,35 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class ClawSubsystem extends SubsystemBase {
-public WPI_TalonSRX wristMotor = new WPI_TalonSRX(Constants.Arm.wristMotor);
+  Compressor compressor = new Compressor(15, PneumaticsModuleType.CTREPCM);
+  DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
+  
   /** Creates a new ClawSubsystem. */
   public ClawSubsystem() {
-    
+    compressor.enableDigital();
+    solenoid.set(Value.kOff);
+  }
+
+  public void openSolenoid(){
+    solenoid.set(Value.kForward);
+  }
+
+  public void closeSolenoid(){
+    solenoid.set(Value.kReverse);
   }
 
   @Override
   public void periodic() {
+
     // This method will be called once per scheduler run
-  }
-  public void closeWrist(double power){
-    wristMotor.set(ControlMode.PercentOutput, power);
   }
 }
