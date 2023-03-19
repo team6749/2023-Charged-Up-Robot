@@ -110,7 +110,7 @@ public final class Constants {
         return blue;
       }
 
-      Rotation2d redSideRotation = blue.getRotation().plus(Rotation2d.fromDegrees(180));
+      Rotation2d redSideRotation = blue.getRotation().times(-1);
       
       return new Pose2d(sideifyTranslation2d(blue.getTranslation()), redSideRotation);
     }
@@ -120,10 +120,7 @@ public final class Constants {
         //If we are not red (aka blue) return the blue value
         return blue;
       }
-
-      double redSideLength = fieldLengthInMeters - blue.getX();
-      
-      return new Translation2d(redSideLength, blue.getY());
+      return new Translation2d(blue.getX(), fieldWidthInMeters - blue.getY());
     }
   }
 }
