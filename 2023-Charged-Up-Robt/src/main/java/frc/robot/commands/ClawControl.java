@@ -4,30 +4,37 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.BucketSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 
-public class ControlBucket extends CommandBase {
-  /** Creates a new ControlBucket. */
-  BucketSubsystem subsystem;
-  double powerToSet;
-  public ControlBucket(BucketSubsystem subsystem, double powerToSet) {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class ClawControl extends CommandBase {
+  ClawSubsystem m_ClawSubsystem;
+  boolean m_direction;
+  /** Creates a new ClawControl. */
+  public ClawControl(ClawSubsystem subsystem, boolean direction) {
+    m_ClawSubsystem = subsystem;
     addRequirements(subsystem);
-    this.subsystem = subsystem;
-    this.powerToSet = powerToSet;
+    m_direction = direction;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  subsystem.bucketMotor.set(ControlMode.PercentOutput, powerToSet);
+    if(m_direction == true){
+      m_ClawSubsystem.openSolenoid();
+      System.out.println("opennnnnn");
+    } 
+    if(m_direction == false){
+      m_ClawSubsystem.closeSolenoid();
+      System.out.println("closeeeeeee");
+    }
   }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.
