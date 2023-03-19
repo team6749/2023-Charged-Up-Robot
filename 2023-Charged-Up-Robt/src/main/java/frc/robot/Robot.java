@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.enums.ScoringType;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -24,7 +25,7 @@ public class Robot extends TimedRobot {
   public SendableChooser<Pose2d> startPosChooser = new SendableChooser<Pose2d>();
   public SendableChooser<CommandBase> autoChooser = new SendableChooser<CommandBase>();
   SendableChooser<Command> autoSelector = new SendableChooser<Command>();
-
+  SendableChooser<ScoringType> scoringSelector = new SendableChooser<ScoringType>();
 
   private RobotContainer m_robotContainer;
   Thread m_visionThread;
@@ -46,6 +47,9 @@ public class Robot extends TimedRobot {
     autoSelector.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
     SmartDashboard.putData("auto selector", autoSelector);
 
+    scoringSelector.setDefaultOption("Middle", ScoringType.Middle);
+    scoringSelector.addOption("Low", ScoringType.Low);
+    scoringSelector.addOption("Dont Score", ScoringType.Low);
 
     //april tag shit
     m_visionThread =
