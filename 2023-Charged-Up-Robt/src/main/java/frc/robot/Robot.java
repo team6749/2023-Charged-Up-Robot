@@ -59,9 +59,9 @@ public class Robot extends TimedRobot {
     m_visionThread.setDaemon(true);
     m_visionThread.start();
 
-    Shuffleboard.startRecording();
+    // Shuffleboard.startRecording();
   }
-
+  
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -82,29 +82,29 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     Shuffleboard.stopRecording();
-
   }
-
+  
   @Override
   public void disabledPeriodic() {}
-
+  
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
     // // schedule the autonomous command (example)
     // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
-    
-    
+      //   m_autonomousCommand.schedule();
+      // }
+      
+      
+      Shuffleboard.startRecording();
       autoSelector.getSelected().schedule();
-  }
-
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
+    }
+    
+    /** This function is called periodically during autonomous. */
+    @Override
+    public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -115,6 +115,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    Shuffleboard.startRecording();
+
   }
 
   /** This function is called periodically during operator control. */
