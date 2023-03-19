@@ -12,19 +12,24 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import frc.robot.Constants;
 
 public class ArmSegment extends PIDSubsystem {
 
-  WPI_TalonFX motor = new WPI_TalonFX(Constants.Arm.baseMotor);
-  DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.Arm.baseEncoder);
+  WPI_TalonFX motor;
+  DutyCycleEncoder encoder;
 
   double minRange;
   double maxRange;
+  double maxOutput;
 
   /** Creates a new ArmSegment. */
-  public ArmSegment(double minRange, double maxRange, boolean invert, double offset, PIDController controller) {
+  public ArmSegment(double maxOutput, double minRange, double maxRange, boolean invert, double offset, PIDController controller, int motorID, int encoderID) {
     super(controller);
+
+    this.maxOutput = maxOutput;
+
+    motor = new WPI_TalonFX(motorID);
+    encoder = new DutyCycleEncoder(encoderID);
   
     this.minRange = minRange;
     this.maxRange = maxRange;
@@ -38,19 +43,23 @@ public class ArmSegment extends PIDSubsystem {
   
     //degrees
     controller.setTolerance(2);
+
+    //By default do not move
+    disable();
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
-    if (output > 0.1) {
-      output = 0.1;
+    if (output > maxOutput) {
+      output = maxOutput;
     }
-    if (output < -0.1) {
-      output = -0.1;
+    if (output < -maxOutput) {
+      output = -maxOutput;
     }
     SmartDashboard.putNumber(getName() + " PID", output);
     motor.set(ControlMode.PercentOutput, output);
+    
   }
 
   @Override
