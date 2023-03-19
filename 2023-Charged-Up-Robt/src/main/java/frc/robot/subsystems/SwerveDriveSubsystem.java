@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.MatBuilder;
@@ -26,7 +25,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -39,13 +37,12 @@ import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
     // priv variables
@@ -56,6 +53,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     // public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
+    HashMap<String, Command> eventMap = new HashMap<>();
+    public SendableChooser<Boolean> cameraDisable = new SendableChooser<Boolean>(); 
 
     public SwerveDrivePoseEstimator poseEstimator;
 
@@ -133,6 +132,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         // add the field map to smartdashboard
         SmartDashboard.putData("field map", field);
+        cameraDisable.setDefaultOption("On", true);
+        cameraDisable.addOption("Off", false);
+        SmartDashboard.putData("Use Camera Measurements", cameraDisable);
     }
 
     @Override
@@ -150,7 +152,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         photonPoseEstimator.setReferencePose(poseEstimator.getEstimatedPosition());
 
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
-        if (estPose.isPresent()) {
+        if (estPose.isPresent() && cameraDisable.getSelected()) {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(),
                     estPose.get().timestampSeconds);
