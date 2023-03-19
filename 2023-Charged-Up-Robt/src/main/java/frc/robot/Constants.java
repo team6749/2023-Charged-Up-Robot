@@ -30,7 +30,7 @@ public final class Constants {
 
   public static class Arm{
     public static int baseMotor = 14;
-    public static int clawMotor = 13;
+    public static int clawMotor = 19;
     public static int wristMotor;
 
     public static int baseEncoder = 4;
@@ -61,7 +61,7 @@ public final class Constants {
       Constants.Drivebase.backRightPosition
     );
     
-    public static int bucketMotorID = 20;
+    // public static int bucketMotorID = 20;
     public static SwerveDriveModule backRightModule = new SwerveDriveModule(
       "frontLeftModule",
       4,

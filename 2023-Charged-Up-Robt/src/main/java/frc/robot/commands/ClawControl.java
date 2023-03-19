@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClawSubsystem;
 
 public class ClawControl extends CommandBase {
-  ClawSubsystem m_ClawSubsystem = new ClawSubsystem();
+  ClawSubsystem m_ClawSubsystem;
+  boolean m_direction;
   /** Creates a new ClawControl. */
-  public ClawControl(ClawSubsystem subsystem) {
-    subsystem = m_ClawSubsystem;
+  public ClawControl(ClawSubsystem subsystem, boolean direction) {
+    m_ClawSubsystem = subsystem;
     addRequirements(subsystem);
+    m_direction = direction;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,7 +25,12 @@ public class ClawControl extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ClawSubsystem.toggleSolenoidState();
+    if(m_direction == true){
+      m_ClawSubsystem.openSolenoid();
+    } 
+    if(m_direction == false){
+      m_ClawSubsystem.closeSolenoid();
+    }
   }
 
   // Called once the command ends or is interrupted.
