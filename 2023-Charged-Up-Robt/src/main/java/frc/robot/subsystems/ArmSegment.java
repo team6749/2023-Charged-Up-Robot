@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 public class ArmSegment extends PIDSubsystem {
 
-  WPI_TalonFX motor;
+  public WPI_TalonFX motor;
   DutyCycleEncoder encoder;
 
   double minRange;

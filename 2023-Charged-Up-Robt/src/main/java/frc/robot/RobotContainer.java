@@ -7,7 +7,6 @@ package frc.robot;
 import frc.robot.commands.ClawControl;
 import frc.robot.commands.LineUpWithStation;
 
-import frc.robot.commands.MoveArmSegment;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithController;
 import frc.robot.subsystems.ArmSubsystem;
@@ -20,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.commands.MoveArmSegmentManually;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -52,8 +52,12 @@ public class RobotContainer {
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_controller, 7); //back
 
-  final static JoystickButton moveArmUpButton = new JoystickButton(_controller, XboxController.Axis.kRightTrigger.value); //gets right trigger
-  final static JoystickButton moveArmDownButton = new JoystickButton(_controller, XboxController.Axis.kLeftTrigger.value); //gets left trigger
+  final static JoystickButton moveArmUp = new JoystickButton(_controller, XboxController.Axis.kRightTrigger.value); //gets right trigger
+  final static JoystickButton moveArmDown = new JoystickButton(_controller, XboxController.Axis.kLeftTrigger.value); //gets left trigger
+
+  final static JoystickButton moveClawUp = new JoystickButton(_controller, 6); //left bumber
+  final static JoystickButton moveClawDown = new JoystickButton(_controller, 5); //right bumper
+
   final static JoystickButton openClaw = new JoystickButton(_controller, 1); //a button on controller
   final static JoystickButton closeClaw = new JoystickButton(_controller, 3); //x button on controller
   //claw up/down bound to upper triggers
@@ -101,13 +105,19 @@ public class RobotContainer {
     // new Trigger(lineUpWithConeSpotButton)
     //     .onTrue(Commands.run(() -> Autos.LineUpWithConeArea(_SwerveDrivebase), _SwerveDrivebase));
 
-    new Trigger(moveArmUpButton).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 95 ));
+    new Trigger(moveClawUp).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.clawSegment, 0.15));
+    new Trigger(moveClawDown).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.clawSegment, -0.15));
 
-    new Trigger(moveArmDownButton).whileTrue(
-        new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
-        .alongWith(new MoveArmSegment(_ArmSubsystem.clawSegment, 75))
-        .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
-        .andThen(new MoveArmSegment(_ArmSubsystem.clawSegment, -25)));
+    new Trigger(moveArmUp).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, 0.1));
+    new Trigger(moveArmDown).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, -0.1));
+
+    // new Trigger(moveArmUp).whileTrue(new MoveArmSegment(_ArmSubsystem.baseSegment, 95 ));
+
+    // new Trigger(moveArmDown).whileTrue(
+    //     new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
+    //     .alongWith(new MoveArmSegment(_ArmSubsystem.clawSegment, 75))
+    //     .andThen(new MoveArmSegment(_ArmSubsystem.baseSegment, 53))
+    //     .andThen(new MoveArmSegment(_ArmSubsystem.clawSegment, -25)));
 
 
 
