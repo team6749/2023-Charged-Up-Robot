@@ -22,7 +22,7 @@ public class MoveArmSegment extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    System.out.println("hello");
     m_Segment.enable();
     m_Segment.setSetpoint(m_setPoint);
   }
@@ -34,7 +34,6 @@ public class MoveArmSegment extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("hello");
     m_Segment.disable();
   }
 

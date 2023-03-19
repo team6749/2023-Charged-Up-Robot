@@ -20,17 +20,21 @@ public class ClawControl extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(m_direction == true){
+      m_ClawSubsystem.openSolenoid();
+      System.out.println("opennnnnn");
+    } 
+    if(m_direction == false){
+      m_ClawSubsystem.closeSolenoid();
+      System.out.println("closeeeeeee");
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_direction == true){
-      m_ClawSubsystem.openSolenoid();
-    } 
-    if(m_direction == false){
-      m_ClawSubsystem.closeSolenoid();
-    }
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +44,6 @@ public class ClawControl extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

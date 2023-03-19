@@ -31,14 +31,13 @@ public final class Constants {
   public static class Arm{
     public static int baseMotor = 14;
     public static int clawMotor = 19;
-    public static int wristMotor;
 
     public static int baseEncoder = 4;
     public static int clawEncoder = 3;
 
 
     public static double baseOffset = 136.4;
-    public static double clawOffset = -280;
+    public static double clawOffset = 160;
 
     public static int[] solenoid = {1, 2};
   }

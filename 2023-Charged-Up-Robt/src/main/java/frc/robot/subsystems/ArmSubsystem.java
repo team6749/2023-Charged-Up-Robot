@@ -16,14 +16,15 @@ public class ArmSubsystem extends SubsystemBase {
   double baseMotorPower;
   double clawMotorPower;
 
-  public ArmSegment baseSegment = new ArmSegment(0.1, -45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), 15, 4);
-  public ArmSegment clawSegment = new ArmSegment(0.05, -150, 150, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), 13, 3);
+  public ArmSegment baseSegment = new ArmSegment(0.1, -45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), Constants.Arm.baseMotor, 4);
+  public ArmSegment clawSegment = new ArmSegment(0.1, -95, 135, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), Constants.Arm.clawMotor, 3);
 
   
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     baseSegment.setName("Base Segment");
     clawSegment.setName("Claw Segment");
+    
 
     // baseSegment.setSetpoint(90);
     // baseSegment.getController().atSetpoint();
@@ -33,16 +34,7 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
   //   moveClawSegment(0);
-  // }
 
-  // public double getBaseAnglePosition() {
-  //   return baseTargetAngle = ( * 360) + Constants.Arm.baseOffset;
-  // }
-  // public double getMiddleAnglePosition() {
-  //   return middleAngle = (middleEncoder.getAbsolutePosition() * 360);
-  // }
-  // public double getClawAnglePosition() {
-  //   return clawAngle = (clawEncoder.getAbsolutePosition() *360);
   }
 
 

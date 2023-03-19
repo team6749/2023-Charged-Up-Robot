@@ -26,6 +26,8 @@ public class ArmSegment extends PIDSubsystem {
   public ArmSegment(double maxOutput, double minRange, double maxRange, boolean invert, double offset, PIDController controller, int motorID, int encoderID) {
     super(controller);
 
+    this.maxOutput = maxOutput;
+
     motor = new WPI_TalonFX(motorID);
     encoder = new DutyCycleEncoder(encoderID);
   
@@ -57,6 +59,7 @@ public class ArmSegment extends PIDSubsystem {
     }
     SmartDashboard.putNumber(getName() + " PID", output);
     motor.set(ControlMode.PercentOutput, output);
+    
   }
 
   @Override
