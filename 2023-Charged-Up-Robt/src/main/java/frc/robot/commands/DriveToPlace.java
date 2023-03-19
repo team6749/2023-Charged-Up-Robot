@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import java.util.List;
 
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,14 +22,21 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class DriveToPlace extends CommandBase {
   /** Creates a new DriveToPlace. */
+
+  // inits pid controllers
+  //these are used to counteract against any error the subsystem may have during auto driving
   final static PIDController xController = new PIDController(6.5, 0, 0);
   final static PIDController yController = new PIDController(6.5, 0, 0);
-  final static ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
+  final static ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0,
+      new TrapezoidProfile.Constraints(5 / 4, 3));
 
+  //these are the private variables
   SwerveDriveSubsystem subsystem;
   List<Translation2d> waypoints;
   Pose2d destination;
   Command moveCommand;
+
+  // constructor without waypoints
   public DriveToPlace(SwerveDriveSubsystem subsystem, Pose2d destination) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
@@ -38,37 +44,46 @@ public class DriveToPlace extends CommandBase {
     waypoints = null;
     this.destination = destination;
   }
-  
+
+  // constructor with waypoints
   public DriveToPlace(SwerveDriveSubsystem subsystem, Pose2d destination, List<Translation2d> waypoints) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     addRequirements(subsystem);
-    
-    for(Translation2d point : waypoints){
-      
+
+    // adds each translation from the list to a private list for easier access, AND
+    // sideifies each point (in the 2d space)
+    for (Translation2d point : waypoints) {
+
       this.waypoints.add(Constants.Drivebase.sideifyTranslation2d(point));
-      
+
     }
     this.destination = destination;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // gets the starting robot pose
     Pose2d currentPose = subsystem.getPose2d();
 
     // An ExampleCommand will run in autonomous
+    // generates a trjactory
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      currentPose,
-      waypoints,
 
-      Constants.Drivebase.sideifyPose2d(destination),
-       trajectoryConfig);
-      
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        currentPose,
+        waypoints,
+        Constants.Drivebase.sideifyPose2d(destination),
 
-      this.moveCommand = new SwerveControllerCommand(
+        trajectoryConfig);
+
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    // generates a command within the command in order to run with the current robot
+    // pose
+    // this is called wrapping
+    this.moveCommand = new SwerveControllerCommand(
         trajectory,
         subsystem::getPose2d,
         subsystem._kinematics,
@@ -77,7 +92,7 @@ public class DriveToPlace extends CommandBase {
         thetaController,
         subsystem::setModuleStates,
         subsystem);
-        moveCommand.initialize();
+    moveCommand.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

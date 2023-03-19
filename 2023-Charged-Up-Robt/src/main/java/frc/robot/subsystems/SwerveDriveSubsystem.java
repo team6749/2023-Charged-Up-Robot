@@ -34,6 +34,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -52,6 +53,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
     HashMap<String, Command> eventMap = new HashMap<>();
+    public SendableChooser<Boolean> cameraDisable = new SendableChooser<Boolean>(); 
 
     public SwerveDrivePoseEstimator poseEstimator;
 
@@ -129,6 +131,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         // add the field map to smartdashboard
         SmartDashboard.putData("field map", field);
+        cameraDisable.setDefaultOption("On", true);
+        cameraDisable.addOption("Off", false);
+        SmartDashboard.putData("Use Camera Measurements", cameraDisable);
     }
 
     @Override
@@ -139,7 +144,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         poseEstimator.update(getGyroRotation(), getCurrentModulePositions());
 
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
-        if (estPose.isPresent()) {
+        if (estPose.isPresent() && cameraDisable.getSelected()) {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(),
                     estPose.get().timestampSeconds);
