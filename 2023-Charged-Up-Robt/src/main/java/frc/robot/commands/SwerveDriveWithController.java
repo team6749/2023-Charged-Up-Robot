@@ -18,7 +18,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class SwerveDriveWithController extends CommandBase {
   /** Creates a new SwerveDriveWithJoystick. */
-  public SendableChooser<String> orientation = new SendableChooser<String>(); 
+  
   private String selectedDriveMode;
   private SwerveDriveSubsystem swerveDriveSubsystem;
   private XboxController controller;
@@ -29,14 +29,9 @@ public class SwerveDriveWithController extends CommandBase {
   SlewRateLimiter rotationLimiter = new SlewRateLimiter(5);
 
   public SwerveDriveWithController(SwerveDriveSubsystem subsystem, XboxController controller) {
-
-
     // Use addRequirements() here to declare subsystem dependencies.
     swerveDriveSubsystem = subsystem;
     this.controller = controller;
-    orientation.setDefaultOption("Robot Oriented", "Robot Oriented");
-    orientation.addOption("Field Oriented", "Field Oriented");
-    SmartDashboard.putData(orientation);
     addRequirements(swerveDriveSubsystem);
   }
 
@@ -47,7 +42,7 @@ public class SwerveDriveWithController extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    selectedDriveMode = orientation.getSelected();
+    selectedDriveMode = swerveDriveSubsystem.orientation.getSelected();
 
     double joystickRotation = controller.getRightX();
     if(Math.abs(joystickRotation) < 0.10 ) {
@@ -89,11 +84,7 @@ public class SwerveDriveWithController extends CommandBase {
             break;
       case ("Field Oriented"):
           //put field oriented drive here.
-          if(DriverStation.getAlliance() != Alliance.Red){
-            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getPose2d().getRotation());
-          } else {
-            desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-verticalDirectionSpeed, -horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getPose2d().getRotation());
-          }
+          desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed, swerveDriveSubsystem.getPose2d().getRotation());
           break;
     }
     if(verticalDirectionSpeed == 0 && horizontalDirectionSpeed == 0 && rotationalSpeed == 0){

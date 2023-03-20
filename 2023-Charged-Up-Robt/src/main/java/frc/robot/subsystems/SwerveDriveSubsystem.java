@@ -53,6 +53,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public SwerveDriveOdometry odometry;
     HashMap<String, Command> eventMap = new HashMap<>();
     public SendableChooser<Boolean> cameraDisable = new SendableChooser<Boolean>(); 
+    public SendableChooser<String> orientation = new SendableChooser<String>(); 
 
     public SwerveDrivePoseEstimator poseEstimator;
 
@@ -133,10 +134,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         cameraDisable.setDefaultOption("On", true);
         cameraDisable.addOption("Off", false);
         SmartDashboard.putData("Use Camera Measurements", cameraDisable);
+
+        orientation.addOption("Robot Oriented", "Robot Oriented");
+        orientation.setDefaultOption("Field Oriented", "Field Oriented");
+        SmartDashboard.putData("Drive Mode", orientation);
     }
 
     @Override
     public void periodic() {
+
         odometry.update(
                 getGyroRotation(),
                 getCurrentModulePositions());
