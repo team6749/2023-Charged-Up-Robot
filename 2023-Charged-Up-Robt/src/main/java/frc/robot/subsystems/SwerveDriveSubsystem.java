@@ -191,11 +191,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        odometry.resetPosition(
+        poseEstimator.resetPosition(
                 getGyroRotation(),
                 getCurrentModulePositions(),
                 pose);
-
+        
     }
 
     /**
