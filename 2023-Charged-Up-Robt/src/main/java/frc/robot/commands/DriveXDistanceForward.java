@@ -8,8 +8,6 @@ import java.util.List;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -18,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class DriveXDistanceForward extends CommandBase {
@@ -52,24 +51,21 @@ public class DriveXDistanceForward extends CommandBase {
     //gets the current robot position found using april tags and odometry
     Pose2d currentPose = subsystem.getPose2d();
 
-    destination = currentPose.plus(new Transform2d(new Translation2d(distanceX, distanceY), Rotation2d.fromDegrees(0)));
-
-    System.out.println(currentPose);
-    System.out.println(destination);
-
+    // adds x and y offset from pose2d
+    this.destination = new Pose2d(new Translation2d(currentPose.getX() + distanceX, currentPose.getY() + distanceY),
+        currentPose.getRotation());
     // An ExampleCommand will run in autonomous
 
     // genrates the trajectory
     // same code as in drivetoplace
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
-    trajectoryConfig.setReversed( distanceX < 0 );
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      currentPose,
-      List.of(),
-      destination,
-       trajectoryConfig);
-      
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        currentPose,
+        // list of no way points
+        List.of(),
+
+        Constants.Drivebase.sideifyPose2d(destination),
+        trajectoryConfig);
 
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 

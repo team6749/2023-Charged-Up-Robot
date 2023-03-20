@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
     autoSelector.setDefaultOption("DO NOTHING", Autos.doNothing(m_robotContainer._SwerveDrivebase));
     autoSelector.addOption("Drive Forward (2m)", Autos.driveForward(m_robotContainer._SwerveDrivebase));
-    autoSelector.addOption("Forward and Balance (.3m in front of ramp", Autos.ForwardAndBalance(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("Forward and Balance (.3m in front of ramp", Autos.forwardAndBalance(m_robotContainer._SwerveDrivebase));
     autoSelector.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase));
     autoSelector.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
     SmartDashboard.putData("auto selector", autoSelector);

@@ -39,20 +39,10 @@ public final class Autos {
   }
 
   
-    //path planner lib auto mirrors / flips paths
-  //starts closer to charge station
-  public static CommandBase PlaceAndBalance(SwerveDriveSubsystem subsystem) {
-    PathPlannerTrajectory ChargingStationOnlyTop = PathPlanner.loadPath("PlaceAndBalance", new PathConstraints(1.5, 1.5));
-    subsystem.field.getObject("autostart").setPose(ChargingStationOnlyTop.getInitialPose());
-    return subsystem.followTrajectoryCommand(ChargingStationOnlyTop, true).andThen(new SelfBalance(subsystem));
-    // ADD PLACE COMMAND BEFORE FOLLOW TRAJECTORY
-  }
-
   //path planner lib auto mirrors / flips paths
   //starts closer to charge station
   public static CommandBase ChargingStationOnlyTop(SwerveDriveSubsystem subsystem) {
     PathPlannerTrajectory ChargingStationOnlyTop = PathPlanner.loadPath("ChargingStationOnlyTop", new PathConstraints(1.5, 1.5));
-    subsystem.field.getObject("autostart").setPose(ChargingStationOnlyTop.getInitialPose());
     return subsystem.followTrajectoryCommand(ChargingStationOnlyTop, true).andThen(new SelfBalance(subsystem));
 
   }
@@ -61,7 +51,6 @@ public final class Autos {
   //closer to gates
   public static CommandBase ChargingStationOnlyBottom(SwerveDriveSubsystem subsystem) {
     PathPlannerTrajectory ChargingStationOnlyBottom = PathPlanner.loadPath("ChargingStationOnlyBottom", new PathConstraints(1.5, 1.5));
-    subsystem.field.getObject("autostart").setPose(ChargingStationOnlyBottom.getInitialPose());
     return subsystem.followTrajectoryCommand(ChargingStationOnlyBottom, true).andThen(new SelfBalance(subsystem));
   }
 
@@ -77,8 +66,8 @@ public final class Autos {
 
   //drive forward 1.3m and balance
   //START 0.3m FROM CHARGING PAD RAMP
-  public static Command ForwardAndBalance (SwerveDriveSubsystem subsystem){
-    return new DriveXDistanceForward(subsystem, -0.8, 0).andThen(new SelfBalance(subsystem));
+  public static Command forwardAndBalance (SwerveDriveSubsystem subsystem){
+    return new DriveXDistanceForward(subsystem, 1.3, 0).andThen(new SelfBalance(subsystem));
   }
 
   //custom command w/o pplib
@@ -106,5 +95,7 @@ public final class Autos {
         subsystem);
       // return new WaitCommand(1);
   }
+
+
 
 }
