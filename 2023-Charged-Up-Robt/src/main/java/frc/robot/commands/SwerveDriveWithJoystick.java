@@ -7,7 +7,9 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -65,8 +67,15 @@ public class SwerveDriveWithJoystick extends CommandBase {
         desiredSpeeds = new ChassisSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed, rotationalSpeed);
         break;
       case ("Field Oriented"):
-          desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-verticalDirectionSpeed, -horizontalDirectionSpeed, rotationalSpeed, subsystem.getPose2d().getRotation());
-          break;
+        // fo drive based on alliance color
+        if (DriverStation.getAlliance() != Alliance.Red) {
+          desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(verticalDirectionSpeed, horizontalDirectionSpeed,
+              rotationalSpeed, subsystem.getPose2d().getRotation());
+        } else {
+          desiredSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-verticalDirectionSpeed, -horizontalDirectionSpeed,
+              rotationalSpeed, subsystem.getPose2d().getRotation());
+        }
+        break;
     }
     // if there is no input on joystick, state is set to straight wheels
     // otherwise, set to desired speeds

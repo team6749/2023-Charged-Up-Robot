@@ -10,6 +10,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
 import java.util.List;
 import java.util.Optional;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -41,6 +42,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -223,24 +225,32 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     // creates a path to follow using the parameter trjactoery and returns the auto
     // command
     // Assuming this method is part of a drivetrain subsystem that provides the
-    // necessary methods
-    public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        return new PPSwerveControllerCommand(
-                traj,
-                this::getPose2d, // Pose supplier
-                this._kinematics, // SwerveDriveKinematics
-                new PIDController(6.5, 0, 0), // X controller. Tune these values for
-                                              // your robot. Leaving them 0
-                                              // will only use feedforwards.
-                new PIDController(6.5, 0, 0), // Y controller (usually the same values
-                                              // as X controller)
-                new PIDController(3.5, 0, 0), // Rotation controller. Tune these values
-                                              // for your robot. Leaving
-                                              // them 0 will only use feedforwards.
-                this::setModuleStates, // Module states consumer
-                true, // Should the path be automatically mirrored depending on alliance color.  Optional, defaults to true
-                this // Requires this drive subsystem
-        );
-    }
-
+   // necessary methods
+   public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    // Reset odometry for the first path you run during auto
+                    if (isFirstPath) {
+                        this.resetOdometry(traj.getInitialHolonomicPose());
+                    }
+                }),
+                new PPSwerveControllerCommand(
+                        traj,
+                        this::getPose2d, // Pose supplier
+                        this._kinematics, // SwerveDriveKinematics
+                        new PIDController(6.5, 0, 0), // X controller. Tune these values for
+                                                      // your robot. Leaving them 0
+                                                      // will only use feedforwards.
+                        new PIDController(6.5, 0, 0), // Y controller (usually the same values
+                                                      // as X controller)
+                        new PIDController(3.5, 0, 0), // Rotation controller. Tune these values
+                                                      // for your robot. Leaving
+                                                      // them 0 will only use feedforwards.
+                        this::setModuleStates, // Module states consumer
+                        true, // Should the path be automatically mirrored depending on alliance
+                              // color.
+                              // Optional, defaults to true
+                        this // Requires this drive subsystem
+                ));
+        }
 }
