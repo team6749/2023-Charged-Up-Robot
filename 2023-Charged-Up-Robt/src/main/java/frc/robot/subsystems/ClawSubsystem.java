@@ -14,15 +14,14 @@ import frc.robot.Constants;
 
 public class ClawSubsystem extends SubsystemBase {
   Compressor compressor = new Compressor(15, PneumaticsModuleType.CTREPCM);
-  DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
-  
+  DoubleSolenoid solenoid = new DoubleSolenoid(15, PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
   /** Creates a new ClawSubsystem. */
   public ClawSubsystem() {
     compressor.enableDigital();
-    solenoid.set(Value.kOff);
   }
 
   public void openSolenoid(){
+    System.out.println("its forward!!");
     solenoid.set(Value.kForward);
   }
 
@@ -32,6 +31,11 @@ public class ClawSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    
+    if(solenoid.get() != Value.kOff){
+      System.err.println("ITS OFF!!!!");
+      solenoid.set(Value.kOff);
+    }
 
     // This method will be called once per scheduler run
   }
