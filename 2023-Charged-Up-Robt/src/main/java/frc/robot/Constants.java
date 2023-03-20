@@ -39,7 +39,7 @@ public final class Constants {
     public static double baseOffset = 136.4;
     public static double clawOffset = 160;
 
-    public static int[] solenoid = {1, 2};
+    public static int[] solenoid = {6, 7};
   }
   public static class Drivebase {
     //subsystem constructed with array of modules

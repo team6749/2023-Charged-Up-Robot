@@ -49,7 +49,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public SwerveDriveModule[] modules;
     public SwerveDriveKinematics _kinematics;
     public SwerveModuleState[] states;
-    // public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
     HashMap<String, Command> eventMap = new HashMap<>();
@@ -108,7 +107,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             Constants.Drivebase.fieldWidthInMeters);
 
     // define the position of the camera on the robot
-    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.31, 0, 0.22),
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.26, 0, 0.21),
             new Rotation3d(0, 0, 0));
 
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS,

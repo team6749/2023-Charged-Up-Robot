@@ -38,6 +38,7 @@ public class ArmSegment extends PIDSubsystem {
     motor.setNeutralMode(NeutralMode.Brake);
     motor.setInverted(invert); // TODO see how this works
 
+
     encoder.setDistancePerRotation(360);
     encoder.setPositionOffset(offset / 360);
   

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -23,7 +24,13 @@ public class SwerveDriveWithController extends CommandBase {
   private XboxController controller;
   public ChassisSpeeds desiredSpeeds;
 
+  SlewRateLimiter horizontalLimiter = new SlewRateLimiter(5);
+  SlewRateLimiter verticalLimiter = new SlewRateLimiter(5);
+  SlewRateLimiter rotationLimiter = new SlewRateLimiter(5);
+
   public SwerveDriveWithController(SwerveDriveSubsystem subsystem, XboxController controller) {
+
+
     // Use addRequirements() here to declare subsystem dependencies.
     swerveDriveSubsystem = subsystem;
     this.controller = controller;
@@ -43,24 +50,27 @@ public class SwerveDriveWithController extends CommandBase {
     selectedDriveMode = orientation.getSelected();
 
     double joystickRotation = controller.getRightX();
-    if(Math.abs(joystickRotation) < (0.30) ) {
+    if(Math.abs(joystickRotation) < 0.10 ) {
       joystickRotation = 0;
   }
+  System.out.println(controller.getPOV());
 
-    double verticalDirectionSpeed = limitedJoystickInput(-controller.getLeftY()) * 2;
-    double horizontalDirectionSpeed = limitedJoystickInput(-controller.getLeftX()) * 2;
-    double rotationalSpeed = limitedJoystickInput(-joystickRotation) * 3;
+    double verticalDirectionSpeed = limitedJoystickInput(-controller.getLeftY());
+    double horizontalDirectionSpeed = limitedJoystickInput(-controller.getLeftX());
+    double rotationalSpeed = limitedJoystickInput(-joystickRotation);
 
-
-    if(magnitude(controller.getRightX(), controller.getRightY()) < 0.15) {
-      horizontalDirectionSpeed = 0;
-      verticalDirectionSpeed = 0;
-    }
     
-    if(magnitude(controller.getLeftX(), controller.getLeftY()) < 0.15) {
+
+
+    if(magnitude(verticalDirectionSpeed, horizontalDirectionSpeed) < 0.15) {
       horizontalDirectionSpeed = 0;
       verticalDirectionSpeed = 0;
     }
+
+    verticalDirectionSpeed = verticalLimiter.calculate(verticalDirectionSpeed * 2);
+    horizontalDirectionSpeed = horizontalLimiter.calculate(horizontalDirectionSpeed *2);
+    rotationalSpeed = rotationLimiter.calculate(rotationalSpeed * 4.5);
+    
     
     
     // System.out.println("X: " + horizontalDirectionSpeed);

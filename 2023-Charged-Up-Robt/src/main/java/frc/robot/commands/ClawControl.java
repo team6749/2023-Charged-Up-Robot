@@ -23,7 +23,7 @@ public class ClawControl extends CommandBase {
   public void initialize() {
     if(m_direction == true){
       m_ClawSubsystem.openSolenoid();
-      System.out.println("opennnnnn");
+      System.out.println("opennnnnnn");
     } 
     if(m_direction == false){
       m_ClawSubsystem.closeSolenoid();
