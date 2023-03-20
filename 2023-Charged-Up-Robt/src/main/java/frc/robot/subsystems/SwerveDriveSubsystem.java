@@ -10,6 +10,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
 import java.util.List;
 import java.util.Optional;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -18,6 +19,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -33,15 +35,16 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
     // priv variables
@@ -108,6 +111,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             Constants.Drivebase.fieldWidthInMeters);
 
     // define the position of the camera on the robot
+    // needs to be double checked
     public static Transform3d cameraPosition = new Transform3d(new Translation3d(.26, 0, 0.21),
             new Rotation3d(0, 0, 0));
 
@@ -143,10 +147,17 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+
+        layout2023.setOrigin(DriverStation.getAlliance() == Alliance.Red
+        ? OriginPosition.kRedAllianceWallRightSide
+        : OriginPosition.kBlueAllianceWallRightSide);
+
         odometry.update(
                 getGyroRotation(),
                 getCurrentModulePositions());
         poseEstimator.update(getGyroRotation(), getCurrentModulePositions());
+
+        photonPoseEstimator.setReferencePose(poseEstimator.getEstimatedPosition());
 
         Optional<EstimatedRobotPose> estPose = photonPoseEstimator.update();
         if (estPose.isPresent() && cameraDisable.getSelected()) {
@@ -220,8 +231,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     // creates a path to follow using the parameter trjactoery and returns the auto
     // command
     // Assuming this method is part of a drivetrain subsystem that provides the
-    // necessary methods
-    public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+   // necessary methods
+   public CommandBase followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
@@ -247,5 +258,5 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                               // Optional, defaults to true
                         this // Requires this drive subsystem
                 ));
-    }
+        }
 }
