@@ -114,7 +114,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public static Transform3d cameraPosition = new Transform3d(new Translation3d(-0.2, 0.09, 0.24),
             new Rotation3d(0, 0, 0));
 
-    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+    PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS,
             camera, cameraPosition);
 
     // constructor
