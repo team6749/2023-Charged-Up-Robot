@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 public class ArmSegment extends PIDSubsystem {
 
-  WPI_TalonFX motor;
+  public WPI_TalonFX motor;
   DutyCycleEncoder encoder;
 
   double minRange;
@@ -37,6 +37,7 @@ public class ArmSegment extends PIDSubsystem {
     motor.configFactoryDefault();
     motor.setNeutralMode(NeutralMode.Brake);
     motor.setInverted(invert); // TODO see how this works
+
 
     encoder.setDistancePerRotation(360);
     encoder.setPositionOffset(offset / 360);

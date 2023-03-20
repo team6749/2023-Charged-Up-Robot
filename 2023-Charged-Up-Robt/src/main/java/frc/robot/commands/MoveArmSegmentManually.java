@@ -4,46 +4,43 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClawSubsystem;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
-public class ClawControl extends CommandBase {
-  ClawSubsystem m_ClawSubsystem;
-  boolean m_direction;
-  /** Creates a new ClawControl. */
-  public ClawControl(ClawSubsystem subsystem, boolean direction) {
-    m_ClawSubsystem = subsystem;
-    addRequirements(subsystem);
-    m_direction = direction;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmSegment;
+
+public class MoveArmSegmentManually extends CommandBase {
+  ArmSegment m_Segment;
+  double m_power;
+  /** Creates a new MoveArmSegmentManually. */
+  public MoveArmSegmentManually(ArmSegment segment, double power) {
+    m_Segment = segment;
+    addRequirements(segment);
+    m_power = power;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(m_direction == true){
-      m_ClawSubsystem.openSolenoid();
-      System.out.println("opennnnnnn");
-    } 
-    if(m_direction == false){
-      m_ClawSubsystem.closeSolenoid();
-      System.out.println("closeeeeeee");
-    }
+    m_Segment.disable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    m_Segment.motor.set(ControlMode.PercentOutput, m_power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_Segment.motor.set(ControlMode.PercentOutput, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

@@ -49,11 +49,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public SwerveDriveModule[] modules;
     public SwerveDriveKinematics _kinematics;
     public SwerveModuleState[] states;
-    // public ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     public BuiltInAccelerometer accelerometer = new BuiltInAccelerometer();
     public SwerveDriveOdometry odometry;
     HashMap<String, Command> eventMap = new HashMap<>();
     public SendableChooser<Boolean> cameraDisable = new SendableChooser<Boolean>(); 
+    public SendableChooser<String> orientation = new SendableChooser<String>(); 
 
     public SwerveDrivePoseEstimator poseEstimator;
 
@@ -108,7 +108,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             Constants.Drivebase.fieldWidthInMeters);
 
     // define the position of the camera on the robot
-    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.31, 0, 0.22),
+    public static Transform3d cameraPosition = new Transform3d(new Translation3d(.26, 0, 0.21),
             new Rotation3d(0, 0, 0));
 
     PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(layout2023, PoseStrategy.AVERAGE_BEST_TARGETS,
@@ -134,10 +134,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         cameraDisable.setDefaultOption("On", true);
         cameraDisable.addOption("Off", false);
         SmartDashboard.putData("Use Camera Measurements", cameraDisable);
+
+        orientation.addOption("Robot Oriented", "Robot Oriented");
+        orientation.setDefaultOption("Field Oriented", "Field Oriented");
+        SmartDashboard.putData("Drive Mode", orientation);
     }
 
     @Override
     public void periodic() {
+
         odometry.update(
                 getGyroRotation(),
                 getCurrentModulePositions());

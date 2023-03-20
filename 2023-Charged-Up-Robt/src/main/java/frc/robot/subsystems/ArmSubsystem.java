@@ -16,8 +16,8 @@ public class ArmSubsystem extends SubsystemBase {
   double baseMotorPower;
   double clawMotorPower;
 
-  public ArmSegment baseSegment = new ArmSegment(0.1, -45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), Constants.Arm.baseMotor, 4);
-  public ArmSegment clawSegment = new ArmSegment(0.1, -95, 135, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), Constants.Arm.clawMotor, 3);
+  public ArmSegment baseSegment = new ArmSegment(0.25, -45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), Constants.Arm.baseMotor, 4);
+  public ArmSegment clawSegment = new ArmSegment(0.25, -95, 135, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), Constants.Arm.clawMotor, 3);
 
   
   /** Creates a new ArmSubsystem. */
