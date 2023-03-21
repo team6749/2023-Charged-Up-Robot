@@ -56,18 +56,35 @@ public final class Autos {
 
   // drive forward 1.3m and balance
   // START 0.3m FROM CHARGING PAD RAMP
-  public static Command ForwardAndBalance(SwerveDriveSubsystem subsystem, ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
+  public static Command ForwardAndBalance(SwerveDriveSubsystem subsystem, ArmSubsystem armSubsystem,
+      ClawSubsystem clawSubsystem) {
     return PlaceMiddle(armSubsystem, clawSubsystem)
         .andThen(new DriveXDistanceForward(subsystem, -2.3, 0)
-        .andThen(new SelfBalance(subsystem)));
+            .andThen(new SelfBalance(subsystem)));
   }
 
-  // place and do nothing
+  // place mid and do nothing
   public static Command PlaceMiddle(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
     return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
         .andThen(new ClawControl(clawSubsystem, true))
         .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
         .andThen(new ClawControl(clawSubsystem, false));
+  }
+
+  // place bottom and do nothing
+  public static Command PlaceBottom(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
+    return Constants.ArmCommands.moveArmToBottom(armSubsystem)
+        .andThen(new ClawControl(clawSubsystem, true))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen(new ClawControl(clawSubsystem, false));
+  }
+
+  // grab from substation and go back
+  public static Command GrabFromSubation(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
+    return new ClawControl(clawSubsystem, true)
+        .andThen(Constants.ArmCommands.MoveArmToSubstation(armSubsystem))
+        .andThen(new ClawControl(clawSubsystem, false))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem));
   }
 
   // place and leave community

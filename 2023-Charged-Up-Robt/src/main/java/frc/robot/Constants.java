@@ -150,5 +150,10 @@ public final class Constants {
       return new MoveArmSegment(subsystem.baseSegment, -34)
         .alongWith(new MoveArmSegment(subsystem.clawSegment, 107));
     }
+
+    public static Command moveArmToBottom(ArmSubsystem subsystem){
+      return new MoveArmSegment(subsystem.baseSegment, 2)
+        .alongWith(new MoveArmSegment(subsystem.clawSegment, 119));
+    }
   }
 }
