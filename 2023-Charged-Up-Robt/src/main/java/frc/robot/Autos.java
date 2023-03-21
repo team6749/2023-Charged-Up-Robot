@@ -71,32 +71,6 @@ public final class Autos {
   }
 
   //custom command w/o pplib
-  public static Command LineUpWithConeArea(SwerveDriveSubsystem subsystem){
-    Pose2d currentPose = subsystem.getPose2d();
-
-    // An ExampleCommand will run in autonomous
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      currentPose,
-      List.of(),
-      new Pose2d(1.8, 1.6, Rotation2d.fromDegrees(180)),
-       trajectoryConfig);
-      
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-      return new SwerveControllerCommand(
-        trajectory,
-        subsystem::getPose2d,
-        subsystem._kinematics,
-        xController,
-        yController,
-        thetaController,
-        subsystem::setModuleStates,
-        subsystem);
-      // return new WaitCommand(1);
-  }
-
-  //custom command w/o pplib
   public static Command LineUpWithSubstation(SwerveDriveSubsystem subsystem, boolean rightSubstation){
     Pose2d currentPose = subsystem.getPose2d();
 
