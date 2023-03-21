@@ -21,7 +21,6 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void openSolenoid(){
-    System.out.println("its forward!!");
     solenoid.set(Value.kForward);
   }
 
