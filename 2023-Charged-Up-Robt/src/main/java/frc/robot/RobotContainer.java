@@ -117,10 +117,10 @@ public class RobotContainer {
     new Trigger(moveArmUp).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, 0.2));
     new Trigger(moveArmDown).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, -0.2));
 
-    new Trigger(substationSetpoint).whileTrue(MoveArmToSubstation());
-    new Trigger(middleScoring).whileTrue(MoveArmToMiddle());
-    new Trigger(ground).whileTrue(MoveArmToGround());
-    new Trigger(idle).whileTrue(moveArmInside());
+    new Trigger(substationSetpoint).whileTrue(Constants.ArmCommands.MoveArmToSubstation(_ArmSubsystem));
+    new Trigger(middleScoring).whileTrue(Constants.ArmCommands.MoveArmToMiddle(_ArmSubsystem));
+    new Trigger(ground).whileTrue(Constants.ArmCommands.MoveArmToGround(_ArmSubsystem));
+    new Trigger(idle).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem));
 
 
 
@@ -132,23 +132,5 @@ public class RobotContainer {
     }
   }
 
-  public Command MoveArmToSubstation(){
-    return new MoveArmSegment(_ArmSubsystem.baseSegment, 0)
-      .alongWith(new MoveArmSegment(_ArmSubsystem.clawSegment, 90));
-  }
 
-  public Command MoveArmToMiddle(){
-    return new MoveArmSegment(_ArmSubsystem.baseSegment, 25)
-      .alongWith(new MoveArmSegment(_ArmSubsystem.clawSegment, 45));
-  }
-
-  public Command MoveArmToGround(){
-    return new MoveArmSegment(_ArmSubsystem.baseSegment, 90)  
-      .alongWith(new MoveArmSegment(_ArmSubsystem.clawSegment, 0));
-  }
-  
-  public Command moveArmInside(){
-    return new MoveArmSegment(_ArmSubsystem.baseSegment, -10)
-      .alongWith(new MoveArmSegment(_ArmSubsystem.clawSegment, 35));
-  }
 }
