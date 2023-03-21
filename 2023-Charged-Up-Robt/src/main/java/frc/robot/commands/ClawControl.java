@@ -4,15 +4,18 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClawSubsystem;
 
 public class ClawControl extends CommandBase {
   ClawSubsystem m_ClawSubsystem;
   boolean m_direction;
+  Timer timer;
   /** Creates a new ClawControl. */
   public ClawControl(ClawSubsystem subsystem, boolean direction) {
     m_ClawSubsystem = subsystem;
+    timer = new Timer();
     addRequirements(subsystem);
     m_direction = direction;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,6 +24,8 @@ public class ClawControl extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.reset();
+    timer.start();
     if(m_direction == true){
       m_ClawSubsystem.openSolenoid();
       System.out.println("opennnnnnn");
@@ -39,11 +44,14 @@ public class ClawControl extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    timer.stop();
+    System.out.println("fml");
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return timer.hasElapsed(1);
   }
 }

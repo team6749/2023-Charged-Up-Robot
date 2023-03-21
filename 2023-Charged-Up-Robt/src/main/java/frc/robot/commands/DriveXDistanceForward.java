@@ -35,8 +35,9 @@ public class DriveXDistanceForward extends CommandBase {
   double distanceX;
   double distanceY;
 
-  // constructor which takes in a distance x and distance y offsetted from
-  // starting pose
+  /// constructor which takes in a distance x and distance y offsetted from
+  /// starting pose
+  /// DOES NOT USE VISION, ONLY ODOMETRY
   public DriveXDistanceForward(SwerveDriveSubsystem subsystem, double distanceX, double distanceY) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
@@ -50,7 +51,7 @@ public class DriveXDistanceForward extends CommandBase {
   public void initialize() {
 
     //gets the current robot position found using april tags and odometry
-    Pose2d currentPose = subsystem.getPose2d();
+    Pose2d currentPose = subsystem.odometry.getPoseMeters();
 
     destination = currentPose.plus(new Transform2d(new Translation2d(distanceX, distanceY), Rotation2d.fromDegrees(0)));
 
@@ -76,7 +77,7 @@ public class DriveXDistanceForward extends CommandBase {
     // generates the wrapping command used to run the automatic drive distance
     this.moveCommand = new SwerveControllerCommand(
         trajectory,
-        subsystem::getPose2d,
+        subsystem.odometry::getPoseMeters,
         subsystem._kinematics,
         xController,
         yController,

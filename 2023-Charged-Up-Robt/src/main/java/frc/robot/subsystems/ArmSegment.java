@@ -60,7 +60,6 @@ public class ArmSegment extends PIDSubsystem {
     }
     SmartDashboard.putNumber(getName() + " PID", output);
     motor.set(ControlMode.PercentOutput, output);
-    
   }
 
   @Override
