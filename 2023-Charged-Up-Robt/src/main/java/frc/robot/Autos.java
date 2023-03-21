@@ -96,6 +96,33 @@ public final class Autos {
       // return new WaitCommand(1);
   }
 
+  //custom command w/o pplib
+  public static Command LineUpWithSubstation(SwerveDriveSubsystem subsystem, boolean rightSubstation){
+    Pose2d currentPose = subsystem.getPose2d();
+
+    Pose2d leftSubstationPose = Constants.Drivebase.sideifyPose2d(new Pose2d(15.8, 7.33, Rotation2d.fromDegrees(0)));
+    Pose2d rightSubstationPose = Constants.Drivebase.sideifyPose2d(new Pose2d(15.8, 6.0, Rotation2d.fromDegrees(0)));
+
+    // An ExampleCommand will run in autonomous
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      currentPose,
+      List.of(),
+      rightSubstation ? rightSubstationPose : leftSubstationPose,
+       trajectoryConfig);
+      
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+      return new SwerveControllerCommand(
+        trajectory,
+        subsystem::getPose2d,
+        subsystem._kinematics,
+        xController,
+        yController,
+        thetaController,
+        subsystem::setModuleStates,
+        subsystem);
+  }
 
 
 }
