@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -58,6 +59,18 @@ public class ArmSegment extends PIDSubsystem {
     if (output < -maxOutput) {
       output = -maxOutput;
     }
+
+    if(getMeasurement() < minRange - 30) {
+      DriverStation.reportError(getName() + " encoder is way out of range (+) not moving...", true);
+      motor.set(ControlMode.PercentOutput, 0);
+      return;
+    }
+    if(getMeasurement() > maxRange + 30) {
+      DriverStation.reportError(getName() + " encoder is way out of range (-) not moving...", true);
+      motor.set(ControlMode.PercentOutput, 0);
+      return;
+    }
+
     SmartDashboard.putNumber(getName() + " PID", output);
     motor.set(ControlMode.PercentOutput, output);
   }
