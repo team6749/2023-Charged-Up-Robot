@@ -8,6 +8,8 @@ import java.util.List;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -16,7 +18,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class DriveXDistanceForward extends CommandBase {
@@ -34,8 +35,9 @@ public class DriveXDistanceForward extends CommandBase {
   double distanceX;
   double distanceY;
 
-  // constructor which takes in a distance x and distance y offsetted from
-  // starting pose
+  /// constructor which takes in a distance x and distance y offsetted from
+  /// starting pose
+  /// DOES NOT USE VISION, ONLY ODOMETRY
   public DriveXDistanceForward(SwerveDriveSubsystem subsystem, double distanceX, double distanceY) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
@@ -49,30 +51,31 @@ public class DriveXDistanceForward extends CommandBase {
   public void initialize() {
 
     //gets the current robot position found using april tags and odometry
-    Pose2d currentPose = subsystem.getPose2d();
+    Pose2d currentPose = subsystem.odometry.getPoseMeters();
 
-    // adds x and y offset from pose2d
-    this.destination = new Pose2d(new Translation2d(currentPose.getX() + distanceX, currentPose.getY() + distanceY),
-        currentPose.getRotation());
+    destination = currentPose.plus(new Transform2d(new Translation2d(distanceX, distanceY), Rotation2d.fromDegrees(0)));
+
+
     // An ExampleCommand will run in autonomous
 
     // genrates the trajectory
     // same code as in drivetoplace
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
+    trajectoryConfig.setReversed( distanceX < 0 );
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        currentPose,
-        // list of no way points
-        List.of(),
-
-        Constants.Drivebase.sideifyPose2d(destination),
-        trajectoryConfig);
+      currentPose,
+      List.of(),
+      destination,
+       trajectoryConfig);
+      
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     // generates the wrapping command used to run the automatic drive distance
     this.moveCommand = new SwerveControllerCommand(
         trajectory,
-        subsystem::getPose2d,
+        subsystem.odometry::getPoseMeters,
         subsystem._kinematics,
         xController,
         yController,
