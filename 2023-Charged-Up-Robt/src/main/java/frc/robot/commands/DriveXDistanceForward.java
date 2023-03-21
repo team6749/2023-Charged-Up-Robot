@@ -55,8 +55,6 @@ public class DriveXDistanceForward extends CommandBase {
 
     destination = currentPose.plus(new Transform2d(new Translation2d(distanceX, distanceY), Rotation2d.fromDegrees(0)));
 
-    System.out.println(currentPose);
-    System.out.println(destination);
 
     // An ExampleCommand will run in autonomous
 
