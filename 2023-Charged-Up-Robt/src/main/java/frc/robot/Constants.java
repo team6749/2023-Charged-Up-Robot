@@ -36,8 +36,8 @@ public final class Constants {
     public static int baseMotor = 14;
     public static int clawMotor = 19;
 
-    public static int baseEncoder = 4;
-    public static int clawEncoder = 3;
+    public static int baseEncoder = 6;
+    public static int clawEncoder = 5;
 
 
     public static double baseOffset = 313;
