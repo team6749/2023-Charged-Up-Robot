@@ -52,6 +52,6 @@ public class ClawControl extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(1);
+    return timer.hasElapsed(0.1);
   }
 }
