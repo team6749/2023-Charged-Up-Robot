@@ -42,8 +42,8 @@ public class Robot extends TimedRobot {
     autoSelector.addOption("Place Mid and Balance", Autos.ForwardAndBalance(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     autoSelector.addOption("Place Mid And DO Nothing", Autos.PlaceMiddle(m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     autoSelector.addOption("PlaceMidAndLeaveCommunity", Autos.PlaceAndLeaveCommunity(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
-    autoSelector.addOption("PlaceMidAndBalanceConeLower", Autos.PlaceAndBalanceConeLower(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
-    autoSelector.addOption("PlaceMidAndBalanceConeUpper", Autos.PlaceAndBalanceConeUpper(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("LowerPlaceMidAndBalanceCone", Autos.LowerPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("UpperPlaceMidAndBalanceCone", Autos.UpperPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     SmartDashboard.putData("auto selector", autoSelector);
 
 

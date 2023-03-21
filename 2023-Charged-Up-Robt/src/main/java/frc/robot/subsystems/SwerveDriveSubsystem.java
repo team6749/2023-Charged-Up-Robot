@@ -191,6 +191,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
+        odometry.resetPosition(
+                getGyroRotation(),
+                getCurrentModulePositions(),
+                pose);
         poseEstimator.resetPosition(
                 getGyroRotation(),
                 getCurrentModulePositions(),
@@ -237,12 +241,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
                     if (isFirstPath) {
-                        this.resetOdometry(traj.getInitialHolonomicPose());
+                        this.resetOdometry(Constants.Drivebase.sideifyPose2d(traj.getInitialHolonomicPose()));
                     }
                 }),
                 new PPSwerveControllerCommand(
                         traj,
-                        this::getPose2d, // Pose supplier
+                        this.odometry::getPoseMeters, // Pose supplier
                         this._kinematics, // SwerveDriveKinematics
                         new PIDController(6.5, 0, 0), // X controller. Tune these values for
                                                       // your robot. Leaving them 0

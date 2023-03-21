@@ -79,33 +79,33 @@ public final class Autos {
   }
 
   // place cone and balance (lower)
-  public static CommandBase PlaceAndBalanceConeLower(SwerveDriveSubsystem swerveDriveSubsystem,
+  public static CommandBase LowerPlaceAndBalanceCone(SwerveDriveSubsystem swerveDriveSubsystem,
       ArmSubsystem armSubsystem,
       ClawSubsystem clawSubsystem) {
-    PathPlannerTrajectory PlaceAndBalanceConeLower = PathPlanner.loadPath("PlaceAndBalanceConeLower",
+    PathPlannerTrajectory LowerPlaceAndBalanceCone = PathPlanner.loadPath("LowerPlaceAndBalanceCone",
         new PathConstraints(1.5, 1.5));
-    swerveDriveSubsystem.field.getObject("autostart").setPose(PlaceAndBalanceConeLower.getInitialPose());
+    swerveDriveSubsystem.field.getObject("autostart").setPose(LowerPlaceAndBalanceCone.getInitialPose());
     return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
         .andThen(new ClawControl(clawSubsystem, true))
         .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
-        .andThen(swerveDriveSubsystem.followTrajectoryCommand(PlaceAndBalanceConeLower, true))
+        .andThen(swerveDriveSubsystem.followTrajectoryCommand(LowerPlaceAndBalanceCone, true))
         .andThen(new ClawControl(clawSubsystem, false))
         .andThen(new SelfBalance(swerveDriveSubsystem));
   }
 
   // place cone and balance (upper)
-  public static CommandBase PlaceAndBalanceConeUpper(SwerveDriveSubsystem swerveDriveSubsystem,
+  public static CommandBase UpperPlaceAndBalanceCone(SwerveDriveSubsystem swerveDriveSubsystem,
       ArmSubsystem armSubsystem,
       ClawSubsystem clawSubsystem) {
-    PathPlannerTrajectory PlaceAndBalanceConeUpper = PathPlanner.loadPath("PlaceAndBalanceConeUpper",
+    PathPlannerTrajectory UpperPlaceAndBalanceCone = PathPlanner.loadPath("UpperPlaceAndBalanceCone",
         new PathConstraints(1.5, 1.5));
-    swerveDriveSubsystem.field.getObject("autostart").setPose(PlaceAndBalanceConeUpper.getInitialPose());
+    swerveDriveSubsystem.field.getObject("autostart").setPose(UpperPlaceAndBalanceCone.getInitialPose());
     return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
         .andThen(new ClawControl(clawSubsystem, true))
-        .andThen(swerveDriveSubsystem.followTrajectoryCommand(PlaceAndBalanceConeUpper, true))
         .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
-        .andThen(new ClawControl(clawSubsystem, false))
-        .andThen(new SelfBalance(swerveDriveSubsystem));
+        .andThen(swerveDriveSubsystem.followTrajectoryCommand(UpperPlaceAndBalanceCone, true))
+        .andThen(new SelfBalance(swerveDriveSubsystem))
+        .andThen(new ClawControl(clawSubsystem, false));
   }
 
   // custom command w/o pplib
