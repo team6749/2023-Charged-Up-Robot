@@ -12,7 +12,6 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.util.List;
-import frc.robot.Constants;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;

@@ -11,12 +11,10 @@ import edu.wpi.first.math.controller.PIDController;
 import java.util.List;
 import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
