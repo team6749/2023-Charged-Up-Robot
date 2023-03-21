@@ -8,10 +8,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -48,7 +45,6 @@ public class SwerveDriveWithController extends CommandBase {
     if(Math.abs(joystickRotation) < 0.10 ) {
       joystickRotation = 0;
   }
-  System.out.println(controller.getPOV());
 
     double verticalDirectionSpeed = limitedJoystickInput(-controller.getLeftY());
     double horizontalDirectionSpeed = limitedJoystickInput(-controller.getLeftX());
