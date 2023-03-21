@@ -46,7 +46,6 @@ public class ClawControl extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     timer.stop();
-    System.out.println("fml");
   }
 
   // Returns true when the command should end.
