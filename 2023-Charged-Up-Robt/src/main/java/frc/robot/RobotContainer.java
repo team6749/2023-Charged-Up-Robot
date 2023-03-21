@@ -6,17 +6,12 @@ package frc.robot;
 
 import frc.robot.commands.ClawControl;
 import frc.robot.commands.LineUpWithStation;
-import frc.robot.commands.MoveArmSegment;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithController;
-import frc.robot.subsystems.ArmSegment;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;

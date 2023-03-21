@@ -39,7 +39,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 
   public void moveBaseSegment(double power){
-    System.out.println(power);
     baseSegment.motor.set(ControlMode.PercentOutput, power);
   }
 

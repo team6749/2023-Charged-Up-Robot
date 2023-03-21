@@ -28,11 +28,9 @@ public class ClawControl extends CommandBase {
     timer.start();
     if(m_direction == true){
       m_ClawSubsystem.openSolenoid();
-      System.out.println("opennnnnnn");
     } 
     if(m_direction == false){
       m_ClawSubsystem.closeSolenoid();
-      System.out.println("closeeeeeee");
     }
   }
 
