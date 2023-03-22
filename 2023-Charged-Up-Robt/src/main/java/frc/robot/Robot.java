@@ -11,21 +11,23 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.enums.ScoringType;
+import frc.robot.commands.LineUpWithStation;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
+
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   public SendableChooser<Pose2d> startPosChooser = new SendableChooser<Pose2d>();
-  public SendableChooser<CommandBase> autoChooser = new SendableChooser<CommandBase>();
   SendableChooser<Command> autoSelector = new SendableChooser<Command>();
   SendableChooser<ScoringType> scoringSelector = new SendableChooser<ScoringType>();
+  SendableChooser<Command> stationSelector = new SendableChooser<Command>();
+
 
   private RobotContainer m_robotContainer;
   Thread m_visionThread;
@@ -42,14 +44,23 @@ public class Robot extends TimedRobot {
 
     autoSelector.setDefaultOption("DO NOTHING", Autos.doNothing(m_robotContainer._SwerveDrivebase));
     autoSelector.addOption("Drive Forward (2m)", Autos.driveForward(m_robotContainer._SwerveDrivebase));
-    autoSelector.addOption("Forward and Balance (.3m in front of ramp", Autos.forwardAndBalance(m_robotContainer._SwerveDrivebase));
-    autoSelector.addOption("ChargingStationOnlyTop", Autos.ChargingStationOnlyTop(m_robotContainer._SwerveDrivebase));
-    autoSelector.addOption("ChargingStationOnlyBottom", Autos.ChargingStationOnlyBottom(m_robotContainer._SwerveDrivebase));
+    autoSelector.addOption("Place Mid and Balance", Autos.ForwardAndBalance(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("Place Mid And DO Nothing", Autos.PlaceMiddle(m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("PlaceMidAndLeaveCommunity", Autos.PlaceAndLeaveCommunity(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("LowerPlaceMidAndBalanceCone", Autos.LowerPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("UpperPlaceMidAndBalanceCone", Autos.UpperPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     SmartDashboard.putData("auto selector", autoSelector);
 
     scoringSelector.setDefaultOption("Middle", ScoringType.Middle);
     scoringSelector.addOption("Low", ScoringType.Low);
     scoringSelector.addOption("Dont Score", ScoringType.Low);
+    SmartDashboard.putData("Scoring Selector:", scoringSelector);
+    //this code adds the stations 1-9 to the sendable chooser `stationSelector` 
+    for (int i = 1; i < 10; i++) {
+      stationSelector.addOption("Station " + i + " align", new LineUpWithStation(m_robotContainer._SwerveDrivebase, i));
+    }
+    //then we would add something that triggers it to go to the selected station
+    SmartDashboard.putData("Station Selected:", stationSelector);
 
     //april tag shit
     m_visionThread =
@@ -59,8 +70,9 @@ public class Robot extends TimedRobot {
           camera.setResolution(160, 120);
           camera.setFPS(30);
         });
-  m_visionThread.setDaemon(true);
-  m_visionThread.start();
+    m_visionThread.setDaemon(true);
+    m_visionThread.start();
+
   }
 
   /**
