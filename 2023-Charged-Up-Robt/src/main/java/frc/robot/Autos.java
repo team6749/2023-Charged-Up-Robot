@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import frc.robot.commands.ClawControl;
 import frc.robot.commands.DriveXDistanceForward;
 import frc.robot.commands.SelfBalance;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 import java.util.List;
@@ -70,8 +73,89 @@ public final class Autos {
     return new DriveXDistanceForward(subsystem, 1.3, 0).andThen(new SelfBalance(subsystem));
   }
 
-  //custom command w/o pplib
-  public static Command LineUpWithConeArea(SwerveDriveSubsystem subsystem){
+  // place mid and do nothing
+  public static Command PlaceMiddle(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
+    return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
+        .andThen(new ClawControl(clawSubsystem, true))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen(new ClawControl(clawSubsystem, false));
+  }
+
+  // place bottom and do nothing
+  public static Command PlaceBottom(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
+    return Constants.ArmCommands.moveArmToBottom(armSubsystem)
+        .andThen(new ClawControl(clawSubsystem, true))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen(new ClawControl(clawSubsystem, false));
+  }
+
+  // grab from substation and go back
+  public static Command GrabFromSubation(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
+    return new ClawControl(clawSubsystem, true)
+        .andThen(Constants.ArmCommands.MoveArmToSubstation(armSubsystem))
+        .andThen(new ClawControl(clawSubsystem, false))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem));
+  }
+
+  // place and leave community
+  public static Command PlaceAndLeaveCommunity(SwerveDriveSubsystem swerveDriveSubsystem, ArmSubsystem armSubsystem,
+      ClawSubsystem clawSubsystem) {
+    return PlaceMiddle(armSubsystem, clawSubsystem)
+        .andThen(new DriveXDistanceForward(swerveDriveSubsystem, -4.1, 0));
+  }
+
+  // place cone and balance (lower)
+  public static CommandBase LowerPlaceAndBalanceCone(SwerveDriveSubsystem swerveDriveSubsystem,
+      ArmSubsystem armSubsystem,
+      ClawSubsystem clawSubsystem) {
+    PathPlannerTrajectory LowerPlaceAndBalanceCone = PathPlanner.loadPath("LowerPlaceAndBalanceCone",
+        new PathConstraints(1.5, 1.5));
+    swerveDriveSubsystem.field.getObject("autostart").setPose(LowerPlaceAndBalanceCone.getInitialPose());
+    return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
+        .andThen(new ClawControl(clawSubsystem, true))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen(swerveDriveSubsystem.followTrajectoryCommand(LowerPlaceAndBalanceCone, true))
+        .andThen(new ClawControl(clawSubsystem, false))
+        .andThen(new SelfBalance(swerveDriveSubsystem));
+  }
+
+  // place cone and balance (upper)
+  public static CommandBase UpperPlaceAndBalanceCone(SwerveDriveSubsystem swerveDriveSubsystem,
+      ArmSubsystem armSubsystem,
+      ClawSubsystem clawSubsystem) {
+    PathPlannerTrajectory UpperPlaceAndBalanceCone = PathPlanner.loadPath("UpperPlaceAndBalanceCone",
+        new PathConstraints(1.5, 1.5));
+    swerveDriveSubsystem.field.getObject("autostart").setPose(UpperPlaceAndBalanceCone.getInitialPose());
+    return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
+        .andThen(new ClawControl(clawSubsystem, true))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen(swerveDriveSubsystem.followTrajectoryCommand(UpperPlaceAndBalanceCone, true))
+        .andThen(new SelfBalance(swerveDriveSubsystem))
+        .andThen(new ClawControl(clawSubsystem, false));
+  }
+
+  public static CommandBase Lower2ConePlaceAndBalance(SwerveDriveSubsystem swerveDriveSubsystem,
+      ArmSubsystem armSubsystem,
+      ClawSubsystem clawSubsystem) {
+    PathPlannerTrajectory path1 = PathPlanner.loadPath("path1",
+        new PathConstraints(2, 2));
+    PathPlannerTrajectory path2 = PathPlanner.loadPath("path2",
+        new PathConstraints(2, 2));
+    PathPlannerTrajectory path3 = PathPlanner.loadPath("path3",
+        new PathConstraints(2, 2));
+
+    return PlaceMiddle(armSubsystem, clawSubsystem)
+        .andThen(swerveDriveSubsystem.followTrajectoryCommand(path1, true))
+        .andThen(Constants.ArmCommands.moveArmToBottom(armSubsystem))
+        .andThen(swerveDriveSubsystem.followTrajectoryCommand(path2, true))
+        .alongWith(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen(PlaceMiddle(armSubsystem, clawSubsystem))
+        .andThen(swerveDriveSubsystem.followTrajectoryCommand(path3, true))
+        .andThen(new SelfBalance(swerveDriveSubsystem));
+  }
+
+  // custom command w/o pplib
+  public static Command LineUpWithConeArea(SwerveDriveSubsystem subsystem) {
     Pose2d currentPose = subsystem.getPose2d();
 
     // An ExampleCommand will run in autonomous
