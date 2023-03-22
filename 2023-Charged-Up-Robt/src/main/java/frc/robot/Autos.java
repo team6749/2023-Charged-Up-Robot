@@ -69,6 +69,35 @@ public final class Autos {
   public static Command forwardAndBalance (SwerveDriveSubsystem subsystem){
     return new DriveXDistanceForward(subsystem, 1.3, 0).andThen(new SelfBalance(subsystem));
   }
+  
+  public static CommandBase DriveToSubstation(SwerveDriveSubsystem subsystem) {
+    Pose2d currentPose = subsystem.getPose2d();
+    TrajectoryConfig config = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
+
+    Trajectory trajerctory = TrajectoryGenerator.generateTrajectory(
+      currentPose, 
+      List.of(), 
+      new Pose2d(7.5, 1.5, Rotation2d.fromDegrees(180)), 
+      config);
+
+      PIDController xController = new PIDController(4, 4, 0);
+      PIDController yController = new PIDController(4, 4, 0);
+      ProfiledPIDController thetaController = new ProfiledPIDController(
+        3, 0, 0, new TrapezoidProfile.Constraints(5/4,3));
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+      return new SwerveControllerCommand(
+        trajerctory, 
+        subsystem::getPose2d, 
+        subsystem._kinematics, 
+        xController,  
+        yController, 
+        thetaController,
+        subsystem::setModuleStates,
+        subsystem);
+
+    
+  }
 
   //custom command w/o pplib
   public static Command LineUpWithConeArea(SwerveDriveSubsystem subsystem){
@@ -95,6 +124,8 @@ public final class Autos {
         subsystem);
       // return new WaitCommand(1);
   }
+
+
 
 
 
