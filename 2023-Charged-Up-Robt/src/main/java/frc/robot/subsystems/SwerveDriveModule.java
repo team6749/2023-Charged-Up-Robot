@@ -112,7 +112,6 @@ public class SwerveDriveModule {
         double velocityFeedback = velocityPID.calculate(getDriveEncoderVelocity(), state.speedMetersPerSecond);
 
         rotationMotor.set(turnOutput);
-        // System.out.println(state.speedMetersPerSecond);
 
         SmartDashboard.putNumber("ff difference to actual velocity " + name, state.speedMetersPerSecond - getDriveEncoderVelocity());
 
@@ -128,13 +127,6 @@ public class SwerveDriveModule {
         rotationMotor.set(0);
     }
 
-    
-    // public void printOffsets(double calibration, double currentAngle, String name){
-    //     //currentAngle includes calibration
-    //     double offset = (double) calibration - currentAngle;
-    //     System.out.println(name + ": " + offset);
-    // }
-    
     public SwerveModulePosition getCurrentPosition(){
         return new SwerveModulePosition(
         getDriveEncoderPos(), Rotation2d.fromDegrees(getRotationEncoder()));
