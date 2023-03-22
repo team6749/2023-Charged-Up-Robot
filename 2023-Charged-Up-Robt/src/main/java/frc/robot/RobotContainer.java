@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.ClawControl;
+import frc.robot.commands.DriveToSubstation;
 import frc.robot.commands.LineUpWithStation;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithController;
@@ -119,8 +120,15 @@ public class RobotContainer {
     new Trigger(moveArmUp).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, 0.2));
     new Trigger(moveArmDown).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, -0.2));
 
-    new Trigger(rightSubstation).whileTrue(Constants.ArmCommands.MoveArmToSubstation(_ArmSubsystem));
-    new Trigger(leftSubstation).whileTrue(Constants.ArmCommands.MoveArmToMiddle(_ArmSubsystem));
+    
+    new Trigger(rightSubstation).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem)
+        .andThen(new DriveToSubstation(_SwerveDrivebase, false))
+        .andThen(Autos.GrabFromSubation(_ArmSubsystem, _ClawSubsystem)));
+
+    new Trigger(leftSubstation).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem)
+        .andThen(new DriveToSubstation(_SwerveDrivebase, true))
+        .andThen(Autos.GrabFromSubation(_ArmSubsystem, _ClawSubsystem)));
+
     new Trigger(ground).whileTrue(Constants.ArmCommands.MoveArmToGround(_ArmSubsystem));
     new Trigger(idle).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem));
 
