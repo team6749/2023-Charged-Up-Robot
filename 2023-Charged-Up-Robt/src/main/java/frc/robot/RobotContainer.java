@@ -160,6 +160,8 @@ public class RobotContainer {
     new Trigger(scoreMiddle).whileTrue(Autos.PlaceMiddle(_ArmSubsystem, _ClawSubsystem));
     new Trigger(scoreBottom).whileTrue(Autos.PlaceBottom(_ArmSubsystem, _ClawSubsystem));
 
+    new Trigger(intakeSubstation).whileTrue(Autos.GrabFromSubation(_ArmSubsystem, _ClawSubsystem));
+
     new Trigger(autoAlign).whileTrue( new DoAutoAlignmentAndScore(this) );
 
 

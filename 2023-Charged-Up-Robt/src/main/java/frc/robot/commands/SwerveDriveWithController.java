@@ -21,9 +21,9 @@ public class SwerveDriveWithController extends CommandBase {
   private XboxController controller;
   public ChassisSpeeds desiredSpeeds;
 
-  SlewRateLimiter horizontalLimiter = new SlewRateLimiter(3);
-  SlewRateLimiter verticalLimiter = new SlewRateLimiter(3);
-  SlewRateLimiter rotationLimiter = new SlewRateLimiter(15);
+  SlewRateLimiter horizontalLimiter = new SlewRateLimiter(6);
+  SlewRateLimiter verticalLimiter = new SlewRateLimiter(6);
+  SlewRateLimiter rotationLimiter = new SlewRateLimiter(50);
 
   public SwerveDriveWithController(SwerveDriveSubsystem subsystem, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
