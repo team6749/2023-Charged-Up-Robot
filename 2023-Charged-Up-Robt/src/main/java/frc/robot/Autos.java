@@ -128,6 +128,9 @@ public final class Autos {
   public static Command LineUpWithConeArea(SwerveDriveSubsystem subsystem) {
     Pose2d currentPose = subsystem.getPose2d();
 
+    Pose2d leftSubstationPose = Constants.Drivebase.sideifyPose2d(new Pose2d(15.8, 7.33, Rotation2d.fromDegrees(0)));
+    Pose2d rightSubstationPose = Constants.Drivebase.sideifyPose2d(new Pose2d(15.8, 6.0, Rotation2d.fromDegrees(0)));
+
     // An ExampleCommand will run in autonomous
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(

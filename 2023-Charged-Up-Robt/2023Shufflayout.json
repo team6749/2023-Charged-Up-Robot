@@ -222,7 +222,7 @@
           "10,4": {
             "size": [
               4,
-              1
+              2
             ],
             "content": {
               "_type": "ComboBox Chooser",
@@ -286,8 +286,21 @@
           },
           "6,4": {
             "size": [
-              3,
-              1
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Base Segment Encoder",
+              "_title": "SmartDashboard/Base Segment Encoder",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,4": {
+            "size": [
+              2,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -297,15 +310,15 @@
               "_showGlyph": false
             }
           },
-          "6,5": {
+          "14,4": {
             "size": [
               3,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Base Segment Encoder",
-              "_title": "SmartDashboard/Base Segment Encoder",
+              "_source0": "network_table:///SmartDashboard/Claw Segment Encoder",
+              "_title": "SmartDashboard/Claw Segment Encoder",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -423,9 +436,9 @@
               "imageHeight": 0
             }
           },
-          "10,2": {
+          "19,2": {
             "size": [
-              17,
+              12,
               10
             ],
             "content": {
@@ -440,7 +453,7 @@
               "Colors/autostart": "#FFFFFFFF"
             }
           },
-          "20,12": {
+          "25,12": {
             "size": [
               6,
               3
@@ -453,20 +466,28 @@
               "_showGlyph": false
             }
           },
-          "11,12": {
+          "10,2": {
             "size": [
-              7,
-              2
+              9,
+              10
             ],
             "content": {
-              "_type": "ComboBox Chooser",
-              "_source0": "network_table:///SmartDashboard/Use Camera Measurements",
-              "_title": "SmartDashboard/Use Camera Measurements",
+              "_type": "Camera Stream",
+              "_source0": "camera_server://USB Camera 0",
+              "_title": "USB Camera 0",
               "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "HALF",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
             }
           },
-          "8,0": {
+          "0,0": {
             "size": [
               4,
               2
@@ -475,6 +496,32 @@
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Drive Mode",
               "_title": "SmartDashboard/Drive Mode",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              6,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Station Selected:",
+              "_title": "SmartDashboard/Station Selected:",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "16,0": {
+            "size": [
+              5,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Scoring Selector:",
+              "_title": "SmartDashboard/Scoring Selector:",
               "_glyph": 148,
               "_showGlyph": false
             }

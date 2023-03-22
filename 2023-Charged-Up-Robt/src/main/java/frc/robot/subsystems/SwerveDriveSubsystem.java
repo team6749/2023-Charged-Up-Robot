@@ -162,7 +162,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             SmartDashboard.putString("pose est", estPose.get().estimatedPose.toString());
             poseEstimator.addVisionMeasurement(estPose.get().estimatedPose.toPose2d(),
                     estPose.get().timestampSeconds);
-            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(4, 4, 16));
+            poseEstimator.setVisionMeasurementStdDevs(new MatBuilder(Nat.N3(), Nat.N1()).fill(4, 4, 4));
         }
 
         // Call periodic on children

@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.IntSummaryStatistics;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -14,7 +16,8 @@ import frc.robot.Constants;
 
 public class ClawSubsystem extends SubsystemBase {
   Compressor compressor = new Compressor(15, PneumaticsModuleType.CTREPCM);
-  DoubleSolenoid solenoid = new DoubleSolenoid(15, PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
+  private DoubleSolenoid solenoid = new DoubleSolenoid(15, PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
+  boolean isClawOpen;
   /** Creates a new ClawSubsystem. */
   public ClawSubsystem() {
     compressor.enableDigital();
@@ -22,15 +25,24 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void openSolenoid(){
     solenoid.set(Value.kForward);
+    isClawOpen = true;
   }
 
   public void closeSolenoid(){
     solenoid.set(Value.kReverse);
+    isClawOpen = false;
+  }
+
+  public void toggleSolenoid(){
+    if(isClawOpen == true){
+    closeSolenoid();
+     } else{
+      openSolenoid();
+    }
   }
 
   @Override
   public void periodic() {
-    
     if(solenoid.get() != Value.kOff){
       System.err.println("ITS OFF!!!!");
       solenoid.set(Value.kOff);

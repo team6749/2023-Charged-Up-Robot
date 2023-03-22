@@ -25,8 +25,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   public SendableChooser<Pose2d> startPosChooser = new SendableChooser<Pose2d>();
   SendableChooser<Command> autoSelector = new SendableChooser<Command>();
-  SendableChooser<ScoringType> scoringSelector = new SendableChooser<ScoringType>();
-  SendableChooser<Command> stationSelector = new SendableChooser<Command>();
+
 
 
   private RobotContainer m_robotContainer;
@@ -51,16 +50,7 @@ public class Robot extends TimedRobot {
     autoSelector.addOption("UpperPlaceMidAndBalanceCone", Autos.UpperPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     SmartDashboard.putData("auto selector", autoSelector);
 
-    scoringSelector.setDefaultOption("Middle", ScoringType.Middle);
-    scoringSelector.addOption("Low", ScoringType.Low);
-    scoringSelector.addOption("Dont Score", ScoringType.Low);
-    SmartDashboard.putData("Scoring Selector:", scoringSelector);
-    //this code adds the stations 1-9 to the sendable chooser `stationSelector` 
-    for (int i = 1; i < 10; i++) {
-      stationSelector.addOption("Station " + i + " align", new LineUpWithStation(m_robotContainer._SwerveDrivebase, i));
-    }
-    //then we would add something that triggers it to go to the selected station
-    SmartDashboard.putData("Station Selected:", stationSelector);
+   
 
     //april tag shit
     m_visionThread =

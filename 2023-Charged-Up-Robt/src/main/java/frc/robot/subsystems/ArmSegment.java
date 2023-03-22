@@ -39,9 +39,11 @@ public class ArmSegment extends PIDSubsystem {
     motor.setNeutralMode(NeutralMode.Brake);
     motor.setInverted(invert); // TODO see how this works
 
-
     encoder.setDistancePerRotation(360);
-    encoder.setPositionOffset(offset / 360);
+    if (encoder.getPositionOffset() == 0) {
+      encoder.setPositionOffset(offset / 360);
+    }
+    
   
     //degrees
     controller.setTolerance(2);
@@ -77,6 +79,9 @@ public class ArmSegment extends PIDSubsystem {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber(getName() + " Encoder ABS", encoder.getAbsolutePosition());
+    SmartDashboard.putNumber(getName() + " Encoder DIST", encoder.get());
+    
     SmartDashboard.putNumber(getName() + " Encoder", getMeasurement());
 
     // Do Range limits before the built in super method calls useOutput
@@ -90,9 +95,17 @@ public class ArmSegment extends PIDSubsystem {
     super.periodic();
   }
 
+  
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return encoder.getDistance();
+    double value = encoder.getDistance();
+    //TODO this is REALLY JANK like REALLY jank to try and solve a hardware setup thing
+    //i have no idea if it even works
+    if(value < -150) {
+      DriverStation.reportWarning(getName() + " is using ov erride +360 kinda sus", false);
+      value += 360;
+    }
+    return value;
   }
 }
