@@ -5,12 +5,11 @@
 package frc.robot.commands;
 
 import java.util.List;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -18,64 +17,51 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-public class DriveXDistanceForward extends CommandBase {
-  /** Creates a new DriveToPlace. */
+public class DriveToSubstation extends CommandBase {
 
-  // inits pid controllers
-  final static PIDController xController = new PIDController(6.5, 0, 0);
-  final static PIDController yController = new PIDController(6.5, 0, 0);
-  final static ProfiledPIDController thetaController = new ProfiledPIDController(3, 0, 0,
-      new TrapezoidProfile.Constraints(5 / 4, 3));
+  private SwerveDriveSubsystem subsystem;
+  private Command moveCommand;
+  boolean m_leftStation;
 
-  SwerveDriveSubsystem subsystem;
-  Pose2d destination;
-  Command moveCommand;
-  double distanceX;
-  double distanceY;
-
-  /// constructor which takes in a distance x and distance y offsetted from
-  /// starting pose
-  /// DOES NOT USE VISION, ONLY ODOMETRY
-  public DriveXDistanceForward(SwerveDriveSubsystem subsystem, double distanceX, double distanceY) {
+  /** Creates a new IntakeFromSubstation. */
+  public DriveToSubstation(SwerveDriveSubsystem subsystem, boolean station) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_leftStation = station;
     this.subsystem = subsystem;
     addRequirements(subsystem);
-    this.distanceX = distanceX;
-    this.distanceY = distanceY;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Pose2d currentPose = subsystem.getPose2d();
 
-    //gets the current robot position found using april tags and odometry
-    Pose2d currentPose = subsystem.odometry.getPoseMeters();
-
-    destination = currentPose.plus(new Transform2d(new Translation2d(distanceX, distanceY), Rotation2d.fromDegrees(0)));
-
+    Pose2d leftSubstationPose = Constants.Drivebase.sideifyPose2d(new Pose2d(15.8, 7.33, Rotation2d.fromDegrees(0)));
+    Pose2d rightSubstationPose = Constants.Drivebase.sideifyPose2d(new Pose2d(15.8, 6.0, Rotation2d.fromDegrees(0)));
 
     // An ExampleCommand will run in autonomous
-
-    // genrates the trajectory
-    // same code as in drivetoplace
+    // trajectory generator
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
-    trajectoryConfig.setReversed( distanceX < 0 );
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      currentPose,
-      List.of(),
-      destination,
-       trajectoryConfig);
-      
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        currentPose,
+        List.of(),
+        m_leftStation ? leftSubstationPose : rightSubstationPose,
+        trajectoryConfig);
 
+    // pid controllers used to correct any error
+    PIDController xController = new PIDController(6.5, 0, 0);
+    PIDController yController = new PIDController(6.5, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+        3, 0, 0, new TrapezoidProfile.Constraints(5 / 4, 3));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    // generates the wrapping command used to run the automatic drive distance
-    this.moveCommand = new SwerveControllerCommand(
+    // command to wrap trajectory generator
+    moveCommand = new SwerveControllerCommand(
         trajectory,
-        subsystem.odometry::getPoseMeters,
+        subsystem::getPose2d,
         subsystem._kinematics,
         xController,
         yController,
@@ -85,6 +71,7 @@ public class DriveXDistanceForward extends CommandBase {
     moveCommand.initialize();
   }
 
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

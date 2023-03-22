@@ -8,16 +8,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClawSubsystem;
 
-public class ClawControl extends CommandBase {
+public class ClawToggle extends CommandBase {
   ClawSubsystem m_ClawSubsystem;
-  boolean m_direction;
   Timer timer;
   /** Creates a new ClawControl. */
-  public ClawControl(ClawSubsystem subsystem, boolean direction) {
+  public ClawToggle(ClawSubsystem subsystem) {
     m_ClawSubsystem = subsystem;
     timer = new Timer();
     addRequirements(subsystem);
-    m_direction = direction;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,12 +24,7 @@ public class ClawControl extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
-    if(m_direction == true){
-      m_ClawSubsystem.openSolenoid();
-    } 
-    if(m_direction == false){
-      m_ClawSubsystem.closeSolenoid();
-    }
+    m_ClawSubsystem.toggleSolenoid();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

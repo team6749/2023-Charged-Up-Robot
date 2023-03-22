@@ -16,8 +16,8 @@ public class ArmSubsystem extends SubsystemBase {
   double baseMotorPower;
   double clawMotorPower;
 
-  public ArmSegment baseSegment = new ArmSegment(0.25, -45, 95, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), Constants.Arm.baseMotor, 4);
-  public ArmSegment clawSegment = new ArmSegment(0.25, -95, 135, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), Constants.Arm.clawMotor, 3);
+  public ArmSegment baseSegment = new ArmSegment(0.25, -45, 110, true, Constants.Arm.baseOffset, new PIDController(0.05, 0, 0), Constants.Arm.baseMotor, Constants.Arm.baseEncoder);
+  public ArmSegment clawSegment = new ArmSegment(0.25, -95, 135, true, Constants.Arm.clawOffset, new PIDController(0.05, 0, 0), Constants.Arm.clawMotor, Constants.Arm.clawEncoder);
 
   
   /** Creates a new ArmSubsystem. */
@@ -39,7 +39,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 
   public void moveBaseSegment(double power){
-    System.out.println(power);
     baseSegment.motor.set(ControlMode.PercentOutput, power);
   }
 

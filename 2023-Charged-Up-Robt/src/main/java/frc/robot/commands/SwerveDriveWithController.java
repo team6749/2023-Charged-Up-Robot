@@ -8,10 +8,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -24,9 +21,9 @@ public class SwerveDriveWithController extends CommandBase {
   private XboxController controller;
   public ChassisSpeeds desiredSpeeds;
 
-  SlewRateLimiter horizontalLimiter = new SlewRateLimiter(5);
-  SlewRateLimiter verticalLimiter = new SlewRateLimiter(5);
-  SlewRateLimiter rotationLimiter = new SlewRateLimiter(5);
+  SlewRateLimiter horizontalLimiter = new SlewRateLimiter(6);
+  SlewRateLimiter verticalLimiter = new SlewRateLimiter(6);
+  SlewRateLimiter rotationLimiter = new SlewRateLimiter(50);
 
   public SwerveDriveWithController(SwerveDriveSubsystem subsystem, XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -48,7 +45,6 @@ public class SwerveDriveWithController extends CommandBase {
     if(Math.abs(joystickRotation) < 0.10 ) {
       joystickRotation = 0;
   }
-  System.out.println(controller.getPOV());
 
     double verticalDirectionSpeed = limitedJoystickInput(-controller.getLeftY());
     double horizontalDirectionSpeed = limitedJoystickInput(-controller.getLeftX());
@@ -65,13 +61,6 @@ public class SwerveDriveWithController extends CommandBase {
     verticalDirectionSpeed = verticalLimiter.calculate(verticalDirectionSpeed * 2);
     horizontalDirectionSpeed = horizontalLimiter.calculate(horizontalDirectionSpeed *2);
     rotationalSpeed = rotationLimiter.calculate(rotationalSpeed * 4.5);
-    
-    
-    
-    // System.out.println("X: " + horizontalDirectionSpeed);
-    // System.out.println("Y: " + verticalDirectionSpeed);
-    // System.out.println("Rot: " + rotationalSpeed);
-
     
     SmartDashboard.putNumber("vertical driving speed", verticalDirectionSpeed);
     SmartDashboard.putNumber("horizontal driving speed", horizontalDirectionSpeed);

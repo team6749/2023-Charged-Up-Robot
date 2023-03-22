@@ -10,6 +10,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.MoveArmSegment;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveDriveModule;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
@@ -32,8 +36,8 @@ public final class Constants {
     public static int baseMotor = 14;
     public static int clawMotor = 19;
 
-    public static int baseEncoder = 4;
-    public static int clawEncoder = 3;
+    public static int baseEncoder = 6;
+    public static int clawEncoder = 5;
 
 
     public static double baseOffset = 313;
@@ -123,6 +127,33 @@ public final class Constants {
         return blue;
       }
       return new Translation2d(blue.getX(), fieldWidthInMeters - blue.getY());
+    }
+  }
+  public static class ArmCommands{
+
+    public static CommandBase MoveArmToSubstation(ArmSubsystem subsystem){
+      return new MoveArmSegment(subsystem.baseSegment, 2)
+        .alongWith(new MoveArmSegment(subsystem.clawSegment, 90));
+    }
+  
+    public static Command MoveArmToMiddle(ArmSubsystem subsystem){
+      return new MoveArmSegment(subsystem.baseSegment, 30)
+        .alongWith(new MoveArmSegment(subsystem.clawSegment, 37));
+    }
+  
+    public static Command MoveArmToGround(ArmSubsystem subsystem){
+      return new MoveArmSegment(subsystem.baseSegment, 108)  
+        .alongWith(new MoveArmSegment(subsystem.clawSegment, -9));
+    }
+    
+    public static Command moveArmIdle(ArmSubsystem subsystem){
+      return new MoveArmSegment(subsystem.baseSegment, -34)
+        .alongWith(new MoveArmSegment(subsystem.clawSegment, 107));
+    }
+
+    public static Command moveArmToBottom(ArmSubsystem subsystem){
+      return new MoveArmSegment(subsystem.baseSegment, 2)
+        .alongWith(new MoveArmSegment(subsystem.clawSegment, 119));
     }
   }
 }
