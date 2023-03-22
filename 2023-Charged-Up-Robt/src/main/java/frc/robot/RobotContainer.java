@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.ClawControl;
+import frc.robot.commands.ClawToggle;
 import frc.robot.commands.DoAutoAlignmentAndScore;
 import frc.robot.commands.DriveToSubstation;
 import frc.robot.commands.LineUpWithStation;
@@ -156,11 +157,14 @@ public class RobotContainer {
     new Trigger(ground).whileTrue(Constants.ArmCommands.MoveArmToGround(_ArmSubsystem));
     new Trigger(idle).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem));
 
+    new Trigger(scoreMiddle).whileTrue(Autos.PlaceMiddle(_ArmSubsystem, _ClawSubsystem));
+    new Trigger(scoreBottom).whileTrue(Autos.PlaceBottom(_ArmSubsystem, _ClawSubsystem));
+
     new Trigger(autoAlign).whileTrue( new DoAutoAlignmentAndScore(this) );
 
 
 
-    new Trigger(toggleClawButton).whileTrue(new ClawControl(_ClawSubsystem, true));
+    new Trigger(toggleClawButton).whileTrue(new ClawToggle(_ClawSubsystem));
     
   }
 

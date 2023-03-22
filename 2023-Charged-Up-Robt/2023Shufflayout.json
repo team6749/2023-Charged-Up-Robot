@@ -292,7 +292,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Base Segment Encoder",
-              "_title": "Base Encoder",
+              "_title": "SmartDashboard/Base Segment Encoder",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -305,7 +305,20 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Claw Segment Encoder",
-              "_title": "Claw Encoder",
+              "_title": "SmartDashboard/Claw Segment Encoder",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "14,4": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Claw Segment Encoder",
+              "_title": "SmartDashboard/Claw Segment Encoder",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -423,123 +436,6 @@
               "imageHeight": 0
             }
           },
-          "4,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 1",
-              "_title": "Align Station 1",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "7,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 2",
-              "_title": "Align Station 2",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "10,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 3",
-              "_title": "Align Station 3",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "13,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 4",
-              "_title": "Align Station 4",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "16,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 5",
-              "_title": "Align Station 5",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "19,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 6",
-              "_title": "Align Station 6",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "22,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 7",
-              "_title": "Align Station 7",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "25,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 8",
-              "_title": "Align Station 8",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "28,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive to 9",
-              "_title": "Align Station 9",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "19,2": {
             "size": [
               12,
@@ -570,19 +466,6 @@
               "_showGlyph": false
             }
           },
-          "0,0": {
-            "size": [
-              4,
-              2
-            ],
-            "content": {
-              "_type": "ComboBox Chooser",
-              "_source0": "network_table:///SmartDashboard/SendableChooser[3]",
-              "_title": "Drive Mode",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "10,2": {
             "size": [
               9,
@@ -602,6 +485,45 @@
               "fps": -1,
               "imageWidth": -1,
               "imageHeight": -1
+            }
+          },
+          "0,0": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Drive Mode",
+              "_title": "SmartDashboard/Drive Mode",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              6,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Station Selected:",
+              "_title": "SmartDashboard/Station Selected:",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "16,0": {
+            "size": [
+              5,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/Scoring Selector:",
+              "_title": "SmartDashboard/Scoring Selector:",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }

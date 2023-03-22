@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.IntSummaryStatistics;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -32,16 +34,15 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void toggleSolenoid(){
-    if(isClawOpen == false){
-    openSolenoid();
+    if(isClawOpen == true){
+    closeSolenoid();
      } else{
-      closeSolenoid();
+      openSolenoid();
     }
   }
 
   @Override
   public void periodic() {
-    
     if(solenoid.get() != Value.kOff){
       System.err.println("ITS OFF!!!!");
       solenoid.set(Value.kOff);
