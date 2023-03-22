@@ -508,7 +508,7 @@
             "content": {
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Station Selected:",
-              "_title": "SmartDashboard/Station Selected:",
+              "_title": "/SmartDashboard/Station Selected:",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -521,7 +521,7 @@
             "content": {
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Scoring Selector:",
-              "_title": "SmartDashboard/Scoring Selector:",
+              "_title": "/SmartDashboard/Scoring Selector:",
               "_glyph": 148,
               "_showGlyph": false
             }

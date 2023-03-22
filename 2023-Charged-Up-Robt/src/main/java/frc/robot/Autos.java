@@ -134,11 +134,12 @@ public final class Autos {
     PathPlannerTrajectory path3 = PathPlanner.loadPath("path3",
         new PathConstraints(2, 2));
 
-    return PlaceMiddle(armSubsystem, clawSubsystem)
+    return 
+        PlaceMiddle(armSubsystem, clawSubsystem)
         .andThen(swerveDriveSubsystem.followTrajectoryCommand(path1, true))
         .andThen(Constants.ArmCommands.moveArmToBottom(armSubsystem))
         .andThen(swerveDriveSubsystem.followTrajectoryCommand(path2, true))
-        .alongWith(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
         .andThen(PlaceMiddle(armSubsystem, clawSubsystem))
         .andThen(swerveDriveSubsystem.followTrajectoryCommand(path3, true))
         .andThen(new SelfBalance(swerveDriveSubsystem));

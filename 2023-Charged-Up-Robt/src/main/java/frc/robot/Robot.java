@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     autoSelector.addOption("PlaceMidAndLeaveCommunity", Autos.PlaceAndLeaveCommunity(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     autoSelector.addOption("LowerPlaceMidAndBalanceCone", Autos.LowerPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     autoSelector.addOption("UpperPlaceMidAndBalanceCone", Autos.UpperPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("2gamepiece", Autos.Lower2ConePlaceAndBalance(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     SmartDashboard.putData("auto selector", autoSelector);
 
    
