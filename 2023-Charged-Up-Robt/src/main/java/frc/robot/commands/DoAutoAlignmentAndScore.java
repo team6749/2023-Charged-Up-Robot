@@ -32,6 +32,7 @@ public class DoAutoAlignmentAndScore extends CommandBase {
     myCommand = Constants.ArmCommands.moveArmIdle(container._ArmSubsystem)
     .andThen(container.stationSelector.getSelected())
     .andThen(container.scoringSelector.getSelected());
+     myCommand.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
