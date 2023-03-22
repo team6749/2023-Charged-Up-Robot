@@ -10,6 +10,7 @@ import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -49,10 +50,17 @@ public class RobotContainer {
 
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_controller, 7); //back
 
-  final static Trigger substationSetpoint = new Trigger(() -> _controller.getPOV() == 0); //dpad up
-  final static Trigger middleScoring = new Trigger(() -> _controller.getPOV() == 270); //dpad left
+  final static Trigger rightSubstation = new Trigger(() -> _controller.getPOV() == 90); //dpad right
+  final static Trigger leftSubstation = new Trigger(() -> _controller.getPOV() == 270); //dpad left
   final static Trigger ground = new Trigger(() -> _controller.getPOV() == 180); //dpad down
-  final static Trigger idle = new Trigger(() -> _controller.getPOV() == 90); //dpad right
+  final static Trigger idle = new Trigger(() -> _controller.getPOV() == 0); //dpad up
+
+  final static JoystickButton scoreMiddle = new JoystickButton(_controller, 4);
+  final static JoystickButton scoreBottom = new JoystickButton(_controller, 1);
+  
+  final static JoystickButton intakeSubstation = new JoystickButton(_controller, 2);
+
+  final static JoystickButton autoAlign = new JoystickButton(_controller, 8);
 
   final static Trigger moveArmUp = new Trigger(() -> _controller.getRightTriggerAxis() > 0.5); //back right trigger
   final static Trigger moveClawUp = new Trigger(() -> _controller.getLeftTriggerAxis() > 0.5); //back left trigger
@@ -60,8 +68,7 @@ public class RobotContainer {
   final static JoystickButton moveArmDown = new JoystickButton(_controller, 6); //left bumber
   final static JoystickButton moveClawDown = new JoystickButton(_controller, 5); //right bumper
 
-  final static JoystickButton openClaw = new JoystickButton(_controller, 1); //a button on controller
-  final static JoystickButton closeClaw = new JoystickButton(_controller, 3); //x button on controller
+  final static JoystickButton toggleClawButton = new JoystickButton(_controller, 3); //a button on controller
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new CommandXboxController(Operation.kDriverControllerPort);
@@ -112,15 +119,14 @@ public class RobotContainer {
     new Trigger(moveArmUp).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, 0.2));
     new Trigger(moveArmDown).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, -0.2));
 
-    new Trigger(substationSetpoint).whileTrue(Constants.ArmCommands.MoveArmToSubstation(_ArmSubsystem));
-    new Trigger(middleScoring).whileTrue(Constants.ArmCommands.MoveArmToMiddle(_ArmSubsystem));
+    new Trigger(rightSubstation).whileTrue(Constants.ArmCommands.MoveArmToSubstation(_ArmSubsystem));
+    new Trigger(leftSubstation).whileTrue(Constants.ArmCommands.MoveArmToMiddle(_ArmSubsystem));
     new Trigger(ground).whileTrue(Constants.ArmCommands.MoveArmToGround(_ArmSubsystem));
     new Trigger(idle).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem));
 
 
 
-    new Trigger(openClaw).whileTrue(new ClawControl(_ClawSubsystem, true));
-    new Trigger(closeClaw).whileTrue(new ClawControl(_ClawSubsystem, false));
+    new Trigger(toggleClawButton).whileTrue(new ClawControl(_ClawSubsystem, true));
     
     for (int i = 1; i < 10; i++) {
       SmartDashboard.putData("Drive to " + i, new LineUpWithStation(_SwerveDrivebase ,i));
