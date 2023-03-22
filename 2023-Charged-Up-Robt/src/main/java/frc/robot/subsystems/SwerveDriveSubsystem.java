@@ -130,7 +130,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 getGyroRotation(),
                 getCurrentModulePositions());
         poseEstimator = new SwerveDrivePoseEstimator(_kinematics, getGyroRotation(), getCurrentModulePositions(),
-                new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+                new Pose2d(0, 0, Rotation2d.fromDegrees(180)));
         // add the field map to smartdashboard
         SmartDashboard.putData("field map", field);
         cameraDisable.setDefaultOption("On", true);
