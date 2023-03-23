@@ -136,10 +136,12 @@ public final class Autos {
 
     return 
         PlaceMiddle(armSubsystem, clawSubsystem)
-        .andThen(swerveDriveSubsystem.followTrajectoryCommand(path1, true))
-        .andThen(Constants.ArmCommands.moveArmToBottom(armSubsystem))
-        .andThen(swerveDriveSubsystem.followTrajectoryCommand(path2, true))
-        .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
+        .andThen((swerveDriveSubsystem.followTrajectoryCommand(path1, true))
+            .alongWith(Constants.ArmCommands.MoveArmToGround(armSubsystem))
+            .alongWith(new ClawControl(clawSubsystem, true)))
+        .andThen((swerveDriveSubsystem.followTrajectoryCommand(path2, true))
+            .alongWith(new ClawControl(clawSubsystem, false))
+            .alongWith(Constants.ArmCommands.moveArmIdle(armSubsystem)))
         .andThen(PlaceMiddle(armSubsystem, clawSubsystem))
         .andThen(swerveDriveSubsystem.followTrajectoryCommand(path3, true))
         .andThen(new SelfBalance(swerveDriveSubsystem));
