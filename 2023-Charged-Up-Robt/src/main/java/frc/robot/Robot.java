@@ -62,7 +62,10 @@ public class Robot extends TimedRobot {
         });
     m_visionThread.setDaemon(true);
     m_visionThread.start();
-
+    
+    for (int i = 1; i < 10; i++) {
+      SmartDashboard.putData("Drive to " + i, new LineUpWithStation(m_robotContainer._SwerveDrivebase, i));
+    }
   }
 
   /**
