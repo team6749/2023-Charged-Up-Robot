@@ -4,23 +4,18 @@
 
 package frc.robot;
 
-import frc.robot.commands.ClawControl;
 import frc.robot.commands.ClawToggle;
 import frc.robot.commands.DoAutoAlignmentAndScore;
 import frc.robot.commands.DriveToSubstation;
 import frc.robot.commands.LineUpWithStation;
 import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithController;
-import frc.robot.enums.ScoringType;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -41,6 +36,7 @@ public class RobotContainer {
   public final SwerveDriveSubsystem _SwerveDrivebase = Constants.Drivebase.swerveDriveSubsystem;
 
   // public static Joystick _joystick = new Joystick(0);
+  public static XboxController _armController = new XboxController(1);
   public static XboxController _controller = new XboxController(0);
 
   // public final BucketSubsystem _BucketSubsystem = new BucketSubsystem(Constants.Drivebase.bucketMotorID, _joystick);
@@ -56,6 +52,8 @@ public class RobotContainer {
   //  final static JoystickButton moveArmUpButton = new JoystickButton(_joystick, 9);
   // final static JoystickButton moveArmDownButton = new JoystickButton(_joystick, 10);
 
+
+  //main driver controller triggers
   final static JoystickButton activateAutoBalanceButton = new JoystickButton(_controller, 7); //back
 
   final static Trigger rightSubstation = new Trigger(() -> _controller.getPOV() == 90); //dpad right
@@ -78,6 +76,28 @@ public class RobotContainer {
 
   final static JoystickButton toggleClawButton = new JoystickButton(_controller, 3); //a button on controller
 
+
+  
+
+
+  //arm controller triggers
+  final static Trigger rightSubstation2 = new Trigger(() -> _armController.getPOV() == 90); //dpad right
+  final static Trigger leftSubstation2 = new Trigger(() -> _armController.getPOV() == 270); //dpad left
+  final static Trigger ground2 = new Trigger(() -> _armController.getPOV() == 180); //dpad down
+  final static Trigger idle2 = new Trigger(() -> _armController.getPOV() == 0); //dpad up
+
+  final static JoystickButton scoreMiddle2 = new JoystickButton(_armController, 4);
+  final static JoystickButton scoreBottom2 = new JoystickButton(_armController, 1);
+  
+  final static JoystickButton intakeSubstation2 = new JoystickButton(_armController, 2);
+
+  final static Trigger moveArmUp2 = new Trigger(() -> _armController.getRightTriggerAxis() > 0.5); //back right trigger
+  final static Trigger moveClawUp2 = new Trigger(() -> _armController.getLeftTriggerAxis() > 0.5); //back left trigger
+
+  final static JoystickButton moveArmDown2 = new JoystickButton(_armController, 6); //left bumber
+  final static JoystickButton moveClawDown2 = new JoystickButton(_armController, 5); //right bumper
+
+  final static JoystickButton toggleClawButton2 = new JoystickButton(_armController, 3); //a button on controller
 
 
   public SendableChooser<Command> scoringSelector = new SendableChooser<Command>();
@@ -134,6 +154,8 @@ public class RobotContainer {
 
   private void configureBindings() {
 
+
+    //controller one
     new Trigger(activateAutoBalanceButton).whileTrue(new SelfBalance(_SwerveDrivebase));
 
     // new Trigger(lineUpWithConeSpotButton)
@@ -167,6 +189,34 @@ public class RobotContainer {
 
 
     new Trigger(toggleClawButton).whileTrue(new ClawToggle(_ClawSubsystem));
+
+
+
+    //controller 2 
+    new Trigger(moveClawUp2).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.clawSegment, 0.2));
+    new Trigger(moveClawDown2).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.clawSegment, -0.2));
+
+    new Trigger(moveArmUp2).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, 0.2));
+    new Trigger(moveArmDown2).whileTrue(new MoveArmSegmentManually(_ArmSubsystem.baseSegment, -0.2));
+
+    
+    new Trigger(rightSubstation2).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem)
+        .andThen(new DriveToSubstation(_SwerveDrivebase, false))
+        .andThen(Autos.GrabFromSubation(_ArmSubsystem, _ClawSubsystem)));
+
+    new Trigger(leftSubstation2).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem)
+        .andThen(new DriveToSubstation(_SwerveDrivebase, true))
+        .andThen(Autos.GrabFromSubation(_ArmSubsystem, _ClawSubsystem)));
+
+    new Trigger(ground2).whileTrue(Constants.ArmCommands.MoveArmToGround(_ArmSubsystem));
+    new Trigger(idle2).whileTrue(Constants.ArmCommands.moveArmIdle(_ArmSubsystem));
+
+    new Trigger(scoreMiddle2).whileTrue(Autos.PlaceMiddle(_ArmSubsystem, _ClawSubsystem));
+    new Trigger(scoreBottom2).whileTrue(Autos.PlaceBottom(_ArmSubsystem, _ClawSubsystem));
+
+    new Trigger(intakeSubstation2).whileTrue(Autos.GrabFromSubation(_ArmSubsystem, _ClawSubsystem));
+
+    new Trigger(toggleClawButton2).whileTrue(new ClawToggle(_ClawSubsystem));
     
   }
 
