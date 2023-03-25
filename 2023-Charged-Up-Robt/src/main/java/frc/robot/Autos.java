@@ -27,6 +27,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
@@ -66,6 +67,7 @@ public final class Autos {
   // place mid and do nothing
   public static Command PlaceMiddle(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
     return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
+        .andThen(new WaitCommand(0.5))
         .andThen(new ClawControl(clawSubsystem, true))
         .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
         .andThen(new ClawControl(clawSubsystem, false));
