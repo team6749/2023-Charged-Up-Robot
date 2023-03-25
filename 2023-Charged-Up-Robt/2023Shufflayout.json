@@ -397,8 +397,8 @@
               "Controls/Rotation": "NONE",
               "compression": -1.0,
               "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "imageWidth": 0,
+              "imageHeight": 0
             }
           }
         }
@@ -483,8 +483,8 @@
               "Controls/Rotation": "HALF",
               "compression": -1.0,
               "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "imageWidth": 0,
+              "imageHeight": 0
             }
           },
           "0,0": {
@@ -500,28 +500,119 @@
               "_showGlyph": false
             }
           },
-          "10,0": {
+          "4,0": {
             "size": [
-              6,
+              3,
               2
             ],
             "content": {
-              "_type": "ComboBox Chooser",
-              "_source0": "network_table:///SmartDashboard/Station Selected:",
-              "_title": "SmartDashboard/Station Selected:",
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 1",
+              "_title": "SmartDashboard/Drive to 1",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 2",
+              "_title": "SmartDashboard/Drive to 2",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 3",
+              "_title": "SmartDashboard/Drive to 3",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "13,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 4",
+              "_title": "SmartDashboard/Drive to 4",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
           "16,0": {
             "size": [
-              5,
+              3,
               2
             ],
             "content": {
-              "_type": "ComboBox Chooser",
-              "_source0": "network_table:///SmartDashboard/Scoring Selector:",
-              "_title": "SmartDashboard/Scoring Selector:",
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 5",
+              "_title": "SmartDashboard/Drive to 5",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "19,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 6",
+              "_title": "SmartDashboard/Drive to 6",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "22,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 7",
+              "_title": "SmartDashboard/Drive to 7",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "25,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 8",
+              "_title": "SmartDashboard/Drive to 8",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "28,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Drive to 9",
+              "_title": "SmartDashboard/Drive to 9",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -531,9 +622,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.199999809265137,
-    "y": -7.199999809265137,
-    "width": 1550.4000244140625,
-    "height": 830.4000244140625
+    "x": 0.800000011920929,
+    "y": 0.800000011920929,
+    "width": 1534.4000244140625,
+    "height": 814.4000244140625
   }
 }
