@@ -64,6 +64,19 @@ public final class Autos {
             .andThen(new SelfBalance(subsystem)));
   }
 
+  public static Command ForwardTaxiBalance(SwerveDriveSubsystem subsystem, ArmSubsystem armSubsystem,
+      ClawSubsystem clawSubsystem) {
+    return PlaceMiddle(armSubsystem, clawSubsystem)
+        .andThen(new DriveXDistanceForward(subsystem, -4.18, 0)) //- (1.5 + .355 + 1.22 + .355 + .75)
+        .andThen(new WaitCommand(0.25))
+        .andThen(new DriveXDistanceForward(subsystem, 1.1, 0) //+ .355 + 75
+        .andThen(new SelfBalance(subsystem)));
+    //ramps are 35.5
+    //cs is 122 cm
+    //another ramp
+    //exit 
+  }
+
   // place mid and do nothing
   public static Command PlaceMiddle(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
     return Constants.ArmCommands.MoveArmToMiddle(armSubsystem)
