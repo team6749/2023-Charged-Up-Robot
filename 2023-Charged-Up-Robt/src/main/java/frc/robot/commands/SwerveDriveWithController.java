@@ -58,8 +58,8 @@ public class SwerveDriveWithController extends CommandBase {
       verticalDirectionSpeed = 0;
     }
 
-    verticalDirectionSpeed = verticalLimiter.calculate(verticalDirectionSpeed * 2);
-    horizontalDirectionSpeed = horizontalLimiter.calculate(horizontalDirectionSpeed *2);
+    verticalDirectionSpeed = verticalLimiter.calculate(verticalDirectionSpeed * 3);
+    horizontalDirectionSpeed = horizontalLimiter.calculate(horizontalDirectionSpeed * 3);
     rotationalSpeed = rotationLimiter.calculate(rotationalSpeed * 4.5);
     
     SmartDashboard.putNumber("vertical driving speed", verticalDirectionSpeed);
