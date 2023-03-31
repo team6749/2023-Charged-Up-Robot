@@ -34,6 +34,8 @@ public class DriveXDistanceForward extends CommandBase {
   Command moveCommand;
   double distanceX;
   double distanceY;
+  double maxVel = 2;
+  double maxAcc = 2;
 
   /// constructor which takes in a distance x and distance y offsetted from
   /// starting pose
@@ -44,6 +46,15 @@ public class DriveXDistanceForward extends CommandBase {
     addRequirements(subsystem);
     this.distanceX = distanceX;
     this.distanceY = distanceY;
+  }
+  public DriveXDistanceForward(SwerveDriveSubsystem subsystem, double distanceX, double distanceY, double maxVel, double maxAcc) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.subsystem = subsystem;
+    addRequirements(subsystem);
+    this.distanceX = distanceX;
+    this.distanceY = distanceY;
+    this.maxAcc = maxAcc;
+    this.maxVel = maxVel;
   }
 
   // Called when the command is initially scheduled.
@@ -60,7 +71,7 @@ public class DriveXDistanceForward extends CommandBase {
 
     // genrates the trajectory
     // same code as in drivetoplace
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(2, 2).setKinematics(subsystem._kinematics);
+    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(maxVel, maxAcc).setKinematics(subsystem._kinematics);
     trajectoryConfig.setReversed( distanceX < 0 );
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       currentPose,
