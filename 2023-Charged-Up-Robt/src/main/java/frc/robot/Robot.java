@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
     autoSelector.setDefaultOption("DO NOTHING", Autos.doNothing(m_robotContainer._SwerveDrivebase));
     autoSelector.addOption("Drive Forward (2m)", Autos.driveForward(m_robotContainer._SwerveDrivebase));
     autoSelector.addOption("Place Mid and Balance", Autos.ForwardAndBalance(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
+    autoSelector.addOption("Place Mid, Taxi, and Balance", Autos.ForwardTaxiBalance(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     autoSelector.addOption("Place Mid And DO Nothing", Autos.PlaceMiddle(m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     autoSelector.addOption("PlaceMidAndLeaveCommunity", Autos.PlaceAndLeaveCommunity(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
     autoSelector.addOption("LowerPlaceMidAndBalanceCone", Autos.LowerPlaceAndBalanceCone(m_robotContainer._SwerveDrivebase, m_robotContainer._ArmSubsystem, m_robotContainer._ClawSubsystem));
