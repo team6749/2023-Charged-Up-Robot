@@ -84,7 +84,6 @@ public final class Autos {
         .andThen(Constants.ArmCommands.moveArmIdle(armSubsystem))
         .andThen(new ClawControl(clawSubsystem, false));
   }
-  
 
   // place bottom and do nothing
   public static Command PlaceBottom(ArmSubsystem armSubsystem, ClawSubsystem clawSubsystem) {
