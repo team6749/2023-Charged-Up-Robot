@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -14,12 +15,13 @@ import frc.robot.Constants;
 
 
 public class ClawSubsystem extends SubsystemBase {
-  Compressor compressor = new Compressor(15, PneumaticsModuleType.CTREPCM);
+  Compressor compressor = new Compressor(21, PneumaticsModuleType.REVPH);
   private DoubleSolenoid solenoid = new DoubleSolenoid(15, PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
   boolean isClawOpen;
   /** Creates a new ClawSubsystem. */
   public ClawSubsystem() {
     compressor.enableDigital();
+
   }
 
   public void openSolenoid(){
