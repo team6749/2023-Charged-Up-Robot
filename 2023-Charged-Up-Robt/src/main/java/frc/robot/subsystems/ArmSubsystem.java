@@ -8,6 +8,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -34,13 +36,13 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
   //   moveClawSegment(0);
-
   }
 
 
   public void moveBaseSegment(double power){
     baseSegment.motor.set(ControlMode.PercentOutput, power);
   }
+
 
   // public void moveClawSegment(double power){
   //   clawSegment.motor.set(ControlMode.PercentOutput, power);

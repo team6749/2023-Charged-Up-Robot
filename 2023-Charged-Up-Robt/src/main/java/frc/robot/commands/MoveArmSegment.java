@@ -13,9 +13,9 @@ public class MoveArmSegment extends CommandBase {
   double m_setPoint;
 
   /** Creates a new MoveArmSegment. */
-  public MoveArmSegment(ArmSegment segment, double setPoint) {
+  public MoveArmSegment(ArmSegment segment, double i) {
     m_Segment = segment;
-    m_setPoint = setPoint;
+    m_setPoint = i;
     addRequirements(segment);
   }
 

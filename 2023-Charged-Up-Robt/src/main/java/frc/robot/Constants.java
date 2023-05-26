@@ -10,9 +10,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.MoveArmSegment;
+import frc.robot.commands.MoveArmWithNetworkTables;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveDriveModule;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -129,6 +131,8 @@ public final class Constants {
       return new Translation2d(blue.getX(), fieldWidthInMeters - blue.getY());
     }
   }
+
+  
   public static class ArmCommands{
 
     public static CommandBase MoveArmToSubstation(ArmSubsystem subsystem){
@@ -154,6 +158,10 @@ public final class Constants {
     public static Command moveArmToBottom(ArmSubsystem subsystem){
       return new MoveArmSegment(subsystem.baseSegment, 2)
         .alongWith(new MoveArmSegment(subsystem.clawSegment, 119));
+    }
+
+    public static Command moveArmBase(ArmSubsystem subsystem, double angle){
+      return new MoveArmSegment(subsystem.baseSegment, angle);
     }
   }
 }

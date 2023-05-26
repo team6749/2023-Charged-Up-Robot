@@ -12,6 +12,8 @@ import frc.robot.commands.SelfBalance;
 import frc.robot.commands.SwerveDriveWithController;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.commands.MoveArmSegmentManually;
+import frc.robot.commands.MoveArmWithNetworkTables;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -43,6 +46,7 @@ public class RobotContainer {
   public final ArmSubsystem _ArmSubsystem = new ArmSubsystem();
   public final ClawSubsystem _ClawSubsystem = new ClawSubsystem();
   public final int one = 1;
+
 
 
   // final static JoystickButton activateAutoBalanceButton = new JoystickButton(_joystick, 12);
@@ -75,7 +79,6 @@ public class RobotContainer {
   final static JoystickButton moveClawDown = new JoystickButton(_controller, 5); //right bumper
 
   final static JoystickButton toggleClawButton = new JoystickButton(_controller, 3); //a button on controller
-
 
   
 
@@ -127,7 +130,8 @@ public class RobotContainer {
     configureBindings();
     
     _SwerveDrivebase.setDefaultCommand(new SwerveDriveWithController(_SwerveDrivebase, _controller));
-  }
+    _ArmSubsystem.setDefaultCommand(new MoveArmWithNetworkTables(_ArmSubsystem));
+ }
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
