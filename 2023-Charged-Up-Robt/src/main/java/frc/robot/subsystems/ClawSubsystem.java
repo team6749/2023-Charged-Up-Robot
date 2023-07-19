@@ -17,7 +17,7 @@ import frc.robot.Constants;
 public class ClawSubsystem extends SubsystemBase {
 
   Compressor compressor = new Compressor(21, PneumaticsModuleType.REVPH);
-  private DoubleSolenoid solenoid = new DoubleSolenoid(15, PneumaticsModuleType.CTREPCM, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
+  private DoubleSolenoid solenoid = new DoubleSolenoid(21, PneumaticsModuleType.REVPH, Constants.Arm.solenoid[0], Constants.Arm.solenoid[1]);
 
   boolean isClawOpen;
   /** Creates a new ClawSubsystem. */
